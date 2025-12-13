@@ -71,10 +71,10 @@ export function BudgetTableRow({
     }
   };
 
-  const handleSaveAmount = async (month: number, amountId: string) => {
+  const handleSaveAmount = async (amountId: string) => {
     setSaving(true);
     try {
-      const amount = parseFloat(editingAmount);
+      const amount = parseFloat(editingAmount || "0");
       if (isNaN(amount)) throw new Error("Invalid amount");
 
       await updateEntryAmount(amountId, budgetId, amount);
@@ -153,9 +153,9 @@ export function BudgetTableRow({
                 step="0.01"
                 value={editingAmount}
                 onChange={(e) => setEditingAmount(e.target.value)}
-                onBlur={() => handleSaveAmount(month, amount.id)}
+                onBlur={() => handleSaveAmount(amount.id)}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") handleSaveAmount(month, amount.id);
+                  if (e.key === "Enter") handleSaveAmount(amount.id);
                   if (e.key === "Escape") {
                     setEditingMonth(null);
                     setEditingAmount("");
