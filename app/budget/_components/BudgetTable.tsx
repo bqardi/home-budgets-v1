@@ -1,10 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BudgetTableRow } from "./BudgetTableRow";
 import { CreateEntryRow } from "./CreateEntryRow";
+import { TransferModal } from "./TransferModal";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { updateStartingBalance } from "@/app/actions/budget";
 
 interface EntryAmount {
   id: string;
@@ -30,6 +33,8 @@ interface BudgetTableProps {
   categories: Category[];
   budgetId: string;
   onRefresh?: () => void;
+  otherBudgets?: Array<{ id: string; name: string; year: number }>;
+  initialStartingBalance?: string;
 }
 
 const MONTHS = [
@@ -48,12 +53,56 @@ const MONTHS = [
 ];
 
 export function BudgetTable({
-  entries,
+  entries: initialEntries,
   categories,
   budgetId,
   onRefresh,
+  otherBudgets = [],
+  initialStartingBalance = "0",
 }: BudgetTableProps) {
-  const [startingBalance, setStartingBalance] = useState<string>("0");
+  const [startingBalance, setStartingBalance] = useState<string>(
+    initialStartingBalance
+  );
+  const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
+  const [entries, setEntries] = useState(initialEntries);
+  const [isSaving, setIsSaving] = useState(false);
+
+  // Debounce effect for saving starting balance
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      const numValue = parseFloat(startingBalance) || 0;
+      if (numValue !== (parseFloat(initialStartingBalance) || 0)) {
+        setIsSaving(true);
+        try {
+          await updateStartingBalance(budgetId, numValue);
+        } catch (error) {
+          console.error("Failed to save starting balance:", error);
+          alert("Failed to save starting balance");
+        } finally {
+          setIsSaving(false);
+        }
+      }
+    }, 1000); // 1 second delay
+
+    return () => clearTimeout(timer);
+  }, [startingBalance, budgetId, initialStartingBalance]);
+
+  const handleRefresh = async () => {
+    try {
+      const response = await fetch(`/api/budget/${budgetId}/entries-list`);
+      if (response.ok) {
+        const data = await response.json();
+        setEntries(data.entries || []);
+      }
+    } catch (error) {
+      console.error("Failed to refresh entries:", error);
+    }
+  };
+
+  const handleStartingBalanceChange = (value: string) => {
+    setStartingBalance(value);
+    // The useEffect will handle saving with debouncing
+  };
 
   // Create category map for quick lookup
   const categoryMap = Object.fromEntries(categories.map((c) => [c.id, c.name]));
@@ -112,11 +161,25 @@ export function BudgetTable({
             type="number"
             step="0.01"
             value={startingBalance}
-            onChange={(e) => setStartingBalance(e.target.value)}
+            onChange={(e) => handleStartingBalanceChange(e.target.value)}
             placeholder="0"
             className="mt-1"
+            disabled={isSaving}
           />
         </div>
+
+        {/* Transfer Button */}
+        {otherBudgets.length > 0 && (
+          <div className="pt-2 border-t">
+            <Button
+              size="sm"
+              onClick={() => setIsTransferModalOpen(true)}
+              className="w-full"
+            >
+              Transfer from Another Budget
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Monthly Table */}
@@ -358,7 +421,7 @@ export function BudgetTable({
         <CreateEntryRow
           budgetId={budgetId}
           categories={categories}
-          onSuccess={onRefresh}
+          onSuccess={handleRefresh}
         />
       </div>
 
@@ -412,6 +475,20 @@ export function BudgetTable({
             </div>
           </div>
         </div>
+      )}
+
+      {/* Transfer Modal */}
+      {otherBudgets.length > 0 && (
+        <TransferModal
+          isOpen={isTransferModalOpen}
+          onClose={() => setIsTransferModalOpen(false)}
+          budgetId={budgetId}
+          otherBudgets={otherBudgets}
+          onTransferComplete={handleRefresh}
+          onBalanceTransfer={(balance) =>
+            setStartingBalance(balance.toString())
+          }
+        />
       )}
     </div>
   );

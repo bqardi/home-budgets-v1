@@ -15,10 +15,10 @@ async function getBudgetData(budgetId: string) {
     redirect("/auth/login");
   }
 
-  // Fetch budget
+  // Fetch budget (including starting_balance)
   const { data: budget, error: budgetError } = await supabase
     .from("budgets")
-    .select("*")
+    .select("*, starting_balance")
     .eq("id", budgetId)
     .eq("user_id", userData.user.id)
     .single();
@@ -54,7 +54,19 @@ async function getBudgetData(budgetId: string) {
     .eq("budget_id", budgetId)
     .eq("user_id", userData.user.id);
 
-  return { budget, categories: categories || [], entries: entries || [] };
+  // Fetch all budgets for balance transfer
+  const { data: allBudgets = [] } = await supabase
+    .from("budgets")
+    .select("id, name, year")
+    .eq("user_id", userData.user.id)
+    .order("created_at", { ascending: false });
+
+  return {
+    budget,
+    categories: categories || [],
+    entries: entries || [],
+    allBudgets: allBudgets || [],
+  };
 }
 
 interface PageProps {
@@ -72,7 +84,7 @@ export default async function BudgetPage({ params }: PageProps) {
 }
 
 async function BudgetPageContent({ id }: { id: string }) {
-  const { budget, categories, entries } = await getBudgetData(id);
+  const { budget, categories, entries, allBudgets } = await getBudgetData(id);
 
   return (
     <div className="min-h-screen bg-background">
@@ -106,6 +118,8 @@ async function BudgetPageContent({ id }: { id: string }) {
             entries={entries}
             categories={categories}
             budgetId={id}
+            otherBudgets={allBudgets.filter((b) => b.id !== id)}
+            initialStartingBalance={(budget.starting_balance || 0).toString()}
           />
         )}
       </div>
