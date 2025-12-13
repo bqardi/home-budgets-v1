@@ -199,17 +199,35 @@ export function BudgetTable({
               <>
                 {/* Income Total Row */}
                 {incomeEntries.length > 0 && (
-                  <tr className="bg-green-50/50 border-t border-b font-semibold text-green-700">
+                  <tr className="bg-green-100 border-t border-b font-semibold">
                     <td className="p-2 border-r text-left">Income Total</td>
                     <td className="p-2 border-r"></td>
                     {monthlyIncome.map((total, idx) => (
-                      <td key={idx} className="p-2 text-right border-r">
+                      <td
+                        key={idx}
+                        className={`p-2 text-right border-r ${
+                          total > 0
+                            ? "text-green-700"
+                            : total < 0
+                            ? "text-red-700"
+                            : "text-gray-500"
+                        }`}
+                      >
                         {total > 0 ? "+" : ""}
                         {total.toFixed(0)}
                       </td>
                     ))}
-                    <td className="p-2 text-right border-r">
-                      +{totalIncome.toFixed(0)}
+                    <td
+                      className={`p-2 text-right border-r ${
+                        totalIncome > 0
+                          ? "text-green-700"
+                          : totalIncome < 0
+                          ? "text-red-700"
+                          : "text-gray-500"
+                      }`}
+                    >
+                      {totalIncome > 0 ? "+" : ""}
+                      {totalIncome.toFixed(0)}
                     </td>
                     <td className="p-2"></td>
                   </tr>
@@ -217,64 +235,105 @@ export function BudgetTable({
 
                 {/* Expense Total Row */}
                 {expenseEntries.length > 0 && (
-                  <tr className="bg-red-50/50 border-t border-b font-semibold text-red-700">
+                  <tr className="bg-red-100 border-t border-b font-semibold">
                     <td className="p-2 border-r text-left">Expense Total</td>
                     <td className="p-2 border-r"></td>
                     {monthlyExpenses.map((total, idx) => (
-                      <td key={idx} className="p-2 text-right border-r">
-                        -{total.toFixed(0)}
+                      <td
+                        key={idx}
+                        className={`p-2 text-right border-r ${
+                          total > 0
+                            ? "text-red-700"
+                            : total < 0
+                            ? "text-green-700"
+                            : "text-gray-500"
+                        }`}
+                      >
+                        {total > 0 ? "-" : ""}
+                        {total.toFixed(0)}
                       </td>
                     ))}
-                    <td className="p-2 text-right border-r">
-                      -{totalExpenses.toFixed(0)}
+                    <td
+                      className={`p-2 text-right border-r ${
+                        totalExpenses > 0
+                          ? "text-red-700"
+                          : totalExpenses < 0
+                          ? "text-green-700"
+                          : "text-gray-500"
+                      }`}
+                    >
+                      {totalExpenses > 0 ? "-" : ""}
+                      {totalExpenses.toFixed(0)}
                     </td>
                     <td className="p-2"></td>
                   </tr>
                 )}
 
                 {/* Net Total Row */}
-                <tr className="bg-muted/50 border-t-2 border-b font-semibold">
+                <tr className="bg-gray-100 border-t-2 border-b font-semibold">
                   <td className="p-2 border-r text-left">Net Balance</td>
                   <td className="p-2 border-r"></td>
                   {monthlyTotals.map((total, idx) => (
-                    <td key={idx} className="p-2 text-right border-r">
-                      <span
-                        className={
-                          total >= 0 ? "text-blue-600" : "text-red-600"
-                        }
-                      >
-                        {total > 0 ? "+" : ""}
-                        {total.toFixed(0)}
-                      </span>
+                    <td
+                      key={idx}
+                      className={`p-2 text-right border-r ${
+                        total > 0
+                          ? "text-green-700"
+                          : total < 0
+                          ? "text-red-700"
+                          : "text-gray-500"
+                      }`}
+                    >
+                      {total > 0 ? "+" : ""}
+                      {total.toFixed(0)}
                     </td>
                   ))}
-                  <td className="p-2 text-right border-r">
-                    <span
-                      className={
-                        grandTotal >= 0 ? "text-blue-700" : "text-red-700"
-                      }
-                    >
-                      {grandTotal > 0 ? "+" : ""}
-                      {grandTotal.toFixed(0)}
-                    </span>
+                  <td
+                    className={`p-2 text-right border-r ${
+                      grandTotal > 0
+                        ? "text-green-700"
+                        : grandTotal < 0
+                        ? "text-red-700"
+                        : "text-gray-500"
+                    }`}
+                  >
+                    {grandTotal > 0 ? "+" : ""}
+                    {grandTotal.toFixed(0)}
                   </td>
                   <td className="p-2"></td>
                 </tr>
 
                 {/* Running Balance Row */}
-                <tr className="bg-purple-50/50 border-t border-b font-semibold text-purple-700">
+                <tr className="bg-purple-100 border-t border-b font-semibold">
                   <td className="p-2 border-r text-left">Running Balance</td>
                   <td className="p-2 border-r text-xs text-muted-foreground">
                     Start: {startBalance > 0 ? "+" : ""}
                     {startBalance.toFixed(0)}
                   </td>
                   {runningBalance.map((balance, idx) => (
-                    <td key={idx} className="p-2 text-right border-r">
+                    <td
+                      key={idx}
+                      className={`p-2 text-right border-r ${
+                        balance > 0
+                          ? "text-green-700"
+                          : balance < 0
+                          ? "text-red-700"
+                          : "text-gray-500"
+                      }`}
+                    >
                       {balance > 0 ? "+" : ""}
                       {balance.toFixed(0)}
                     </td>
                   ))}
-                  <td className="p-2 text-right border-r">
+                  <td
+                    className={`p-2 text-right border-r ${
+                      runningBalance[11] > 0
+                        ? "text-green-700"
+                        : runningBalance[11] < 0
+                        ? "text-red-700"
+                        : "text-gray-500"
+                    }`}
+                  >
                     {runningBalance[11] > 0 ? "+" : ""}
                     {runningBalance[11].toFixed(0)}
                   </td>
@@ -320,21 +379,23 @@ export function BudgetTable({
 
             <div
               className={`p-4 border rounded-lg ${
-                grandTotal >= 0
-                  ? "bg-blue-50 border-blue-200"
-                  : "bg-orange-50 border-orange-200"
+                grandTotal > 0
+                  ? "bg-green-100 border-green-200"
+                  : grandTotal < 0
+                  ? "bg-red-100 border-red-200"
+                  : "bg-gray-100 border-gray-200"
               }`}
             >
-              <p
-                className={`text-sm font-semibold uppercase ${
-                  grandTotal >= 0 ? "text-blue-700" : "text-orange-700"
-                }`}
-              >
+              <p className="text-sm font-semibold uppercase text-gray-700">
                 Net Balance
               </p>
               <p
                 className={`text-2xl font-bold mt-2 ${
-                  grandTotal >= 0 ? "text-blue-700" : "text-orange-700"
+                  grandTotal > 0
+                    ? "text-green-700"
+                    : grandTotal < 0
+                    ? "text-red-700"
+                    : "text-gray-500"
                 }`}
               >
                 {grandTotal > 0 ? "+" : ""}
