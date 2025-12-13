@@ -108,7 +108,7 @@ export function BudgetTableRow({
   return (
     <tr className="hover:bg-muted/30 transition-colors border-b">
       {/* Description */}
-      <td className="p-2 border-r max-w-[200px] truncate">
+      <td className="sticky left-0 z-10 p-2 border-r max-w-[200px] truncate bg-white hover:bg-muted/30">
         {editingDescription ? (
           <input
             type="text"
@@ -137,7 +137,7 @@ export function BudgetTableRow({
       </td>
 
       {/* Category */}
-      <td className="p-2 border-r text-sm text-muted-foreground max-w-[120px] truncate">
+      <td className="sticky left-[200px] z-10 p-2 border-r text-sm text-muted-foreground max-w-[120px] truncate bg-white hover:bg-muted/30">
         {categoryMap[entry.category_id]}
       </td>
 
@@ -202,7 +202,7 @@ export function BudgetTableRow({
 
       {/* Row Total */}
       <td
-        className={`p-2 text-right border-r font-semibold min-w-[80px] ${
+        className={`sticky right-[60px] z-10 p-2 text-right border-r font-semibold min-w-[80px] bg-white hover:bg-muted/30 ${
           rowTotal > 0
             ? "text-green-700"
             : rowTotal < 0
@@ -215,7 +215,7 @@ export function BudgetTableRow({
       </td>
 
       {/* Delete Button */}
-      <td className="p-2">
+      <td className="sticky right-0 z-10 p-2 bg-white hover:bg-muted/30">
         <Button
           size="sm"
           variant="destructive"
