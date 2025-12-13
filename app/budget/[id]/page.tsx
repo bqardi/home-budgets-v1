@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
 import { BudgetTable } from "../_components/BudgetTable";
+import { CreateCategoryModal } from "../_components/CreateCategoryModal";
 import { ArrowLeft } from "lucide-react";
 import { Suspense } from "react";
 
@@ -70,17 +71,31 @@ async function BudgetPageContent({ id }: { id: string }) {
           </Button>
         </Link>
 
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold">{budget.name}</h1>
-          {budget.start_date && budget.end_date && (
-            <p className="text-muted-foreground mt-2">
-              {new Date(budget.start_date).toLocaleDateString()} –{" "}
-              {new Date(budget.end_date).toLocaleDateString()}
-            </p>
-          )}
+        <div className="mb-8 flex items-start justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">{budget.name}</h1>
+            {budget.start_date && budget.end_date && (
+              <p className="text-muted-foreground mt-2">
+                {new Date(budget.start_date).toLocaleDateString()} –{" "}
+                {new Date(budget.end_date).toLocaleDateString()}
+              </p>
+            )}
+          </div>
+          <CreateCategoryModal />
         </div>
 
-        <BudgetTable entries={entries} categories={categories} budgetId={id} />
+        {categories.length === 0 ? (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+            <p className="text-blue-900 font-medium mb-2">
+              No categories yet. Create one to get started!
+            </p>
+            <p className="text-blue-700 text-sm">
+              Categories help you organize your budget entries.
+            </p>
+          </div>
+        ) : (
+          <BudgetTable entries={entries} categories={categories} budgetId={id} />
+        )}
       </div>
     </div>
   );
