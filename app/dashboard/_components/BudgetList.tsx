@@ -12,6 +12,8 @@ interface Budget {
   name: string;
   year: number;
   created_at: string;
+  starting_balance?: number;
+  end_balance?: number;
 }
 
 interface BudgetListProps {
@@ -57,9 +59,17 @@ export function BudgetList({ budgets }: BudgetListProps) {
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <CardTitle className="text-lg">{budget.name}</CardTitle>
-                <p className="text-sm text-muted-foreground mt-1">
-                  {budget.year}
-                </p>
+                <div className="flex items-center gap-x-2 mt-1">
+                  <p className="text-sm text-muted-foreground">{budget.year}</p>
+                  <div className="text-muted-foreground">|</div>
+                  <p className="text-sm text-muted-foreground">
+                    Start balance {(budget.starting_balance || 0).toFixed(0)} kr
+                  </p>
+                  <div className="text-muted-foreground">→</div>
+                  <p className="text-sm text-muted-foreground">
+                    End balance {(budget.end_balance || 0).toFixed(0)} kr
+                  </p>
+                </div>
               </div>
               <div className="flex gap-2">
                 <Link href={`/budget/${budget.id}`}>

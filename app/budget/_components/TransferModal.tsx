@@ -57,8 +57,6 @@ export function TransferModal({
         transferExpense
       );
 
-      console.log("[TransferModal] Transfer result:", result);
-
       // If balance was transferred, notify parent component
       if (
         transferBalance &&
@@ -66,10 +64,6 @@ export function TransferModal({
         result?.balanceToTransfer !== undefined &&
         onBalanceTransfer
       ) {
-        console.log(
-          "[TransferModal] Applying balance transfer:",
-          result.balanceToTransfer
-        );
         onBalanceTransfer(result.balanceToTransfer);
       }
 

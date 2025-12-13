@@ -69,11 +69,13 @@ export async function transferRowsFromBudget(
         if (createError) throw createError;
 
         // Copy entry amounts
-        const newAmounts = (sourceEntry.entry_amounts || []).map((ea: { month: string; amount: number }) => ({
-          entry_id: newEntry.id,
-          month: ea.month,
-          amount: ea.amount,
-        }));
+        const newAmounts = (sourceEntry.entry_amounts || []).map(
+          (ea: { month: string; amount: number }) => ({
+            entry_id: newEntry.id,
+            month: ea.month,
+            amount: ea.amount,
+          })
+        );
 
         if (newAmounts.length > 0) {
           const { error: amountsError } = await supabase
@@ -109,8 +111,6 @@ export async function transferRowsFromBudget(
 
       if (entriesError) throw entriesError;
 
-      console.log("[transfers.ts] allEntries:", allEntries);
-
       // Calculate balance
       let totalBalance = 0;
       allEntries?.forEach((entry: EntryWithAmounts) => {
@@ -125,7 +125,6 @@ export async function transferRowsFromBudget(
         }
       });
 
-      console.log("[transfers.ts] Calculated balanceToTransfer:", totalBalance);
       balanceToTransfer = totalBalance;
     } catch (error) {
       console.error("Failed to calculate balance:", error);
