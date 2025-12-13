@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { deleteBudget } from "@/app/actions/budgets";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
+import { NumberDisplay } from "@/components/ui/number-display";
 
 interface Budget {
   id: string;
@@ -63,11 +64,27 @@ export function BudgetList({ budgets }: BudgetListProps) {
                   <p className="text-sm text-muted-foreground">{budget.year}</p>
                   <div className="text-muted-foreground">|</div>
                   <p className="text-sm text-muted-foreground">
-                    Start balance {(budget.starting_balance || 0).toFixed(0)} kr
+                    Start balance{" "}
+                    <NumberDisplay
+                      positiveClassName="bg-green-100 text-green-700 py-0.5 px-2 rounded-sm"
+                      negativeClassName="bg-red-100 text-red-700 py-0.5 px-2 rounded-sm"
+                      nilClassName="bg-gray-200 text-gray-800 py-0.5 px-2 rounded-sm"
+                      value={budget.starting_balance || 0}
+                    >
+                      <NumberDisplay.Value /> kr
+                    </NumberDisplay>
                   </p>
                   <div className="text-muted-foreground">→</div>
                   <p className="text-sm text-muted-foreground">
-                    End balance {(budget.end_balance || 0).toFixed(0)} kr
+                    End balance{" "}
+                    <NumberDisplay
+                      positiveClassName="bg-green-100 text-green-700 py-0.5 px-2 rounded-sm"
+                      negativeClassName="bg-red-100 text-red-700 py-0.5 px-2 rounded-sm"
+                      nilClassName="bg-gray-200 text-gray-800 py-0.5 px-2 rounded-sm"
+                      value={budget.end_balance || 0}
+                    >
+                      <NumberDisplay.Value /> kr
+                    </NumberDisplay>
                   </p>
                 </div>
               </div>
