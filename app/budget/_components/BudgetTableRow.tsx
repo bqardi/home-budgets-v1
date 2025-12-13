@@ -1,25 +1,41 @@
 "use client";
 
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { deleteEntry, updateEntry } from "@/app/actions/entries";
-import { Trash2, CheckCircle2, XCircle } from "lucide-react";
+import {
+  deleteEntry,
+  updateEntryAmount,
+  updateEntryDescription,
+} from "@/app/actions/entries";
+import { Trash2 } from "lucide-react";
+
+const MONTHS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
+interface EntryAmount {
+  id: string;
+  month: number;
+  amount: number;
+}
 
 interface BudgetTableRowProps {
   entry: {
     id: string;
     description: string;
-    amount: number;
     category_id: string;
-    entry_date: string;
+    entry_amounts: EntryAmount[];
   };
   budgetId: string;
   categories: Array<{ id: string; name: string }>;
@@ -31,41 +47,60 @@ interface BudgetTableRowProps {
 export function BudgetTableRow({
   entry,
   budgetId,
-  categories,
   categoryMap,
   onDelete,
   onUpdate,
 }: BudgetTableRowProps) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
+  const [editingDescription, setEditingDescription] = useState(false);
+  const [descriptionValue, setDescriptionValue] = useState(entry.description);
+  const [editingMonth, setEditingMonth] = useState<number | null>(null);
+  const [editingAmount, setEditingAmount] = useState("");
+  const [saving, setSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [editData, setEditData] = useState({
-    description: entry.description,
-    amount: entry.amount.toString(),
-    category_id: entry.category_id,
-    entry_date: entry.entry_date,
-  });
 
-  const handleSave = async () => {
-    setIsSaving(true);
+  // Create a map of month -> entry_amount for quick lookup
+  const amountMap = Object.fromEntries(
+    entry.entry_amounts.map((ea) => [ea.month, ea])
+  );
+
+  // Calculate row total
+  const rowTotal = entry.entry_amounts.reduce((sum, ea) => sum + ea.amount, 0);
+
+  const handleSaveDescription = async () => {
+    if (descriptionValue === entry.description) {
+      setEditingDescription(false);
+      return;
+    }
+
+    setSaving(true);
     try {
-      const amount = parseFloat(editData.amount);
-      if (isNaN(amount)) throw new Error("Invalid amount");
-
-      await updateEntry(entry.id, budgetId, {
-        description: editData.description,
-        amount,
-        category_id: editData.category_id,
-        entry_date: editData.entry_date,
-      });
-
-      setIsEditing(false);
+      await updateEntryDescription(entry.id, budgetId, descriptionValue);
+      setEditingDescription(false);
       onUpdate?.();
     } catch (error) {
-      console.error("Failed to update entry:", error);
-      alert("Failed to update entry");
+      console.error("Failed to update description:", error);
+      alert("Failed to update description");
+      setDescriptionValue(entry.description);
     } finally {
-      setIsSaving(false);
+      setSaving(false);
+    }
+  };
+
+  const handleSaveAmount = async (month: number, amountId: string) => {
+    setSaving(true);
+    try {
+      const amount = parseFloat(editingAmount);
+      if (isNaN(amount)) throw new Error("Invalid amount");
+
+      await updateEntryAmount(amountId, budgetId, amount);
+      setEditingMonth(null);
+      setEditingAmount("");
+      onUpdate?.();
+    } catch (error) {
+      console.error("Failed to update amount:", error);
+      alert("Failed to update amount");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -83,100 +118,108 @@ export function BudgetTableRow({
     }
   };
 
-  if (isEditing) {
-    return (
-      <tr className="bg-muted/50">
-        <td className="p-2">
-          <Input
-            value={editData.description}
-            onChange={(e) =>
-              setEditData({ ...editData, description: e.target.value })
-            }
-            disabled={isSaving}
-            className="h-8"
-          />
-        </td>
-        <td className="p-2">
-          <Select
-            value={editData.category_id}
-            onValueChange={(value) =>
-              setEditData({ ...editData, category_id: value })
-            }
-            disabled={isSaving}
-          >
-            <SelectTrigger className="h-8">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {categories.map((cat) => (
-                <SelectItem key={cat.id} value={cat.id}>
-                  {cat.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </td>
-        <td className="p-2">
-          <Input
-            type="number"
-            step="0.01"
-            value={editData.amount}
-            onChange={(e) =>
-              setEditData({ ...editData, amount: e.target.value })
-            }
-            disabled={isSaving}
-            className="h-8"
-          />
-        </td>
-        <td className="p-2">
-          <Input
-            type="date"
-            value={editData.entry_date}
-            onChange={(e) =>
-              setEditData({ ...editData, entry_date: e.target.value })
-            }
-            disabled={isSaving}
-            className="h-8"
-          />
-        </td>
-        <td className="p-2 space-x-1 flex">
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={handleSave}
-            disabled={isSaving}
-          >
-            <CheckCircle2 className="w-4 h-4" />
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => setIsEditing(false)}
-            disabled={isSaving}
-          >
-            <XCircle className="w-4 h-4" />
-          </Button>
-        </td>
-      </tr>
-    );
-  }
-
   return (
-    <tr className="hover:bg-muted/50 transition-colors border-b">
-      <td className="p-2 cursor-pointer" onClick={() => setIsEditing(true)}>
-        {entry.description}
+    <tr className="hover:bg-muted/30 transition-colors border-b">
+      {/* Description */}
+      <td className="p-2 border-r max-w-[200px] truncate">
+        {editingDescription ? (
+          <input
+            type="text"
+            value={descriptionValue}
+            onChange={(e) => setDescriptionValue(e.target.value)}
+            onBlur={handleSaveDescription}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSaveDescription();
+              if (e.key === "Escape") {
+                setEditingDescription(false);
+                setDescriptionValue(entry.description);
+              }
+            }}
+            autoFocus
+            disabled={saving}
+            className="w-full px-1 py-0.5 border rounded text-sm"
+          />
+        ) : (
+          <div
+            onClick={() => setEditingDescription(true)}
+            className="cursor-pointer hover:bg-accent px-1 py-0.5 rounded"
+          >
+            {entry.description}
+          </div>
+        )}
       </td>
-      <td className="p-2 text-sm">{categoryMap[entry.category_id]}</td>
+
+      {/* Category */}
+      <td className="p-2 border-r text-sm text-muted-foreground max-w-[120px] truncate">
+        {categoryMap[entry.category_id]}
+      </td>
+
+      {/* Monthly Amounts */}
+      {Array.from({ length: 12 }, (_, i) => {
+        const month = i + 1;
+        const amount = amountMap[month];
+        const isEditing = editingMonth === month;
+
+        return (
+          <td key={month} className="p-2 text-right border-r min-w-[80px]">
+            {isEditing && amount ? (
+              <input
+                type="number"
+                step="0.01"
+                value={editingAmount}
+                onChange={(e) => setEditingAmount(e.target.value)}
+                onBlur={() => handleSaveAmount(month, amount.id)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSaveAmount(month, amount.id);
+                  if (e.key === "Escape") {
+                    setEditingMonth(null);
+                    setEditingAmount("");
+                  }
+                }}
+                autoFocus
+                disabled={saving}
+                className="w-full px-1 py-0.5 border rounded text-right text-sm"
+              />
+            ) : (
+              <div
+                onClick={() => {
+                  if (amount) {
+                    setEditingMonth(month);
+                    setEditingAmount(amount.amount.toString());
+                  }
+                }}
+                className={`cursor-pointer hover:bg-accent px-1 py-0.5 rounded ${
+                  amount && amount.amount > 0
+                    ? "text-green-600"
+                    : amount && amount.amount < 0
+                    ? "text-red-600"
+                    : "text-muted-foreground"
+                }`}
+              >
+                {amount
+                  ? `${amount.amount > 0 ? "+" : ""}${amount.amount.toFixed(0)}`
+                  : "-"}
+              </div>
+            )}
+          </td>
+        );
+      })}
+
+      {/* Row Total */}
       <td
-        className="p-2 text-right cursor-pointer font-mono"
-        onClick={() => setIsEditing(true)}
+        className={`p-2 text-right border-r font-semibold min-w-[80px] ${
+          rowTotal > 0
+            ? "text-green-700"
+            : rowTotal < 0
+            ? "text-red-700"
+            : "text-muted-foreground"
+        }`}
       >
-        {entry.amount > 0 ? "+" : ""}
-        {entry.amount.toFixed(2)}
+        {rowTotal > 0 ? "+" : ""}
+        {rowTotal.toFixed(0)}
       </td>
-      <td className="p-2 text-sm text-muted-foreground">
-        {new Date(entry.entry_date).toLocaleDateString()}
-      </td>
+
+      {/* Delete Button */}
       <td className="p-2">
         <Button
           size="sm"

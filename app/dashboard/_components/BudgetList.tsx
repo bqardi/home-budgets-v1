@@ -10,8 +10,7 @@ import { useState } from "react";
 interface Budget {
   id: string;
   name: string;
-  start_date: string | null;
-  end_date: string | null;
+  year: number;
   created_at: string;
 }
 
@@ -58,12 +57,9 @@ export function BudgetList({ budgets }: BudgetListProps) {
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <CardTitle className="text-lg">{budget.name}</CardTitle>
-                {budget.start_date && budget.end_date && (
-                  <p className="text-sm text-muted-foreground mt-1">
-                    {new Date(budget.start_date).toLocaleDateString()} –{" "}
-                    {new Date(budget.end_date).toLocaleDateString()}
-                  </p>
-                )}
+                <p className="text-sm text-muted-foreground mt-1">
+                  {budget.year}
+                </p>
               </div>
               <div className="flex gap-2">
                 <Link href={`/budget/${budget.id}`}>

@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { createCategory } from '@/app/actions/entries';
-import { Plus } from 'lucide-react';
+} from "@/components/ui/dialog";
+import { createCategory } from "@/app/actions/entries";
+import { Plus } from "lucide-react";
 
 interface CreateCategoryModalProps {
   onSuccess?: () => void;
@@ -21,7 +21,7 @@ interface CreateCategoryModalProps {
 export function CreateCategoryModal({ onSuccess }: CreateCategoryModalProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,12 +29,12 @@ export function CreateCategoryModal({ onSuccess }: CreateCategoryModalProps) {
 
     try {
       await createCategory(name);
-      setName('');
+      setName("");
       setOpen(false);
       onSuccess?.();
     } catch (error) {
-      console.error('Failed to create category:', error);
-      alert('Failed to create category');
+      console.error("Failed to create category:", error);
+      alert("Failed to create category");
     } finally {
       setLoading(false);
     }
@@ -76,7 +76,7 @@ export function CreateCategoryModal({ onSuccess }: CreateCategoryModalProps) {
               Cancel
             </Button>
             <Button type="submit" disabled={loading || !name.trim()}>
-              {loading ? 'Creating...' : 'Create Category'}
+              {loading ? "Creating..." : "Create Category"}
             </Button>
           </div>
         </form>

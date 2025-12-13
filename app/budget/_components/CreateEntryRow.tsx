@@ -5,6 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -13,6 +20,21 @@ import {
 } from "@/components/ui/select";
 import { createEntry } from "@/app/actions/entries";
 import { Plus } from "lucide-react";
+
+const MONTHS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 
 interface CreateEntryRowProps {
   budgetId: string;
@@ -27,35 +49,35 @@ export function CreateEntryRow({
 }: CreateEntryRowProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    description: "",
-    amount: "",
-    categoryId: "",
-    entryDate: new Date().toISOString().split("T")[0],
-  });
+  const [description, setDescription] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  const [monthlyAmounts, setMonthlyAmounts] = useState<Record<number, number>>(
+    Object.fromEntries(Array.from({ length: 12 }, (_, i) => [i + 1, 0]))
+  );
+
+  const handleMonthChange = (month: number, value: string) => {
+    const amount = parseFloat(value) || 0;
+    setMonthlyAmounts({
+      ...monthlyAmounts,
+      [month]: amount,
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const amount = parseFloat(formData.amount);
-      if (isNaN(amount)) throw new Error("Invalid amount");
+      if (!description.trim()) throw new Error("Description is required");
+      if (!categoryId) throw new Error("Category is required");
 
-      await createEntry(
-        budgetId,
-        formData.categoryId,
-        formData.description,
-        amount,
-        formData.entryDate
+      await createEntry(budgetId, categoryId, description, monthlyAmounts);
+
+      setDescription("");
+      setCategoryId("");
+      setMonthlyAmounts(
+        Object.fromEntries(Array.from({ length: 12 }, (_, i) => [i + 1, 0]))
       );
-
-      setFormData({
-        description: "",
-        amount: "",
-        categoryId: "",
-        entryDate: new Date().toISOString().split("T")[0],
-      });
       setOpen(false);
       onSuccess?.();
     } catch (error) {
@@ -66,98 +88,102 @@ export function CreateEntryRow({
     }
   };
 
-  if (!open) {
-    return (
-      <tr>
-        <td colSpan={5} className="p-4 text-center">
-          <Button variant="outline" size="sm" onClick={() => setOpen(true)}>
-            <Plus className="w-4 h-4 mr-2" />
-            Add Entry
-          </Button>
-        </td>
-      </tr>
-    );
-  }
-
   return (
-    <tr className="bg-muted/50 border-t border-b">
-      <td className="p-2">
-        <Input
-          placeholder="Description"
-          value={formData.description}
-          onChange={(e) =>
-            setFormData({ ...formData, description: e.target.value })
-          }
-          disabled={loading}
-          required
-          className="h-8"
-        />
-      </td>
-      <td className="p-2">
-        <Select
-          value={formData.categoryId}
-          onValueChange={(value) =>
-            setFormData({ ...formData, categoryId: value })
-          }
-          disabled={loading}
-        >
-          <SelectTrigger className="h-8">
-            <SelectValue placeholder="Category" />
-          </SelectTrigger>
-          <SelectContent>
-            {categories.map((cat) => (
-              <SelectItem key={cat.id} value={cat.id}>
-                {cat.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </td>
-      <td className="p-2">
-        <Input
-          type="number"
-          step="0.01"
-          placeholder="Amount"
-          value={formData.amount}
-          onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-          disabled={loading}
-          required
-          className="h-8"
-        />
-      </td>
-      <td className="p-2">
-        <Input
-          type="date"
-          value={formData.entryDate}
-          onChange={(e) =>
-            setFormData({ ...formData, entryDate: e.target.value })
-          }
-          disabled={loading}
-          className="h-8"
-        />
-      </td>
-      <td className="p-2 space-x-2 flex">
-        <Button
-          size="sm"
-          onClick={handleSubmit}
-          disabled={
-            loading ||
-            !formData.description ||
-            !formData.categoryId ||
-            !formData.amount
-          }
-        >
-          {loading ? "Saving..." : "Save"}
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button>
+          <Plus className="w-4 h-4 mr-2" />
+          Add Entry
         </Button>
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={() => setOpen(false)}
-          disabled={loading}
-        >
-          Cancel
-        </Button>
-      </td>
-    </tr>
+      </DialogTrigger>
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Create New Entry</DialogTitle>
+        </DialogHeader>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Description and Category */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="description">Description</Label>
+              <Input
+                id="description"
+                placeholder="e.g., Husleje"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required
+                disabled={loading}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="category">Category</Label>
+              <Select
+                value={categoryId}
+                onValueChange={setCategoryId}
+                disabled={loading}
+              >
+                <SelectTrigger id="category">
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories.map((cat) => (
+                    <SelectItem key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Monthly Amounts */}
+          <div className="space-y-2">
+            <Label>Monthly Amounts</Label>
+            <div className="grid grid-cols-3 gap-4 p-4 bg-muted rounded-lg">
+              {MONTHS.map((month, idx) => (
+                <div key={month} className="space-y-1">
+                  <label className="text-xs font-semibold text-muted-foreground">
+                    {month}
+                  </label>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    placeholder="0"
+                    value={monthlyAmounts[idx + 1]}
+                    onChange={(e) => handleMonthChange(idx + 1, e.target.value)}
+                    disabled={loading}
+                    className="h-8"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Buttons */}
+          <div className="flex justify-end gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setOpen(false)}
+              disabled={loading}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              disabled={
+                loading ||
+                !description.trim() ||
+                !categoryId ||
+                Object.values(monthlyAmounts).every((v) => v === 0)
+              }
+            >
+              {loading ? "Creating..." : "Create Entry"}
+            </Button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }

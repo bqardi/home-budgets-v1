@@ -37,7 +37,19 @@ async function getBudgetData(budgetId: string) {
   // Fetch entries
   const { data: entries = [] } = await supabase
     .from("entries")
-    .select("*")
+    .select(
+      `
+      id,
+      description,
+      category_id,
+      created_at,
+      entry_amounts (
+        id,
+        month,
+        amount
+      )
+    `
+    )
     .eq("budget_id", budgetId)
     .eq("user_id", userData.user.id);
 
@@ -74,12 +86,7 @@ async function BudgetPageContent({ id }: { id: string }) {
         <div className="mb-8 flex items-start justify-between">
           <div>
             <h1 className="text-3xl font-bold">{budget.name}</h1>
-            {budget.start_date && budget.end_date && (
-              <p className="text-muted-foreground mt-2">
-                {new Date(budget.start_date).toLocaleDateString()} –{" "}
-                {new Date(budget.end_date).toLocaleDateString()}
-              </p>
-            )}
+            <p className="text-muted-foreground mt-2">{budget.year}</p>
           </div>
           <CreateCategoryModal />
         </div>
@@ -94,7 +101,11 @@ async function BudgetPageContent({ id }: { id: string }) {
             </p>
           </div>
         ) : (
-          <BudgetTable entries={entries} categories={categories} budgetId={id} />
+          <BudgetTable
+            entries={entries}
+            categories={categories}
+            budgetId={id}
+          />
         )}
       </div>
     </div>

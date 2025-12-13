@@ -3,11 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
-export async function createBudget(
-  name: string,
-  startDate?: string,
-  endDate?: string
-) {
+export async function createBudget(name: string, year: number) {
   const supabase = await createClient();
 
   const {
@@ -21,8 +17,7 @@ export async function createBudget(
     .insert({
       user_id: user.id,
       name,
-      start_date: startDate || null,
-      end_date: endDate || null,
+      year,
     })
     .select("id")
     .single();

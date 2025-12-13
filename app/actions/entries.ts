@@ -7,8 +7,7 @@ export async function createEntry(
   budgetId: string,
   categoryId: string,
   description: string,
-  amount: number,
-  entryDate: string
+  monthlyAmounts: Record<number, number> // { 1: 100, 2: 150, ... }
 ) {
   const supabase = await createClient();
 
@@ -18,34 +17,64 @@ export async function createEntry(
   } = await supabase.auth.getUser();
   if (userError || !user) throw new Error("Unauthorized");
 
-  const { data, error } = await supabase
+  // Create the entry first
+  const { data: entry, error: entryError } = await supabase
     .from("entries")
     .insert({
       user_id: user.id,
       budget_id: budgetId,
       category_id: categoryId,
       description,
-      amount,
-      entry_date: entryDate,
     })
     .select("id")
     .single();
 
+  if (entryError) throw new Error(entryError.message);
+
+  // Insert monthly amounts (12 rows)
+  const amounts = Array.from({ length: 12 }, (_, i) => ({
+    entry_id: entry.id,
+    month: i + 1,
+    amount: monthlyAmounts[i + 1] || 0,
+  }));
+
+  const { error: amountsError } = await supabase
+    .from("entry_amounts")
+    .insert(amounts);
+
+  if (amountsError) throw new Error(amountsError.message);
+
+  revalidatePath(`/budget/${budgetId}`);
+  return entry;
+}
+
+export async function updateEntryAmount(
+  entryAmountId: string,
+  budgetId: string,
+  amount: number
+) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+  if (userError || !user) throw new Error("Unauthorized");
+
+  const { error } = await supabase
+    .from("entry_amounts")
+    .update({ amount })
+    .eq("id", entryAmountId);
+
   if (error) throw new Error(error.message);
 
   revalidatePath(`/budget/${budgetId}`);
-  return data;
 }
 
-export async function updateEntry(
+export async function updateEntryDescription(
   entryId: string,
   budgetId: string,
-  updates: {
-    description?: string;
-    amount?: number;
-    category_id?: string;
-    entry_date?: string;
-  }
+  description: string
 ) {
   const supabase = await createClient();
 
@@ -57,7 +86,7 @@ export async function updateEntry(
 
   const { error } = await supabase
     .from("entries")
-    .update(updates)
+    .update({ description })
     .eq("id", entryId)
     .eq("user_id", user.id);
 

@@ -23,8 +23,7 @@ export function CreateBudgetModal({ onSuccess }: CreateBudgetModalProps) {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
-    startDate: "",
-    endDate: "",
+    year: new Date().getFullYear(),
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -32,12 +31,8 @@ export function CreateBudgetModal({ onSuccess }: CreateBudgetModalProps) {
     setLoading(true);
 
     try {
-      await createBudget(
-        formData.name,
-        formData.startDate || undefined,
-        formData.endDate || undefined
-      );
-      setFormData({ name: "", startDate: "", endDate: "" });
+      await createBudget(formData.name, formData.year);
+      setFormData({ name: "", year: new Date().getFullYear() });
       setOpen(false);
       onSuccess?.();
     } catch (error) {
@@ -65,7 +60,7 @@ export function CreateBudgetModal({ onSuccess }: CreateBudgetModalProps) {
             <Label htmlFor="name">Budget Name</Label>
             <Input
               id="name"
-              placeholder="e.g., January 2025"
+              placeholder="e.g., My 2025 Budget"
               value={formData.name}
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
@@ -76,27 +71,17 @@ export function CreateBudgetModal({ onSuccess }: CreateBudgetModalProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="startDate">Start Date (Optional)</Label>
+            <Label htmlFor="year">Year</Label>
             <Input
-              id="startDate"
-              type="date"
-              value={formData.startDate}
+              id="year"
+              type="number"
+              min="2020"
+              max="2100"
+              value={formData.year}
               onChange={(e) =>
-                setFormData({ ...formData, startDate: e.target.value })
+                setFormData({ ...formData, year: parseInt(e.target.value) })
               }
-              disabled={loading}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="endDate">End Date (Optional)</Label>
-            <Input
-              id="endDate"
-              type="date"
-              value={formData.endDate}
-              onChange={(e) =>
-                setFormData({ ...formData, endDate: e.target.value })
-              }
+              required
               disabled={loading}
             />
           </div>
@@ -110,7 +95,7 @@ export function CreateBudgetModal({ onSuccess }: CreateBudgetModalProps) {
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={loading}>
+            <Button type="submit" disabled={loading || !formData.name.trim()}>
               {loading ? "Creating..." : "Create Budget"}
             </Button>
           </div>
