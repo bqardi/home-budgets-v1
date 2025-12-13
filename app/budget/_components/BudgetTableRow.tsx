@@ -106,9 +106,9 @@ export function BudgetTableRow({
   };
 
   return (
-    <tr className="hover:bg-muted/30 transition-colors border-b">
+    <tr className="hover:bg-gray-50 transition-colors border-b">
       {/* Description */}
-      <td className="sticky left-0 z-10 p-2 border-r max-w-[200px] truncate bg-white hover:bg-muted/30">
+      <td className="sticky left-0 z-10 p-2 border-r max-w-[200px] truncate bg-white hover:bg-gray-50">
         {editingDescription ? (
           <input
             type="text"
