@@ -9,21 +9,6 @@ import {
 } from "@/app/actions/entries";
 import { Trash2 } from "lucide-react";
 
-const MONTHS = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
 interface EntryAmount {
   id: string;
   month: number;
