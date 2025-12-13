@@ -3,7 +3,6 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
 import { BudgetTable } from "../_components/BudgetTable";
-import { CreateCategoryModal } from "../_components/CreateCategoryModal";
 import { ArrowLeft } from "lucide-react";
 import { Suspense } from "react";
 
@@ -96,12 +95,9 @@ async function BudgetPageContent({ id }: { id: string }) {
           </Button>
         </Link>
 
-        <div className="mb-8 flex items-start justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">{budget.name}</h1>
-            <p className="text-muted-foreground mt-2">{budget.year}</p>
-          </div>
-          <CreateCategoryModal />
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold">{budget.name}</h1>
+          <p className="text-muted-foreground mt-2">{budget.year}</p>
         </div>
 
         {categories.length === 0 ? (

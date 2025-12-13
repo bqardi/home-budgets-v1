@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { updateStartingBalance } from "@/app/actions/budget";
+import { CreateCategoryModal } from "./CreateCategoryModal";
 
 interface EntryAmount {
   id: string;
@@ -148,38 +149,40 @@ export function BudgetTable({
   return (
     <div className="space-y-6">
       {/* Configuration Section */}
-      <div className="bg-card border rounded-lg p-4 space-y-4">
-        <h3 className="text-sm font-semibold text-muted-foreground uppercase">
+      <div className="bg-card border rounded-lg p-4">
+        <h3 className="mb-2 text-sm font-semibold text-muted-foreground uppercase">
           Configuration
         </h3>
-        <div className="max-w-xs">
-          <Label htmlFor="starting-balance" className="text-sm">
-            Starting Balance
-          </Label>
-          <Input
-            id="starting-balance"
-            type="number"
-            step="0.01"
-            value={startingBalance}
-            onChange={(e) => handleStartingBalanceChange(e.target.value)}
-            placeholder="0"
-            className="mt-1"
-            disabled={isSaving}
-          />
-        </div>
+        <div className="flex items-end gap-x-2">
+          <div className="max-w-32">
+            <Label htmlFor="starting-balance" className="text-sm">
+              Starting Balance
+            </Label>
+            <Input
+              id="starting-balance"
+              type="number"
+              step="0.01"
+              value={startingBalance}
+              onChange={(e) => handleStartingBalanceChange(e.target.value)}
+              placeholder="0"
+              className="mt-1"
+              disabled={isSaving}
+            />
+          </div>
 
-        {/* Transfer Button */}
-        {otherBudgets.length > 0 && (
-          <div className="pt-2 border-t">
+          <CreateCategoryModal />
+
+          {/* Transfer Button */}
+          {otherBudgets.length > 0 && (
             <Button
-              size="sm"
+              size="md"
+              variant="outline"
               onClick={() => setIsTransferModalOpen(true)}
-              className="w-full"
             >
               Transfer from Another Budget
             </Button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* Monthly Table */}
