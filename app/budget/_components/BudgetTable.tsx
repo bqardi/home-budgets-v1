@@ -1,7 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { BudgetTableRow } from "./BudgetTableRow";
 import { CreateEntryRow } from "./CreateEntryRow";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface EntryAmount {
   id: string;
@@ -50,6 +53,8 @@ export function BudgetTable({
   budgetId,
   onRefresh,
 }: BudgetTableProps) {
+  const [startingBalance, setStartingBalance] = useState<string>("0");
+
   // Create category map for quick lookup
   const categoryMap = Object.fromEntries(categories.map((c) => [c.id, c.name]));
 
@@ -82,8 +87,38 @@ export function BudgetTable({
   const totalIncome = monthlyIncome.reduce((sum, m) => sum + m, 0);
   const totalExpenses = monthlyExpenses.reduce((sum, m) => sum + m, 0);
 
+  // Calculate running balance from starting balance
+  const startBalance = parseFloat(startingBalance) || 0;
+  const runningBalance: number[] = [];
+  let currentBalance = startBalance;
+  for (let i = 0; i < 12; i++) {
+    currentBalance += monthlyTotals[i];
+    runningBalance.push(currentBalance);
+  }
+
   return (
     <div className="space-y-6">
+      {/* Configuration Section */}
+      <div className="bg-card border rounded-lg p-4 space-y-4">
+        <h3 className="text-sm font-semibold text-muted-foreground uppercase">
+          Configuration
+        </h3>
+        <div className="max-w-xs">
+          <Label htmlFor="starting-balance" className="text-sm">
+            Starting Balance
+          </Label>
+          <Input
+            id="starting-balance"
+            type="number"
+            step="0.01"
+            value={startingBalance}
+            onChange={(e) => setStartingBalance(e.target.value)}
+            placeholder="0"
+            className="mt-1"
+          />
+        </div>
+      </div>
+
       {/* Monthly Table */}
       <div className="overflow-x-auto border rounded-lg">
         <table className="w-full text-sm border-collapse">
@@ -222,6 +257,26 @@ export function BudgetTable({
                       {grandTotal > 0 ? "+" : ""}
                       {grandTotal.toFixed(0)}
                     </span>
+                  </td>
+                  <td className="p-2"></td>
+                </tr>
+
+                {/* Running Balance Row */}
+                <tr className="bg-purple-50/50 border-t border-b font-semibold text-purple-700">
+                  <td className="p-2 border-r text-left">Running Balance</td>
+                  <td className="p-2 border-r text-xs text-muted-foreground">
+                    Start: {startBalance > 0 ? "+" : ""}
+                    {startBalance.toFixed(0)}
+                  </td>
+                  {runningBalance.map((balance, idx) => (
+                    <td key={idx} className="p-2 text-right border-r">
+                      {balance > 0 ? "+" : ""}
+                      {balance.toFixed(0)}
+                    </td>
+                  ))}
+                  <td className="p-2 text-right border-r">
+                    {runningBalance[11] > 0 ? "+" : ""}
+                    {runningBalance[11].toFixed(0)}
                   </td>
                   <td className="p-2"></td>
                 </tr>
