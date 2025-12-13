@@ -1,0 +1,54 @@
+"use server";
+
+import { createClient } from "@/lib/supabase/server";
+import { revalidatePath } from "next/cache";
+
+export async function createBudget(
+  name: string,
+  startDate?: string,
+  endDate?: string
+) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+  if (userError || !user) throw new Error("Unauthorized");
+
+  const { data, error } = await supabase
+    .from("budgets")
+    .insert({
+      user_id: user.id,
+      name,
+      start_date: startDate || null,
+      end_date: endDate || null,
+    })
+    .select("id")
+    .single();
+
+  if (error) throw new Error(error.message);
+
+  revalidatePath("/dashboard");
+  return data;
+}
+
+export async function deleteBudget(budgetId: string) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+  if (userError || !user) throw new Error("Unauthorized");
+
+  const { error } = await supabase
+    .from("budgets")
+    .delete()
+    .eq("id", budgetId)
+    .eq("user_id", user.id);
+
+  if (error) throw new Error(error.message);
+
+  revalidatePath("/dashboard");
+}

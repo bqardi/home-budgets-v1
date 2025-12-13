@@ -1,28 +1,53 @@
 import { redirect } from "next/navigation";
-
 import { createClient } from "@/lib/supabase/server";
-import { Suspense } from "react";
+import { LogoutButton } from "@/components/logout-button";
+import { BudgetList } from "./_components/BudgetList";
+import { CreateBudgetModal } from "./_components/CreateBudgetModal";
 
-async function UserDetails() {
+async function getBudgets() {
   const supabase = await createClient();
-  const { data, error } = await supabase.auth.getClaims();
 
-  if (error || !data?.claims) {
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+  if (userError || !userData?.user) {
     redirect("/auth/login");
   }
 
-  return JSON.stringify(data.claims, null, 2);
+  const { data: budgets, error } = await supabase
+    .from("budgets")
+    .select("*")
+    .eq("user_id", userData.user.id)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Error fetching budgets:", error);
+    return [];
+  }
+
+  return budgets || [];
 }
 
-export default function ProtectedPage() {
+export default async function DashboardPage() {
+  const budgets = await getBudgets();
+
   return (
-    <div>
-      <h2 className="font-bold text-2xl mb-4">Your user details</h2>
-      <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-auto">
-        <Suspense>
-          <UserDetails />
-        </Suspense>
-      </pre>
+    <div className="min-h-screen bg-background">
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">Budget Manager</h1>
+            <p className="text-muted-foreground mt-2">
+              Manage your household budget
+            </p>
+          </div>
+          <LogoutButton />
+        </div>
+
+        <div className="flex justify-end mb-6">
+          <CreateBudgetModal />
+        </div>
+
+        <BudgetList budgets={budgets} />
+      </div>
     </div>
   );
 }
