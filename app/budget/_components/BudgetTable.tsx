@@ -13,6 +13,7 @@ interface Entry {
   id: string;
   description: string;
   category_id: string;
+  entry_type: "income" | "expense";
   entry_amounts: EntryAmount[];
 }
 
@@ -52,33 +53,34 @@ export function BudgetTable({
   // Create category map for quick lookup
   const categoryMap = Object.fromEntries(categories.map((c) => [c.id, c.name]));
 
-  // Calculate totals per month and per row
+  // Separate income and expenses
+  const incomeEntries = entries.filter((e) => e.entry_type === "income");
+  const expenseEntries = entries.filter((e) => e.entry_type === "expense");
+
+  // Calculate totals per month
   const monthlyTotals: number[] = Array(12).fill(0);
-  const categoryTotals: Record<string, number> = {};
+  const monthlyIncome: number[] = Array(12).fill(0);
+  const monthlyExpenses: number[] = Array(12).fill(0);
 
-  entries.forEach((entry) => {
-    const catName = categoryMap[entry.category_id] || "Unknown";
-    if (!categoryTotals[catName]) categoryTotals[catName] = 0;
-
+  // Process income (positive)
+  incomeEntries.forEach((entry) => {
     entry.entry_amounts.forEach((amount) => {
+      monthlyIncome[amount.month - 1] += amount.amount;
       monthlyTotals[amount.month - 1] += amount.amount;
-      categoryTotals[catName] += amount.amount;
+    });
+  });
+
+  // Process expenses (subtract)
+  expenseEntries.forEach((entry) => {
+    entry.entry_amounts.forEach((amount) => {
+      monthlyExpenses[amount.month - 1] += amount.amount;
+      monthlyTotals[amount.month - 1] -= amount.amount;
     });
   });
 
   const grandTotal = monthlyTotals.reduce((sum, m) => sum + m, 0);
-
-  // Separate income and expenses
-  let totalIncome = 0;
-  let totalExpenses = 0;
-
-  Object.values(categoryTotals).forEach((total) => {
-    if (total >= 0) {
-      totalIncome += total;
-    } else {
-      totalExpenses += Math.abs(total);
-    }
-  });
+  const totalIncome = monthlyIncome.reduce((sum, m) => sum + m, 0);
+  const totalExpenses = monthlyExpenses.reduce((sum, m) => sum + m, 0);
 
   return (
     <div className="space-y-6">
@@ -120,46 +122,110 @@ export function BudgetTable({
                 </td>
               </tr>
             ) : (
-              entries.map((entry) => (
-                <BudgetTableRow
-                  key={entry.id}
-                  entry={entry}
-                  budgetId={budgetId}
-                  categories={categories}
-                  categoryMap={categoryMap}
-                  onUpdate={onRefresh}
-                  onDelete={onRefresh}
-                />
-              ))
+              <>
+                {/* Income Entries */}
+                {incomeEntries.length > 0 && (
+                  <>
+                    {incomeEntries.map((entry) => (
+                      <BudgetTableRow
+                        key={entry.id}
+                        entry={entry}
+                        budgetId={budgetId}
+                        categories={categories}
+                        categoryMap={categoryMap}
+                        onUpdate={onRefresh}
+                        onDelete={onRefresh}
+                      />
+                    ))}
+                  </>
+                )}
+
+                {/* Expense Entries */}
+                {expenseEntries.length > 0 && (
+                  <>
+                    {expenseEntries.map((entry) => (
+                      <BudgetTableRow
+                        key={entry.id}
+                        entry={entry}
+                        budgetId={budgetId}
+                        categories={categories}
+                        categoryMap={categoryMap}
+                        onUpdate={onRefresh}
+                        onDelete={onRefresh}
+                      />
+                    ))}
+                  </>
+                )}
+              </>
             )}
 
             {/* Monthly Totals Row */}
             {entries.length > 0 && (
-              <tr className="bg-muted/50 border-t-2 border-b font-semibold">
-                <td className="p-2 border-r text-left">Month Total</td>
-                <td className="p-2 border-r"></td>
-                {monthlyTotals.map((total, idx) => (
-                  <td key={idx} className="p-2 text-right border-r">
+              <>
+                {/* Income Total Row */}
+                {incomeEntries.length > 0 && (
+                  <tr className="bg-green-50/50 border-t border-b font-semibold text-green-700">
+                    <td className="p-2 border-r text-left">Income Total</td>
+                    <td className="p-2 border-r"></td>
+                    {monthlyIncome.map((total, idx) => (
+                      <td key={idx} className="p-2 text-right border-r">
+                        {total > 0 ? "+" : ""}
+                        {total.toFixed(0)}
+                      </td>
+                    ))}
+                    <td className="p-2 text-right border-r">
+                      +{totalIncome.toFixed(0)}
+                    </td>
+                    <td className="p-2"></td>
+                  </tr>
+                )}
+
+                {/* Expense Total Row */}
+                {expenseEntries.length > 0 && (
+                  <tr className="bg-red-50/50 border-t border-b font-semibold text-red-700">
+                    <td className="p-2 border-r text-left">Expense Total</td>
+                    <td className="p-2 border-r"></td>
+                    {monthlyExpenses.map((total, idx) => (
+                      <td key={idx} className="p-2 text-right border-r">
+                        -{total.toFixed(0)}
+                      </td>
+                    ))}
+                    <td className="p-2 text-right border-r">
+                      -{totalExpenses.toFixed(0)}
+                    </td>
+                    <td className="p-2"></td>
+                  </tr>
+                )}
+
+                {/* Net Total Row */}
+                <tr className="bg-muted/50 border-t-2 border-b font-semibold">
+                  <td className="p-2 border-r text-left">Net Balance</td>
+                  <td className="p-2 border-r"></td>
+                  {monthlyTotals.map((total, idx) => (
+                    <td key={idx} className="p-2 text-right border-r">
+                      <span
+                        className={
+                          total >= 0 ? "text-blue-600" : "text-red-600"
+                        }
+                      >
+                        {total > 0 ? "+" : ""}
+                        {total.toFixed(0)}
+                      </span>
+                    </td>
+                  ))}
+                  <td className="p-2 text-right border-r">
                     <span
-                      className={total >= 0 ? "text-green-600" : "text-red-600"}
+                      className={
+                        grandTotal >= 0 ? "text-blue-700" : "text-red-700"
+                      }
                     >
-                      {total > 0 ? "+" : ""}
-                      {total.toFixed(0)}
+                      {grandTotal > 0 ? "+" : ""}
+                      {grandTotal.toFixed(0)}
                     </span>
                   </td>
-                ))}
-                <td className="p-2 text-right border-r">
-                  <span
-                    className={
-                      grandTotal >= 0 ? "text-green-700" : "text-red-700"
-                    }
-                  >
-                    {grandTotal > 0 ? "+" : ""}
-                    {grandTotal.toFixed(0)}
-                  </span>
-                </td>
-                <td className="p-2"></td>
-              </tr>
+                  <td className="p-2"></td>
+                </tr>
+              </>
             )}
           </tbody>
         </table>

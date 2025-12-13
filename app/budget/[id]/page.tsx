@@ -42,6 +42,7 @@ async function getBudgetData(budgetId: string) {
       id,
       description,
       category_id,
+      entry_type,
       created_at,
       entry_amounts (
         id,

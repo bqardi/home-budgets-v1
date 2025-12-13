@@ -7,7 +7,8 @@ export async function createEntry(
   budgetId: string,
   categoryId: string,
   description: string,
-  monthlyAmounts: Record<number, number> // { 1: 100, 2: 150, ... }
+  monthlyAmounts: Record<number, number>, // { 1: 100, 2: 150, ... }
+  entryType: "income" | "expense" = "expense"
 ) {
   const supabase = await createClient();
 
@@ -25,6 +26,7 @@ export async function createEntry(
       budget_id: budgetId,
       category_id: categoryId,
       description,
+      entry_type: entryType,
     })
     .select("id")
     .single();

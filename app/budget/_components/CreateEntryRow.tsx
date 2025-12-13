@@ -51,6 +51,7 @@ export function CreateEntryRow({
   const [loading, setLoading] = useState(false);
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState("");
+  const [entryType, setEntryType] = useState<"income" | "expense">("expense");
   const [pattern, setPattern] = useState<
     "custom" | "monthly" | "quarterly" | "half-yearly" | "yearly"
   >("custom");
@@ -101,7 +102,14 @@ export function CreateEntryRow({
   };
 
   const handlePatternChange = (newPattern: string) => {
-    setPattern(newPattern as "custom" | "monthly" | "quarterly" | "half-yearly" | "yearly");
+    setPattern(
+      newPattern as
+        | "custom"
+        | "monthly"
+        | "quarterly"
+        | "half-yearly"
+        | "yearly"
+    );
     if (newPattern !== "custom" && repeatingAmount) {
       applyPattern(newPattern, parseFloat(repeatingAmount) || 0);
     }
@@ -131,10 +139,17 @@ export function CreateEntryRow({
           throw new Error("Amount is required");
       }
 
-      await createEntry(budgetId, categoryId, description, monthlyAmounts);
+      await createEntry(
+        budgetId,
+        categoryId,
+        description,
+        monthlyAmounts,
+        entryType
+      );
 
       setDescription("");
       setCategoryId("");
+      setEntryType("expense");
       setPattern("custom");
       setRepeatingAmount("");
       setMonthlyAmounts(
@@ -164,8 +179,8 @@ export function CreateEntryRow({
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Description and Category */}
-          <div className="grid grid-cols-2 gap-4">
+          {/* Description, Category, and Type */}
+          <div className="grid grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label htmlFor="description">Description</Label>
               <Input
@@ -194,6 +209,25 @@ export function CreateEntryRow({
                       {cat.name}
                     </SelectItem>
                   ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="type">Type</Label>
+              <Select
+                value={entryType}
+                onValueChange={(val) =>
+                  setEntryType(val as "income" | "expense")
+                }
+                disabled={loading}
+              >
+                <SelectTrigger id="type">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="income">Income</SelectItem>
+                  <SelectItem value="expense">Expense</SelectItem>
                 </SelectContent>
               </Select>
             </div>

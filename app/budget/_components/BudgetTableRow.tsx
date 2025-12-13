@@ -20,6 +20,7 @@ interface BudgetTableRowProps {
     id: string;
     description: string;
     category_id: string;
+    entry_type: "income" | "expense";
     entry_amounts: EntryAmount[];
   };
   budgetId: string;
@@ -48,8 +49,9 @@ export function BudgetTableRow({
     entry.entry_amounts.map((ea) => [ea.month, ea])
   );
 
-  // Calculate row total
-  const rowTotal = entry.entry_amounts.reduce((sum, ea) => sum + ea.amount, 0);
+  // Calculate row total (apply negative sign for expenses)
+  const baseTotal = entry.entry_amounts.reduce((sum, ea) => sum + ea.amount, 0);
+  const rowTotal = entry.entry_type === "expense" ? -baseTotal : baseTotal;
 
   const handleSaveDescription = async () => {
     if (descriptionValue === entry.description) {
@@ -175,14 +177,22 @@ export function BudgetTableRow({
                 }}
                 className={`cursor-pointer hover:bg-accent px-1 py-0.5 rounded ${
                   amount && amount.amount > 0
-                    ? "text-green-600"
+                    ? entry.entry_type === "income"
+                      ? "text-green-600"
+                      : "text-red-600"
                     : amount && amount.amount < 0
                     ? "text-red-600"
                     : "text-muted-foreground"
                 }`}
               >
                 {amount
-                  ? `${amount.amount > 0 ? "+" : ""}${amount.amount.toFixed(0)}`
+                  ? `${
+                      entry.entry_type === "expense"
+                        ? "-"
+                        : amount.amount > 0
+                        ? "+"
+                        : ""
+                    }${amount.amount.toFixed(0)}`
                   : "-"}
               </div>
             )}
