@@ -73,6 +73,31 @@ export async function updateEntryAmount(
   revalidatePath(`/budget/${budgetId}`);
 }
 
+export async function updateEntryAmountsBulk(
+  budgetId: string,
+  updates: Array<{ id: string; amount: number }>
+) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+  if (userError || !user) throw new Error("Unauthorized");
+
+  // Update all amounts in a single batch
+  for (const update of updates) {
+    const { error } = await supabase
+      .from("entry_amounts")
+      .update({ amount: update.amount })
+      .eq("id", update.id);
+
+    if (error) throw new Error(error.message);
+  }
+
+  revalidatePath(`/budget/${budgetId}`);
+}
+
 export async function updateEntryDescription(
   entryId: string,
   budgetId: string,

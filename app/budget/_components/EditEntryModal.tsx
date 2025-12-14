@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import {
   updateEntryDescription,
-  updateEntryAmount,
+  updateEntryAmountsBulk,
   updateEntryType,
 } from "@/app/actions/entries";
 import { Edit2 } from "lucide-react";
@@ -223,15 +223,20 @@ export function EditEntryModal({
         await updateEntryType(entry.id, budgetId, entryType);
       }
 
-      // Update amounts
+      // Update amounts (bulk update)
+      const amountUpdates = [];
       for (const [month, amount] of Object.entries(monthlyAmounts)) {
         const monthNum = parseInt(month);
         const oldAmount = entry.entry_amounts.find(
           (ea) => ea.month === monthNum
         );
         if (oldAmount && oldAmount.amount !== amount) {
-          await updateEntryAmount(oldAmount.id, budgetId, amount);
+          amountUpdates.push({ id: oldAmount.id, amount });
         }
+      }
+
+      if (amountUpdates.length > 0) {
+        await updateEntryAmountsBulk(budgetId, amountUpdates);
       }
 
       setOpen(false);
