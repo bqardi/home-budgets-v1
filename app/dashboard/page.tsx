@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { LogoutButton } from "@/components/logout-button";
 import { BudgetList } from "./_components/BudgetList";
 import { CreateBudgetModal } from "./_components/CreateBudgetModal";
+import { Navigation } from "@/components/navigation";
 
 async function getBudgets() {
   const supabase = await createClient();
@@ -31,6 +31,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Navigation />
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -39,7 +40,6 @@ export default async function DashboardPage() {
               Manage your household budget
             </p>
           </div>
-          <LogoutButton />
         </div>
 
         <div className="flex justify-end mb-6">

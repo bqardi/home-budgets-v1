@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { BudgetTable } from "../_components/BudgetTable";
 import { ArrowLeft } from "lucide-react";
 import { Suspense } from "react";
+import { Navigation } from "@/components/navigation";
 
 async function getBudgetData(budgetId: string) {
   const supabase = await createClient();
@@ -87,6 +88,7 @@ async function BudgetPageContent({ id }: { id: string }) {
 
   return (
     <div className="min-h-screen bg-background">
+      <Navigation />
       <div className="max-w-6xl mx-auto px-4 py-8">
         <Link href="/dashboard">
           <Button variant="ghost" size="sm" className="mb-6">
