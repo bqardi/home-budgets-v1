@@ -8,6 +8,7 @@ import {
   updateEntryDescription,
 } from "@/app/actions/entries";
 import { Trash2 } from "lucide-react";
+import { EditEntryModal } from "./EditEntryModal";
 
 interface EntryAmount {
   id: string;
@@ -33,6 +34,7 @@ interface BudgetTableRowProps {
 export function BudgetTableRow({
   entry,
   budgetId,
+  categories,
   categoryMap,
   onDelete,
   onUpdate,
@@ -215,7 +217,13 @@ export function BudgetTableRow({
       </td>
 
       {/* Delete Button */}
-      <td className="sticky right-0 z-10 p-2 bg-white hover:bg-gray-50">
+      <td className="sticky right-0 z-10 p-2 bg-white hover:bg-gray-50 flex gap-2">
+        <EditEntryModal
+          entry={entry}
+          budgetId={budgetId}
+          categories={categories}
+          onSuccess={onUpdate}
+        />
         <Button
           size="sm"
           variant="destructive"

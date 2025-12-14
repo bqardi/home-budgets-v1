@@ -57,7 +57,6 @@ export function BudgetTable({
   entries: initialEntries,
   categories,
   budgetId,
-  onRefresh,
   otherBudgets = [],
   initialStartingBalance = "0",
 }: BudgetTableProps) {
@@ -234,8 +233,8 @@ export function BudgetTable({
                         budgetId={budgetId}
                         categories={categories}
                         categoryMap={categoryMap}
-                        onUpdate={onRefresh}
-                        onDelete={onRefresh}
+                        onUpdate={handleRefresh}
+                        onDelete={handleRefresh}
                       />
                     ))}
                   </>
@@ -251,8 +250,8 @@ export function BudgetTable({
                         budgetId={budgetId}
                         categories={categories}
                         categoryMap={categoryMap}
-                        onUpdate={onRefresh}
-                        onDelete={onRefresh}
+                        onUpdate={handleRefresh}
+                        onDelete={handleRefresh}
                       />
                     ))}
                   </>

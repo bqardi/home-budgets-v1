@@ -140,3 +140,27 @@ export async function createCategory(name: string, sortOrder?: number) {
 
   return data;
 }
+export async function updateEntryType(
+  entryId: string,
+  budgetId: string,
+  entryType: "income" | "expense"
+) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+  if (userError || !user) throw new Error("Unauthorized");
+
+  const { error } = await supabase
+    .from("entries")
+    .update({ entry_type: entryType })
+    .eq("id", entryId)
+    .eq("user_id", user.id);
+
+  if (error) throw new Error(error.message);
+
+  revalidatePath(`/budget/${budgetId}`);
+  return true;
+}
