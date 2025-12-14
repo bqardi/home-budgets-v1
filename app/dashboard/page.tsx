@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { BudgetList } from "./_components/BudgetList";
 import { CreateBudgetModal } from "./_components/CreateBudgetModal";
-import { Navigation } from "@/components/navigation";
+import { Navigation } from "@/components/nav";
 
 async function getBudgets() {
   const supabase = await createClient();

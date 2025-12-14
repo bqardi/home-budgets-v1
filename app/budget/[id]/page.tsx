@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { BudgetTable } from "../_components/BudgetTable";
 import { ArrowLeft } from "lucide-react";
 import { Suspense } from "react";
-import { Navigation } from "@/components/navigation";
+import { Navigation } from "@/components/nav";
 
 async function getBudgetData(budgetId: string) {
   const supabase = await createClient();
