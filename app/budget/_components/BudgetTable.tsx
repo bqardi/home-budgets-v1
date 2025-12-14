@@ -203,10 +203,10 @@ export function BudgetTable({
                   {month}
                 </th>
               ))}
-              <th className="sticky right-[60px] z-20 p-2 text-right font-semibold border-r min-w-[80px] bg-muted">
+              <th className="sticky right-[105px] z-20 p-2 text-right font-semibold border-r min-w-[80px] bg-muted">
                 Total
               </th>
-              <th className="sticky right-0 z-20 p-2 text-right font-semibold min-w-[60px] bg-muted">
+              <th className="sticky right-0 z-20 p-2 text-right font-semibold min-w-[105px] bg-muted">
                 Actions
               </th>
             </tr>
@@ -285,18 +285,18 @@ export function BudgetTable({
                       </td>
                     ))}
                     <td
-                      className={`sticky right-[60px] z-10 p-2 text-right border-r bg-green-100 ${
+                      className={`sticky right-[105px] z-10 p-2 text-right border-r font-semibold min-w-[80px] bg-white hover:bg-gray-50 ${
                         totalIncome > 0
                           ? "text-green-700"
                           : totalIncome < 0
                           ? "text-red-700"
-                          : "text-gray-500"
+                          : "text-muted-foreground"
                       }`}
                     >
                       {totalIncome > 0 ? "+" : ""}
                       {totalIncome.toFixed(0)}
                     </td>
-                    <td className="sticky right-0 z-10 p-2 bg-green-100"></td>
+                    <td className="sticky right-0 z-10 p-2 min-w-[105px] bg-green-100"></td>
                   </tr>
                 )}
 
@@ -323,7 +323,7 @@ export function BudgetTable({
                       </td>
                     ))}
                     <td
-                      className={`sticky right-[60px] z-10 p-2 text-right border-r bg-red-100 ${
+                      className={`sticky right-[105px] z-10 p-2 text-right border-r bg-red-100 ${
                         totalExpenses > 0
                           ? "text-red-700"
                           : totalExpenses < 0
@@ -334,7 +334,7 @@ export function BudgetTable({
                       {totalExpenses > 0 ? "-" : ""}
                       {totalExpenses.toFixed(0)}
                     </td>
-                    <td className="sticky right-0 z-10 p-2 bg-red-100"></td>
+                    <td className="sticky right-0 z-10 p-2 min-w-[105px] bg-red-100"></td>
                   </tr>
                 )}
 
@@ -360,7 +360,7 @@ export function BudgetTable({
                     </td>
                   ))}
                   <td
-                    className={`sticky right-[60px] z-10 p-2 text-right border-r bg-gray-100 ${
+                    className={`sticky right-[105px] z-10 p-2 text-right border-r bg-gray-100 ${
                       grandTotal > 0
                         ? "text-green-700"
                         : grandTotal < 0
@@ -371,7 +371,7 @@ export function BudgetTable({
                     {grandTotal > 0 ? "+" : ""}
                     {grandTotal.toFixed(0)}
                   </td>
-                  <td className="sticky right-0 z-10 p-2 bg-gray-100"></td>
+                  <td className="sticky right-0 z-10 p-2 min-w-[105px] bg-gray-100"></td>
                 </tr>
 
                 {/* Running Balance Row */}
@@ -399,18 +399,18 @@ export function BudgetTable({
                     </td>
                   ))}
                   <td
-                    className={`sticky right-[60px] z-10 p-2 text-right border-r bg-purple-100 ${
-                      runningBalance[11] > 0
+                    className={`sticky right-[105px] z-10 p-2 text-right border-r bg-purple-100 ${
+                      runningBalance[runningBalance.length - 1] > 0
                         ? "text-green-700"
-                        : runningBalance[11] < 0
+                        : runningBalance[runningBalance.length - 1] < 0
                         ? "text-red-700"
                         : "text-gray-500"
                     }`}
                   >
-                    {runningBalance[11] > 0 ? "+" : ""}
-                    {runningBalance[11].toFixed(0)}
+                    {runningBalance[runningBalance.length - 1] > 0 ? "+" : ""}
+                    {runningBalance[runningBalance.length - 1].toFixed(0)}
                   </td>
-                  <td className="sticky right-0 z-10 p-2 bg-purple-100"></td>
+                  <td className="sticky right-0 z-10 p-2 min-w-[105px] bg-purple-100"></td>
                 </tr>
               </>
             )}

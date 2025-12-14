@@ -150,7 +150,7 @@ export function BudgetTableRow({
         const isEditing = editingMonth === month;
 
         return (
-          <td key={month} className="p-2 text-right border-r min-w-[80px]">
+          <td key={month} className="p-2 text-right border-r min-w-[105px]">
             {isEditing && amount ? (
               <input
                 type="number"
@@ -204,7 +204,7 @@ export function BudgetTableRow({
 
       {/* Row Total */}
       <td
-        className={`sticky right-[60px] z-10 p-2 text-right border-r font-semibold min-w-[80px] bg-white hover:bg-gray-50 ${
+        className={`sticky right-[105px] z-10 p-2 text-right border-x font-semibold min-w-[105px] bg-white hover:bg-gray-50 ${
           rowTotal > 0
             ? "text-green-700"
             : rowTotal < 0
