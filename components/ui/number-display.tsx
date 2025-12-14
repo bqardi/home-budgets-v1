@@ -3,6 +3,8 @@ import { cn } from "@/lib/utils";
 
 interface NumberDisplayContextType {
   value: number;
+  locale: string;
+  options: Intl.NumberFormatOptions;
 }
 
 const NumberDisplayContext = React.createContext<
@@ -24,6 +26,8 @@ export interface NumberDisplayProps
   negativeClassName?: string;
   positiveClassName?: string;
   nilClassName?: string;
+  locale?: string;
+  options?: Intl.NumberFormatOptions;
 }
 
 function NumberDisplay({
@@ -33,6 +37,8 @@ function NumberDisplay({
   negativeClassName = "text-red-700",
   positiveClassName = "text-green-700",
   nilClassName = "text-gray-500",
+  locale = "da-DK",
+  options = { style: "currency", currency: "DKK" },
   ...props
 }: NumberDisplayProps) {
   let classNameToUse = nilClassName;
@@ -43,7 +49,7 @@ function NumberDisplay({
   }
 
   return (
-    <NumberDisplayContext.Provider value={{ value }}>
+    <NumberDisplayContext.Provider value={{ value, locale, options }}>
       <span className={cn(classNameToUse, className)} {...props}>
         {children}
       </span>
@@ -52,8 +58,9 @@ function NumberDisplay({
 }
 
 function Value() {
-  const { value } = useNumberDisplay();
-  return <>{value}</>;
+  const { value, locale, options } = useNumberDisplay();
+  const formatted = new Intl.NumberFormat(locale, options).format(value);
+  return <>{formatted}</>;
 }
 
 NumberDisplay.Value = Value;

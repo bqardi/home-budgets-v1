@@ -71,7 +71,7 @@ export function BudgetList({ budgets }: BudgetListProps) {
                       nilClassName="bg-gray-200 text-gray-800 py-0.5 px-2 rounded-sm"
                       value={budget.starting_balance || 0}
                     >
-                      <NumberDisplay.Value /> kr
+                      <NumberDisplay.Value />
                     </NumberDisplay>
                   </p>
                   <div className="text-muted-foreground">→</div>
@@ -83,7 +83,7 @@ export function BudgetList({ budgets }: BudgetListProps) {
                       nilClassName="bg-gray-200 text-gray-800 py-0.5 px-2 rounded-sm"
                       value={budget.end_balance || 0}
                     >
-                      <NumberDisplay.Value /> kr
+                      <NumberDisplay.Value />
                     </NumberDisplay>
                   </p>
                 </div>
