@@ -14,6 +14,7 @@ export default function Home() {
           <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
             <div className="flex gap-5 items-center font-semibold">
               <Link href={"/"}>Home</Link>
+              <Link href={"/dashboard"}>Dashboard</Link>
             </div>
             {!hasEnvVars ? (
               <EnvVarWarning />
