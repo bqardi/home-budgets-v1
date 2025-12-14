@@ -6,6 +6,7 @@ import { BudgetTable } from "../_components/BudgetTable";
 import { ArrowLeft } from "lucide-react";
 import { Suspense } from "react";
 import { Navigation } from "@/components/nav";
+import { Footer } from "@/components/footer";
 
 async function getBudgetData(budgetId: string) {
   const supabase = await createClient();
@@ -121,6 +122,8 @@ async function BudgetPageContent({ id }: { id: string }) {
           />
         )}
       </div>
+
+      <Footer />
     </div>
   );
 }
