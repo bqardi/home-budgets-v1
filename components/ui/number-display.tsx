@@ -42,8 +42,6 @@ function NumberDisplay({
     classNameToUse = positiveClassName;
   }
 
-  console.log(classNameToUse);
-
   return (
     <NumberDisplayContext.Provider value={{ value }}>
       <span className={cn(classNameToUse, className)} {...props}>
