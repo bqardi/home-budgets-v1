@@ -12,13 +12,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { createCategory } from "@/app/actions/entries";
-import { Plus } from "lucide-react";
 
 interface CreateCategoryModalProps {
   onSuccess?: () => void;
+  asDropdownItem?: boolean;
 }
 
-export function CreateCategoryModal({ onSuccess }: CreateCategoryModalProps) {
+export function CreateCategoryModal({
+  onSuccess,
+  asDropdownItem = false,
+}: CreateCategoryModalProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
@@ -43,10 +46,15 @@ export function CreateCategoryModal({ onSuccess }: CreateCategoryModalProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="md">
-          <Plus className="w-4 h-4 mr-2" />
-          New Category
-        </Button>
+        {asDropdownItem ? (
+          <span className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+            Create Category
+          </span>
+        ) : (
+          <Button size="md" variant="outline">
+            Create Category
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -54,15 +62,14 @@ export function CreateCategoryModal({ onSuccess }: CreateCategoryModalProps) {
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Category Name</Label>
+            <Label htmlFor="category-name">Category Name</Label>
             <Input
-              id="name"
-              placeholder="e.g., Husleje, Mad, Transport"
+              id="category-name"
+              placeholder="e.g., Groceries"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
               disabled={loading}
-              autoFocus
             />
           </div>
 

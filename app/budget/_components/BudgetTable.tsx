@@ -7,8 +7,15 @@ import { TransferModal } from "./TransferModal";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { updateStartingBalance } from "@/app/actions/budget";
 import { CreateCategoryModal } from "./CreateCategoryModal";
+import { MoreVertical } from "lucide-react";
 
 interface EntryAmount {
   id: string;
@@ -181,18 +188,24 @@ export function BudgetTable({
             />
           </div>
 
-          <CreateCategoryModal />
-
-          {/* Transfer Button */}
-          {otherBudgets.length > 0 && (
-            <Button
-              size="md"
-              variant="outline"
-              onClick={() => setIsTransferModalOpen(true)}
-            >
-              Transfer from Another Budget
-            </Button>
-          )}
+          {/* Options Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button size="icon" variant="outline">
+                <MoreVertical className="w-4 h-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem asChild>
+                <CreateCategoryModal asDropdownItem={true} />
+              </DropdownMenuItem>
+              {otherBudgets.length > 0 && (
+                <DropdownMenuItem onClick={() => setIsTransferModalOpen(true)}>
+                  Transfer from Another Budget
+                </DropdownMenuItem>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
