@@ -108,9 +108,9 @@ export function BudgetTableRow({
   };
 
   return (
-    <tr className="hover:bg-primary-foreground transition-colors border-b">
+    <tr className="hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors border-b">
       {/* Description */}
-      <td className="md:sticky md:left-0 md:z-10 p-2 border-r max-w-[200px] truncate hover:bg-gray-50">
+      <td className="md:sticky md:left-0 md:z-10 p-2 border-r max-w-[200px] truncate bg-background dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900">
         {editingDescription ? (
           <input
             type="text"
@@ -139,7 +139,7 @@ export function BudgetTableRow({
       </td>
 
       {/* Category */}
-      <td className="md:sticky md:left-[200px] md:z-10 p-2 border-r text-sm text-muted-foreground max-w-[120px] truncate hover:bg-gray-50">
+      <td className="md:sticky md:left-[200px] md:z-10 p-2 border-r text-sm text-muted-foreground max-w-[120px] truncate bg-background dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900">
         {categoryMap[entry.category_id]}
       </td>
 
@@ -150,7 +150,10 @@ export function BudgetTableRow({
         const isEditing = editingMonth === month;
 
         return (
-          <td key={month} className="p-2 text-right border-r min-w-[105px]">
+          <td
+            key={month}
+            className="p-2 text-right border-r min-w-[105px] bg-background dark:bg-slate-950"
+          >
             {isEditing && amount ? (
               <input
                 type="number"
@@ -177,13 +180,13 @@ export function BudgetTableRow({
                     setEditingAmount(amount.amount.toString());
                   }
                 }}
-                className={`cursor-pointer hover:bg-accent px-1 py-0.5 rounded ${
+                className={`cursor-pointer hover:bg-accent dark:hover:bg-slate-800 px-1 py-0.5 rounded ${
                   amount && amount.amount > 0
                     ? entry.entry_type === "income"
-                      ? "text-green-600"
-                      : "text-red-600"
+                      ? "text-green-600 dark:text-green-400"
+                      : "text-red-600 dark:text-red-400"
                     : amount && amount.amount < 0
-                    ? "text-red-600"
+                    ? "text-red-600 dark:text-red-400"
                     : "text-muted-foreground"
                 }`}
               >
@@ -204,11 +207,11 @@ export function BudgetTableRow({
 
       {/* Row Total */}
       <td
-        className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-x font-semibold min-w-[105px] hover:bg-gray-50 ${
+        className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-x font-semibold min-w-[105px] bg-background dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 ${
           rowTotal > 0
-            ? "text-green-700"
+            ? "text-green-700 dark:text-green-400"
             : rowTotal < 0
-            ? "text-red-700"
+            ? "text-red-700 dark:text-red-400"
             : "text-muted-foreground"
         }`}
       >
@@ -217,7 +220,7 @@ export function BudgetTableRow({
       </td>
 
       {/* Delete Button */}
-      <td className="md:sticky md:right-0 md:z-10 p-2 hover:bg-gray-50 flex gap-2">
+      <td className="md:sticky md:right-0 md:z-10 p-2 bg-background dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 flex gap-2">
         <EditEntryModal
           entry={entry}
           budgetId={budgetId}
