@@ -52,6 +52,16 @@ export default {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        landing: {
+          accent: {
+            blue: "hsl(var(--landing-accent-blue))",
+            purple: "hsl(var(--landing-accent-purple))",
+            emerald: "hsl(var(--landing-accent-emerald))",
+            amber: "hsl(var(--landing-accent-amber))",
+          },
+          surface: "hsl(var(--landing-surface))",
+          "surface-secondary": "hsl(var(--landing-surface-secondary))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

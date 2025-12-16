@@ -28,6 +28,12 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --landing-accent-blue: 218 96% 38%;
+    --landing-accent-purple: 270 97% 38%;
+    --landing-accent-emerald: 162 73% 37%;
+    --landing-accent-amber: 32 94% 44%;
+    --landing-surface: 240 10% 96%;
+    --landing-surface-secondary: 240 15% 88%;
     --radius: 0.5rem;
   }
   .dark {
@@ -55,6 +61,12 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --landing-accent-blue: 217 100% 55%;
+    --landing-accent-purple: 270 100% 55%;
+    --landing-accent-emerald: 162 78% 55%;
+    --landing-accent-amber: 32 98% 56%;
+    --landing-surface: 240 15% 18%;
+    --landing-surface-secondary: 240 10% 28%;
   }
 }
 
