@@ -110,7 +110,7 @@ export function BudgetTableRow({
   return (
     <tr className="hover:bg-primary-foreground transition-colors border-b">
       {/* Description */}
-      <td className="sticky left-0 z-10 p-2 border-r max-w-[200px] truncate hover:bg-gray-50">
+      <td className="md:sticky md:left-0 md:z-10 p-2 border-r max-w-[200px] truncate hover:bg-gray-50">
         {editingDescription ? (
           <input
             type="text"
@@ -139,7 +139,7 @@ export function BudgetTableRow({
       </td>
 
       {/* Category */}
-      <td className="sticky left-[200px] z-10 p-2 border-r text-sm text-muted-foreground max-w-[120px] truncate hover:bg-gray-50">
+      <td className="md:sticky md:left-[200px] md:z-10 p-2 border-r text-sm text-muted-foreground max-w-[120px] truncate hover:bg-gray-50">
         {categoryMap[entry.category_id]}
       </td>
 
@@ -204,7 +204,7 @@ export function BudgetTableRow({
 
       {/* Row Total */}
       <td
-        className={`sticky right-[105px] z-10 p-2 text-right border-x font-semibold min-w-[105px] hover:bg-gray-50 ${
+        className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-x font-semibold min-w-[105px] hover:bg-gray-50 ${
           rowTotal > 0
             ? "text-green-700"
             : rowTotal < 0
@@ -217,7 +217,7 @@ export function BudgetTableRow({
       </td>
 
       {/* Delete Button */}
-      <td className="sticky right-0 z-10 p-2 hover:bg-gray-50 flex gap-2">
+      <td className="md:sticky md:right-0 md:z-10 p-2 hover:bg-gray-50 flex gap-2">
         <EditEntryModal
           entry={entry}
           budgetId={budgetId}

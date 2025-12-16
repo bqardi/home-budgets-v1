@@ -201,10 +201,10 @@ export function BudgetTable({
         <table className="w-full text-sm border-collapse">
           <thead>
             <tr className="bg-muted border-b">
-              <th className="sticky left-0 z-20 p-2 text-left font-semibold border-r min-w-[200px] bg-muted">
+              <th className="md:sticky md:left-0 md:z-20 p-2 text-left font-semibold border-r md:min-w-[200px] bg-muted">
                 Description
               </th>
-              <th className="sticky left-[200px] z-20 p-2 text-left font-semibold border-r min-w-[120px] bg-muted">
+              <th className="md:sticky md:left-[200px] md:z-20 p-2 text-left font-semibold border-r md:min-w-[120px] bg-muted">
                 Category
               </th>
               {MONTHS.map((month) => (
@@ -215,10 +215,10 @@ export function BudgetTable({
                   {month}
                 </th>
               ))}
-              <th className="sticky right-[105px] z-20 p-2 text-right font-semibold border-r min-w-[80px] bg-muted">
+              <th className="md:sticky md:right-[105px] md:z-20 p-2 text-right font-semibold border-r min-w-[80px] bg-muted">
                 Total
               </th>
-              <th className="sticky right-0 z-20 p-2 text-right font-semibold min-w-[105px] bg-muted">
+              <th className="md:sticky md:right-0 md:z-20 p-2 text-right font-semibold min-w-[105px] bg-muted">
                 Actions
               </th>
             </tr>
@@ -277,10 +277,10 @@ export function BudgetTable({
                 {/* Income Total Row */}
                 {incomeEntries.length > 0 && (
                   <tr className="bg-green-100 border-t border-b font-semibold">
-                    <td className="sticky left-0 z-10 p-2 border-r text-left bg-green-100">
+                    <td className="md:sticky md:left-0 md:z-10 p-2 border-r text-left bg-green-100">
                       Income Total
                     </td>
-                    <td className="sticky left-[200px] z-10 p-2 border-r bg-green-100"></td>
+                    <td className="md:sticky md:left-[200px] md:z-10 p-2 border-r bg-green-100"></td>
                     {monthlyIncome.map((total, idx) => (
                       <td
                         key={idx}
@@ -297,7 +297,7 @@ export function BudgetTable({
                       </td>
                     ))}
                     <td
-                      className={`sticky right-[105px] z-10 p-2 text-right border-r font-semibold min-w-[80px] bg-white hover:bg-gray-50 ${
+                      className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-r font-semibold min-w-[80px] bg-white hover:bg-gray-50 ${
                         totalIncome > 0
                           ? "text-green-700"
                           : totalIncome < 0
@@ -308,17 +308,17 @@ export function BudgetTable({
                       {totalIncome > 0 ? "+" : ""}
                       {totalIncome.toFixed(0)}
                     </td>
-                    <td className="sticky right-0 z-10 p-2 min-w-[105px] bg-green-100"></td>
+                    <td className="md:sticky md:right-0 md:z-10 p-2 min-w-[105px] bg-green-100"></td>
                   </tr>
                 )}
 
                 {/* Expense Total Row */}
                 {expenseEntries.length > 0 && (
                   <tr className="bg-red-100 border-t border-b font-semibold">
-                    <td className="sticky left-0 z-10 p-2 border-r text-left bg-red-100">
+                    <td className="md:sticky md:left-0 md:z-10 p-2 border-r text-left bg-red-100">
                       Expense Total
                     </td>
-                    <td className="sticky left-[200px] z-10 p-2 border-r bg-red-100"></td>
+                    <td className="md:sticky md:left-[200px] md:z-10 p-2 border-r bg-red-100"></td>
                     {monthlyExpenses.map((total, idx) => (
                       <td
                         key={idx}
@@ -335,7 +335,7 @@ export function BudgetTable({
                       </td>
                     ))}
                     <td
-                      className={`sticky right-[105px] z-10 p-2 text-right border-r bg-red-100 ${
+                      className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-r bg-red-100 ${
                         totalExpenses > 0
                           ? "text-red-700"
                           : totalExpenses < 0
@@ -346,16 +346,16 @@ export function BudgetTable({
                       {totalExpenses > 0 ? "-" : ""}
                       {totalExpenses.toFixed(0)}
                     </td>
-                    <td className="sticky right-0 z-10 p-2 min-w-[105px] bg-red-100"></td>
+                    <td className="md:sticky md:right-0 md:z-10 p-2 min-w-[105px] bg-red-100"></td>
                   </tr>
                 )}
 
                 {/* Net Total Row */}
                 <tr className="bg-gray-100 border-t-2 border-b font-semibold">
-                  <td className="sticky left-0 z-10 p-2 border-r text-left bg-gray-100">
+                  <td className="md:sticky md:left-0 md:z-10 p-2 border-r text-left bg-gray-100">
                     Net Balance
                   </td>
-                  <td className="sticky left-[200px] z-10 p-2 border-r bg-gray-100"></td>
+                  <td className="md:sticky md:left-[200px] md:z-10 p-2 border-r bg-gray-100"></td>
                   {monthlyTotals.map((total, idx) => (
                     <td
                       key={idx}
@@ -372,7 +372,7 @@ export function BudgetTable({
                     </td>
                   ))}
                   <td
-                    className={`sticky right-[105px] z-10 p-2 text-right border-r bg-gray-100 ${
+                    className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-r bg-gray-100 ${
                       grandTotal > 0
                         ? "text-green-700"
                         : grandTotal < 0
@@ -383,15 +383,15 @@ export function BudgetTable({
                     {grandTotal > 0 ? "+" : ""}
                     {grandTotal.toFixed(0)}
                   </td>
-                  <td className="sticky right-0 z-10 p-2 min-w-[105px] bg-gray-100"></td>
+                  <td className="md:sticky md:right-0 md:z-10 p-2 min-w-[105px] bg-gray-100"></td>
                 </tr>
 
                 {/* Running Balance Row */}
                 <tr className="bg-purple-100 border-t border-b font-semibold">
-                  <td className="sticky left-0 z-10 p-2 border-r text-left bg-purple-100">
+                  <td className="md:sticky md:left-0 md:z-10 p-2 border-r text-left bg-purple-100">
                     Running Balance
                   </td>
-                  <td className="sticky left-[200px] z-10 p-2 border-r text-xs text-muted-foreground bg-purple-100">
+                  <td className="md:sticky md:left-[200px] md:z-10 p-2 text-xs text-muted-foreground bg-purple-100">
                     Start: {startBalance > 0 ? "+" : ""}
                     {startBalance.toFixed(0)}
                   </td>
@@ -411,7 +411,7 @@ export function BudgetTable({
                     </td>
                   ))}
                   <td
-                    className={`sticky right-[105px] z-10 p-2 text-right border-r bg-purple-100 ${
+                    className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-r bg-purple-100 ${
                       runningBalance[runningBalance.length - 1] > 0
                         ? "text-green-700"
                         : runningBalance[runningBalance.length - 1] < 0
@@ -422,7 +422,7 @@ export function BudgetTable({
                     {runningBalance[runningBalance.length - 1] > 0 ? "+" : ""}
                     {runningBalance[runningBalance.length - 1].toFixed(0)}
                   </td>
-                  <td className="sticky right-0 z-10 p-2 min-w-[105px] bg-purple-100"></td>
+                  <td className="md:sticky md:right-0 md:z-10 p-2 min-w-[105px] bg-purple-100"></td>
                 </tr>
               </>
             )}
