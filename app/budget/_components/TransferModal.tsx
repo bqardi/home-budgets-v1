@@ -8,16 +8,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+import { TransferOptions } from "@/components/transfer-options";
 import { transferRowsFromBudget } from "@/app/actions/transfers";
 
 interface TransferModalProps {
@@ -26,7 +18,6 @@ interface TransferModalProps {
   budgetId: string;
   otherBudgets: Array<{ id: string; name: string; year: number }>;
   onTransferComplete: () => void;
-  onBalanceTransfer?: (balance: number) => void;
 }
 
 export function TransferModal({
@@ -35,7 +26,6 @@ export function TransferModal({
   budgetId,
   otherBudgets,
   onTransferComplete,
-  onBalanceTransfer,
 }: TransferModalProps) {
   const [selectedBudgetId, setSelectedBudgetId] = useState<string>("");
   const [transferBalance, setTransferBalance] = useState(false);
@@ -49,23 +39,13 @@ export function TransferModal({
 
     setIsTransferring(true);
     try {
-      const result = await transferRowsFromBudget(
+      await transferRowsFromBudget(
         budgetId,
         selectedBudgetId,
         transferBalance,
         transferIncome,
         transferExpense
       );
-
-      // If balance was transferred, notify parent component
-      if (
-        transferBalance &&
-        result?.balanceToTransfer !== null &&
-        result?.balanceToTransfer !== undefined &&
-        onBalanceTransfer
-      ) {
-        onBalanceTransfer(result.balanceToTransfer);
-      }
 
       // Reset modal state
       setSelectedBudgetId("");
@@ -99,82 +79,18 @@ export function TransferModal({
         </DialogHeader>
 
         <div className="space-y-6">
-          {/* Budget Selection */}
-          <div className="space-y-2">
-            <Label htmlFor="source-budget">Source Budget</Label>
-            <Select
-              value={selectedBudgetId}
-              onValueChange={setSelectedBudgetId}
-              disabled={isTransferring}
-            >
-              <SelectTrigger id="source-budget">
-                <SelectValue placeholder="Choose a budget..." />
-              </SelectTrigger>
-              <SelectContent>
-                {otherBudgets.map((budget) => (
-                  <SelectItem key={budget.id} value={budget.id}>
-                    {budget.name} ({budget.year})
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Transfer Options */}
-          {selectedBudgetId && (
-            <div className="space-y-3 border-t pt-4">
-              <div className="flex items-center space-x-3">
-                <Checkbox
-                  id="transfer-balance"
-                  checked={transferBalance}
-                  onCheckedChange={(checked) =>
-                    setTransferBalance(checked as boolean)
-                  }
-                  disabled={isTransferring}
-                />
-                <Label
-                  htmlFor="transfer-balance"
-                  className="flex-1 cursor-pointer"
-                >
-                  Transfer Starting Balance
-                </Label>
-              </div>
-
-              <div className="flex items-center space-x-3">
-                <Checkbox
-                  id="transfer-income"
-                  checked={transferIncome}
-                  onCheckedChange={(checked) =>
-                    setTransferIncome(checked as boolean)
-                  }
-                  disabled={isTransferring}
-                />
-                <Label
-                  htmlFor="transfer-income"
-                  className="flex-1 cursor-pointer"
-                >
-                  Transfer All Income Rows
-                </Label>
-              </div>
-
-              <div className="flex items-center space-x-3">
-                <Checkbox
-                  id="transfer-expense"
-                  checked={transferExpense}
-                  onCheckedChange={(checked) =>
-                    setTransferExpense(checked as boolean)
-                  }
-                  disabled={isTransferring}
-                />
-                <Label
-                  htmlFor="transfer-expense"
-                  className="flex-1 cursor-pointer"
-                >
-                  Transfer All Expense Rows
-                </Label>
-              </div>
-            </div>
-          )}
+          <TransferOptions
+            selectedBudgetId={selectedBudgetId}
+            onBudgetSelect={setSelectedBudgetId}
+            otherBudgets={otherBudgets}
+            transferBalance={transferBalance}
+            onTransferBalanceChange={setTransferBalance}
+            transferIncome={transferIncome}
+            onTransferIncomeChange={setTransferIncome}
+            transferExpense={transferExpense}
+            onTransferExpenseChange={setTransferExpense}
+            disabled={isTransferring}
+          />
 
           {/* Action Buttons */}
           <div className="flex justify-end space-x-2 border-t pt-4">

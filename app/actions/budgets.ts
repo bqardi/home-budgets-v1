@@ -25,7 +25,7 @@ export async function createBudget(name: string, year: number) {
   if (error) throw new Error(error.message);
 
   revalidatePath("/dashboard");
-  return data;
+  return data.id;
 }
 
 export async function deleteBudget(budgetId: string) {

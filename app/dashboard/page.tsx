@@ -44,7 +44,7 @@ export default async function DashboardPage() {
         </div>
 
         <div className="flex justify-end mb-6">
-          <CreateBudgetModal />
+          <CreateBudgetModal budgets={budgets} />
         </div>
 
         <BudgetList budgets={budgets} />

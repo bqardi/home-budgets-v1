@@ -89,13 +89,25 @@ export function BudgetTable({
 
   const handleRefresh = async () => {
     try {
-      const response = await fetch(`/api/budget/${budgetId}/entries-list`);
-      if (response.ok) {
-        const data = await response.json();
+      // Fetch entries
+      const entriesResponse = await fetch(
+        `/api/budget/${budgetId}/entries-list`
+      );
+      if (entriesResponse.ok) {
+        const data = await entriesResponse.json();
         setEntries(data.entries || []);
       }
+
+      // Fetch updated budget data (including starting_balance after transfer)
+      const budgetResponse = await fetch(`/api/budget/${budgetId}/balance`);
+      if (budgetResponse.ok) {
+        const budgetData = await budgetResponse.json();
+        if (budgetData.starting_balance !== undefined) {
+          setStartingBalance(budgetData.starting_balance.toString());
+        }
+      }
     } catch (error) {
-      console.error("Failed to refresh entries:", error);
+      console.error("Failed to refresh budget data:", error);
     }
   };
 
@@ -487,9 +499,6 @@ export function BudgetTable({
           budgetId={budgetId}
           otherBudgets={otherBudgets}
           onTransferComplete={handleRefresh}
-          onBalanceTransfer={(balance) =>
-            setStartingBalance(balance.toString())
-          }
         />
       )}
     </div>

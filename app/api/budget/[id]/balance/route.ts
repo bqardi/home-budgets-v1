@@ -46,6 +46,18 @@ export async function GET(
       throw new Error(entriesError.message);
     }
 
+    // Fetch the budget's starting_balance
+    const { data: budget, error: budgetError } = await supabase
+      .from("budgets")
+      .select("starting_balance")
+      .eq("id", budgetId)
+      .eq("user_id", user.id)
+      .single();
+
+    if (budgetError) {
+      throw new Error(budgetError.message);
+    }
+
     // Calculate total balance (sum of income - sum of expenses)
     let totalBalance = 0;
 
@@ -62,7 +74,10 @@ export async function GET(
       }
     });
 
-    return NextResponse.json({ balance: totalBalance });
+    return NextResponse.json({
+      balance: totalBalance,
+      starting_balance: budget.starting_balance || 0,
+    });
   } catch (error) {
     console.error("Failed to fetch budget balance:", error);
     return NextResponse.json(

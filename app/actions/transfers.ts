@@ -3,11 +3,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
-interface EntryWithAmounts {
-  entry_type: string;
-  entry_amounts: Array<{ amount: number }>;
-}
-
 export async function transferRowsFromBudget(
   targetBudgetId: string,
   sourceBudgetId: string,
@@ -91,47 +86,33 @@ export async function transferRowsFromBudget(
     }
   }
 
-  // If including balance, calculate and return it (user will manually set it in the UI)
-  // We don't store starting_balance in the database, it's managed client-side
-  let balanceToTransfer = null;
+  // If including balance, transfer the source budget's end_balance as the target's starting_balance
   if (includeBalance) {
     try {
-      // Fetch all entries for the source budget
-      const { data: allEntries, error: entriesError } = await supabase
-        .from("entries")
-        .select(
-          `
-          id,
-          entry_type,
-          entry_amounts (*)
-        `
-        )
-        .eq("budget_id", sourceBudgetId)
+      // Fetch the source budget's end_balance
+      const { data: sourceBudget, error: budgetError } = await supabase
+        .from("budgets")
+        .select("end_balance")
+        .eq("id", sourceBudgetId)
+        .eq("user_id", user.id)
+        .single();
+
+      if (budgetError) throw budgetError;
+
+      // Update the target budget's starting_balance with source's end_balance
+      const { error: updateError } = await supabase
+        .from("budgets")
+        .update({ starting_balance: sourceBudget.end_balance || 0 })
+        .eq("id", targetBudgetId)
         .eq("user_id", user.id);
 
-      if (entriesError) throw entriesError;
-
-      // Calculate balance
-      let totalBalance = 0;
-      allEntries?.forEach((entry: EntryWithAmounts) => {
-        const entryTotal = (entry.entry_amounts || []).reduce(
-          (sum: number, ea: { amount: number }) => sum + (ea.amount || 0),
-          0
-        );
-        if (entry.entry_type === "income") {
-          totalBalance += entryTotal;
-        } else {
-          totalBalance -= entryTotal;
-        }
-      });
-
-      balanceToTransfer = totalBalance;
+      if (updateError) throw updateError;
     } catch (error) {
-      console.error("Failed to calculate balance:", error);
-      throw new Error("Failed to calculate balance");
+      console.error("Failed to transfer balance:", error);
+      throw new Error("Failed to transfer balance");
     }
   }
 
   revalidatePath(`/budget/${targetBudgetId}`);
-  return { success: true, balanceToTransfer };
+  return { success: true };
 }
