@@ -60,7 +60,7 @@ export function CreateBudgetModal({ onSuccess }: CreateBudgetModalProps) {
             <Label htmlFor="name">Budget Name</Label>
             <Input
               id="name"
-              placeholder="e.g., My 2025 Budget"
+              placeholder="e.g., My Awesome Budget"
               value={formData.name}
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
