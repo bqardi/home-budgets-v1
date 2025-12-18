@@ -98,9 +98,9 @@ async function BudgetPageContent({ id }: { id: string }) {
           </Button>
         </Link>
 
-        <div className="flex items-baseline gap-2 mb-8">
-          <h1 className="text-3xl font-bold">{budget.name}</h1>
-          <p className="text-muted-foreground">({budget.year})</p>
+        <div className="mb-2 mr-12">
+          <h1 className="inline text-3xl font-bold">{budget.name}</h1>
+          <p className="inline text-muted-foreground ml-2"> ({budget.year})</p>
         </div>
 
         {categories.length === 0 ? (

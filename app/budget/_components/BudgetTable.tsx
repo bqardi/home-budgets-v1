@@ -4,7 +4,7 @@ import { useState } from "react";
 import { BudgetTableRow } from "./BudgetTableRow";
 import { CreateEntryRow } from "./CreateEntryRow";
 import { TransferModal } from "./TransferModal";
-import { ConfigurationSection } from "./ConfigurationSection";
+import { ConfigurationDropdown } from "./ConfigurationDropdown";
 
 interface EntryAmount {
   id: string;
@@ -133,16 +133,18 @@ export function BudgetTable({
   }
 
   return (
-    <div className="space-y-6">
-      {/* Configuration Section */}
-      <ConfigurationSection
-        budgetId={budgetId}
-        startingBalance={startingBalance}
-        initialStartingBalance={initialStartingBalance}
-        handleStartingBalanceChange={handleStartingBalanceChange}
-        otherBudgets={otherBudgets}
-        setIsTransferModalOpen={setIsTransferModalOpen}
-      />
+    <div className="relative space-y-6">
+      {/* Configuration Dropdown */}
+      <div className="absolute bottom-full right-0 pb-6">
+        <ConfigurationDropdown
+          budgetId={budgetId}
+          startingBalance={startingBalance}
+          initialStartingBalance={initialStartingBalance}
+          handleStartingBalanceChange={handleStartingBalanceChange}
+          otherBudgets={otherBudgets}
+          setIsTransferModalOpen={setIsTransferModalOpen}
+        />
+      </div>
 
       {/* Monthly Table */}
       <div className="overflow-x-auto border rounded-lg">

@@ -11,8 +11,9 @@ import { MoreVertical } from "lucide-react";
 import { CreateCategoryModal } from "./CreateCategoryModal";
 import { useEffect, useState } from "react";
 import { updateStartingBalance } from "@/app/actions/budget";
+import { Separator } from "@/components/ui/separator";
 
-interface ConfigurationSectionProps {
+interface ConfigurationDropdownProps {
   budgetId: string;
   startingBalance: string;
   initialStartingBalance: string;
@@ -21,14 +22,14 @@ interface ConfigurationSectionProps {
   setIsTransferModalOpen: (isOpen: boolean) => void;
 }
 
-export function ConfigurationSection({
+export function ConfigurationDropdown({
   budgetId,
   startingBalance,
   initialStartingBalance,
   handleStartingBalanceChange,
   otherBudgets,
   setIsTransferModalOpen,
-}: ConfigurationSectionProps) {
+}: ConfigurationDropdownProps) {
   const [isSaving, setIsSaving] = useState(false);
 
   // Debounce effect for saving starting balance
@@ -52,13 +53,15 @@ export function ConfigurationSection({
   }, [startingBalance, budgetId, initialStartingBalance]);
 
   return (
-    <div className="bg-card border rounded-lg p-4">
-      <h3 className="mb-2 text-sm font-semibold text-muted-foreground uppercase">
-        Configuration
-      </h3>
-      <div className="flex items-end gap-x-2">
-        <div className="max-w-32">
-          <Label htmlFor="starting-balance" className="text-sm">
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button size="icon" variant="outline">
+          <MoreVertical className="w-4 h-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <div className="px-2 mb-2">
+          <Label htmlFor="starting-balance" className="text-xs font-">
             Starting Balance
           </Label>
           <Input
@@ -72,26 +75,16 @@ export function ConfigurationSection({
             disabled={isSaving}
           />
         </div>
-
-        {/* Options Dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button size="icon" variant="outline">
-              <MoreVertical className="w-4 h-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem asChild>
-              <CreateCategoryModal asDropdownItem={true} />
-            </DropdownMenuItem>
-            {otherBudgets.length > 0 && (
-              <DropdownMenuItem onClick={() => setIsTransferModalOpen(true)}>
-                Transfer from Another Budget
-              </DropdownMenuItem>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    </div>
+        <Separator className="my-4" />
+        <DropdownMenuItem asChild>
+          <CreateCategoryModal asDropdownItem={true} />
+        </DropdownMenuItem>
+        {otherBudgets.length > 0 && (
+          <DropdownMenuItem onClick={() => setIsTransferModalOpen(true)}>
+            Transfer from Another Budget
+          </DropdownMenuItem>
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
