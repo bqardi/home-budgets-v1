@@ -1,21 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { BudgetTableRow } from "./BudgetTableRow";
 import { CreateEntryRow } from "./CreateEntryRow";
 import { TransferModal } from "./TransferModal";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { updateStartingBalance } from "@/app/actions/budget";
-import { CreateCategoryModal } from "./CreateCategoryModal";
-import { MoreVertical } from "lucide-react";
+import { ConfigurationSection } from "./ConfigurationSection";
 
 interface EntryAmount {
   id: string;
@@ -72,27 +61,6 @@ export function BudgetTable({
   );
   const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
   const [entries, setEntries] = useState(initialEntries);
-  const [isSaving, setIsSaving] = useState(false);
-
-  // Debounce effect for saving starting balance
-  useEffect(() => {
-    const timer = setTimeout(async () => {
-      const numValue = parseFloat(startingBalance) || 0;
-      if (numValue !== (parseFloat(initialStartingBalance) || 0)) {
-        setIsSaving(true);
-        try {
-          await updateStartingBalance(budgetId, numValue);
-        } catch (error) {
-          console.error("Failed to save starting balance:", error);
-          alert("Failed to save starting balance");
-        } finally {
-          setIsSaving(false);
-        }
-      }
-    }, 1000); // 1 second delay
-
-    return () => clearTimeout(timer);
-  }, [startingBalance, budgetId, initialStartingBalance]);
 
   const handleRefresh = async () => {
     try {
@@ -167,47 +135,14 @@ export function BudgetTable({
   return (
     <div className="space-y-6">
       {/* Configuration Section */}
-      <div className="bg-card border rounded-lg p-4">
-        <h3 className="mb-2 text-sm font-semibold text-muted-foreground uppercase">
-          Configuration
-        </h3>
-        <div className="flex items-end gap-x-2">
-          <div className="max-w-32">
-            <Label htmlFor="starting-balance" className="text-sm">
-              Starting Balance
-            </Label>
-            <Input
-              id="starting-balance"
-              type="number"
-              step="0.01"
-              value={startingBalance}
-              onChange={(e) => handleStartingBalanceChange(e.target.value)}
-              placeholder="0"
-              className="mt-1"
-              disabled={isSaving}
-            />
-          </div>
-
-          {/* Options Dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button size="icon" variant="outline">
-                <MoreVertical className="w-4 h-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem asChild>
-                <CreateCategoryModal asDropdownItem={true} />
-              </DropdownMenuItem>
-              {otherBudgets.length > 0 && (
-                <DropdownMenuItem onClick={() => setIsTransferModalOpen(true)}>
-                  Transfer from Another Budget
-                </DropdownMenuItem>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
+      <ConfigurationSection
+        budgetId={budgetId}
+        startingBalance={startingBalance}
+        initialStartingBalance={initialStartingBalance}
+        handleStartingBalanceChange={handleStartingBalanceChange}
+        otherBudgets={otherBudgets}
+        setIsTransferModalOpen={setIsTransferModalOpen}
+      />
 
       {/* Monthly Table */}
       <div className="overflow-x-auto border rounded-lg">
