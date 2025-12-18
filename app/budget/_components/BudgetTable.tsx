@@ -226,11 +226,11 @@ export function BudgetTable({
               <>
                 {/* Income Total Row */}
                 {incomeEntries.length > 0 && (
-                  <tr className="bg-green-100 border-t border-b font-semibold">
-                    <td className="md:sticky md:left-0 md:z-10 p-2 border-r text-left bg-green-100">
+                  <tr className="bg-green-100 dark:bg-green-950 border-t border-b font-semibold">
+                    <td className="md:sticky md:left-0 md:z-10 p-2 border-r text-left bg-green-100 dark:bg-green-950">
                       Income Total
                     </td>
-                    <td className="md:sticky md:left-[200px] md:z-10 p-2 border-r bg-green-100"></td>
+                    <td className="md:sticky md:left-[200px] md:z-10 p-2 border-r bg-green-100 dark:bg-green-950"></td>
                     {monthlyIncome.map((total, idx) => (
                       <td
                         key={idx}
@@ -247,7 +247,7 @@ export function BudgetTable({
                       </td>
                     ))}
                     <td
-                      className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-r font-semibold min-w-[80px] bg-background dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 ${
+                      className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-r font-semibold min-w-[80px] bg-green-100 dark:bg-green-950 ${
                         totalIncome > 0
                           ? "text-green-700 dark:text-green-400"
                           : totalIncome < 0
@@ -394,20 +394,20 @@ export function BudgetTable({
         <div className="bg-card border rounded-lg p-6">
           <h3 className="text-lg font-semibold mb-4">Summary</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-              <p className="text-sm font-semibold text-green-700 uppercase">
+            <div className="p-4 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-900 rounded-lg">
+              <p className="text-sm font-semibold text-green-700 dark:text-green-400 uppercase">
                 Total Income
               </p>
-              <p className="text-2xl font-bold text-green-700 mt-2">
+              <p className="text-2xl font-bold text-green-700 dark:text-green-400 mt-2">
                 +{totalIncome.toFixed(0)} kr
               </p>
             </div>
 
-            <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-sm font-semibold text-red-700 uppercase">
+            <div className="p-4 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-900 rounded-lg">
+              <p className="text-sm font-semibold text-red-700 dark:text-red-400 uppercase">
                 Total Expenses
               </p>
-              <p className="text-2xl font-bold text-red-700 mt-2">
+              <p className="text-2xl font-bold text-red-700 dark:text-red-400 mt-2">
                 -{totalExpenses.toFixed(0)} kr
               </p>
             </div>
@@ -415,22 +415,30 @@ export function BudgetTable({
             <div
               className={`p-4 border rounded-lg ${
                 grandTotal > 0
-                  ? "bg-green-100 border-green-200"
+                  ? "bg-green-100 dark:bg-green-950 border-green-200 dark:border-green-900"
                   : grandTotal < 0
-                  ? "bg-red-100 border-red-200"
-                  : "bg-gray-100 border-gray-200"
+                  ? "bg-red-100 dark:bg-red-950 border-red-200 dark:border-red-900"
+                  : "bg-gray-100 dark:bg-slate-800 border-gray-200 dark:border-slate-700"
               }`}
             >
-              <p className="text-sm font-semibold uppercase text-gray-700">
+              <p
+                className={`text-sm font-semibold uppercase ${
+                  grandTotal > 0
+                    ? "text-green-700 dark:text-green-400"
+                    : grandTotal < 0
+                    ? "text-red-700 dark:text-red-400"
+                    : "text-gray-700 dark:text-gray-300"
+                }`}
+              >
                 Net Balance
               </p>
               <p
                 className={`text-2xl font-bold mt-2 ${
                   grandTotal > 0
-                    ? "text-green-700"
+                    ? "text-green-700 dark:text-green-400"
                     : grandTotal < 0
-                    ? "text-red-700"
-                    : "text-gray-500"
+                    ? "text-red-700 dark:text-red-400"
+                    : "text-gray-700 dark:text-gray-300"
                 }`}
               >
                 {grandTotal > 0 ? "+" : ""}
