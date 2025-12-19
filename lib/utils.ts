@@ -32,3 +32,27 @@ export function getAllMonths({
     return month;
   });
 }
+
+export function handleNumber(
+  value: number,
+  positive: string,
+  negative: string,
+  neutral: string
+): string {
+  if (value > 0) return positive;
+  if (value < 0) return negative;
+  return neutral;
+}
+
+export function formatCurrency(
+  amount: number,
+  locale: string = "da-DK",
+  currency: string = "DKK"
+): string {
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount);
+}

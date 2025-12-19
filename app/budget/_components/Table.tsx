@@ -5,7 +5,7 @@ import { TableRow } from "./TableRow";
 import { CreateEntryRow } from "./CreateEntryModal";
 import { TransferModal } from "./TransferModal";
 import { ConfigurationDropdown } from "./ConfigurationDropdown";
-import { getAllMonths } from "@/lib/utils";
+import { formatCurrency, getAllMonths, handleNumber } from "@/lib/utils";
 import { Entry, Category, BudgetTransfer } from "@/lib/types";
 
 interface BudgetTableProps {
@@ -206,29 +206,25 @@ export function Table({
                     {monthlyIncome.map((total, idx) => (
                       <td
                         key={idx}
-                        className={`p-2 text-right border-r ${
-                          total > 0
-                            ? "text-green-700 dark:text-green-400"
-                            : total < 0
-                            ? "text-red-700 dark:text-red-400"
-                            : "text-gray-500 dark:text-gray-400"
-                        }`}
+                        className={`p-2 text-right border-r ${handleNumber(
+                          total,
+                          "text-green-700 dark:text-green-400",
+                          "text-red-700 dark:text-red-400",
+                          "text-gray-500 dark:text-gray-400"
+                        )}`}
                       >
-                        {total > 0 ? "+" : ""}
-                        {total.toFixed(0)}
+                        {formatCurrency(total)}
                       </td>
                     ))}
                     <td
-                      className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-r font-semibold min-w-[80px] bg-green-100 dark:bg-green-950 ${
-                        totalIncome > 0
-                          ? "text-green-700 dark:text-green-400"
-                          : totalIncome < 0
-                          ? "text-red-700 dark:text-red-400"
-                          : "text-muted-foreground"
-                      }`}
+                      className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-r font-semibold min-w-[80px] bg-green-100 dark:bg-green-950 ${handleNumber(
+                        totalIncome,
+                        "text-green-700 dark:text-green-400",
+                        "text-red-700 dark:text-red-400",
+                        "text-muted-foreground"
+                      )}`}
                     >
-                      {totalIncome > 0 ? "+" : ""}
-                      {totalIncome.toFixed(0)}
+                      {formatCurrency(totalIncome)}
                     </td>
                     <td className="md:sticky md:right-0 md:z-10 p-2 min-w-[105px] bg-green-100 dark:bg-green-950"></td>
                   </tr>
@@ -244,29 +240,25 @@ export function Table({
                     {monthlyExpenses.map((total, idx) => (
                       <td
                         key={idx}
-                        className={`p-2 text-right border-r ${
-                          total > 0
-                            ? "text-red-700 dark:text-red-400"
-                            : total < 0
-                            ? "text-green-700 dark:text-green-400"
-                            : "text-gray-500 dark:text-gray-400"
-                        }`}
+                        className={`p-2 text-right border-r ${handleNumber(
+                          total,
+                          "text-red-700 dark:text-red-400",
+                          "text-green-700 dark:text-green-400",
+                          "text-gray-500 dark:text-gray-400"
+                        )}`}
                       >
-                        {total > 0 ? "-" : ""}
-                        {total.toFixed(0)}
+                        {formatCurrency(total)}
                       </td>
                     ))}
                     <td
-                      className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-r bg-red-100 dark:bg-red-950 ${
-                        totalExpenses > 0
-                          ? "text-red-700 dark:text-red-400"
-                          : totalExpenses < 0
-                          ? "text-green-700 dark:text-green-400"
-                          : "text-gray-500 dark:text-gray-400"
-                      }`}
+                      className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-r bg-red-100 dark:bg-red-950 ${handleNumber(
+                        totalExpenses,
+                        "text-red-700 dark:text-red-400",
+                        "text-green-700 dark:text-green-400",
+                        "text-gray-500 dark:text-gray-400"
+                      )}`}
                     >
-                      {totalExpenses > 0 ? "-" : ""}
-                      {totalExpenses.toFixed(0)}
+                      {formatCurrency(totalExpenses)}
                     </td>
                     <td className="md:sticky md:right-0 md:z-10 p-2 min-w-[105px] bg-red-100 dark:bg-red-950"></td>
                   </tr>
@@ -281,29 +273,25 @@ export function Table({
                   {monthlyTotals.map((total, idx) => (
                     <td
                       key={idx}
-                      className={`p-2 text-right border-r ${
-                        total > 0
-                          ? "text-green-700 dark:text-green-400"
-                          : total < 0
-                          ? "text-red-700 dark:text-red-400"
-                          : "text-gray-500 dark:text-gray-400"
-                      }`}
+                      className={`p-2 text-right border-r ${handleNumber(
+                        total,
+                        "text-green-700 dark:text-green-400",
+                        "text-red-700 dark:text-red-400",
+                        "text-gray-500 dark:text-gray-400"
+                      )}`}
                     >
-                      {total > 0 ? "+" : ""}
-                      {total.toFixed(0)}
+                      {formatCurrency(total)}
                     </td>
                   ))}
                   <td
-                    className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-r bg-gray-100 dark:bg-slate-800 ${
-                      grandTotal > 0
-                        ? "text-green-700 dark:text-green-400"
-                        : grandTotal < 0
-                        ? "text-red-700 dark:text-red-400"
-                        : "text-gray-500 dark:text-gray-400"
-                    }`}
+                    className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-r bg-gray-100 dark:bg-slate-800 ${handleNumber(
+                      grandTotal,
+                      "text-green-700 dark:text-green-400",
+                      "text-red-700 dark:text-red-400",
+                      "text-gray-500 dark:text-gray-400"
+                    )}`}
                   >
-                    {grandTotal > 0 ? "+" : ""}
-                    {grandTotal.toFixed(0)}
+                    {formatCurrency(grandTotal)}
                   </td>
                   <td className="md:sticky md:right-0 md:z-10 p-2 min-w-[105px] bg-gray-100 dark:bg-slate-800"></td>
                 </tr>
@@ -314,35 +302,30 @@ export function Table({
                     Running Balance
                   </td>
                   <td className="md:sticky md:left-[200px] md:z-10 p-2 text-xs text-muted-foreground bg-purple-100 dark:bg-purple-950">
-                    Start: {startBalance > 0 ? "+" : ""}
-                    {startBalance.toFixed(0)}
+                    Start: {formatCurrency(startBalance)}
                   </td>
                   {runningBalance.map((balance, idx) => (
                     <td
                       key={idx}
-                      className={`p-2 text-right border-r ${
-                        balance > 0
-                          ? "text-green-700 dark:text-green-400"
-                          : balance < 0
-                          ? "text-red-700 dark:text-red-400"
-                          : "text-gray-500 dark:text-gray-400"
-                      }`}
+                      className={`p-2 text-right border-r ${handleNumber(
+                        balance,
+                        "text-green-700 dark:text-green-400",
+                        "text-red-700 dark:text-red-400",
+                        "text-gray-500 dark:text-gray-400"
+                      )}`}
                     >
-                      {balance > 0 ? "+" : ""}
-                      {balance.toFixed(0)}
+                      {formatCurrency(balance)}
                     </td>
                   ))}
                   <td
-                    className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-r bg-purple-100 dark:bg-purple-950 ${
-                      runningBalance[runningBalance.length - 1] > 0
-                        ? "text-green-700 dark:text-green-400"
-                        : runningBalance[runningBalance.length - 1] < 0
-                        ? "text-red-700 dark:text-red-400"
-                        : "text-gray-500 dark:text-gray-400"
-                    }`}
+                    className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-r bg-purple-100 dark:bg-purple-950 ${handleNumber(
+                      runningBalance[runningBalance.length - 1],
+                      "text-green-700 dark:text-green-400",
+                      "text-red-700 dark:text-red-400",
+                      "text-gray-500 dark:text-gray-400"
+                    )}`}
                   >
-                    {runningBalance[runningBalance.length - 1] > 0 ? "+" : ""}
-                    {runningBalance[runningBalance.length - 1].toFixed(0)}
+                    {formatCurrency(runningBalance[runningBalance.length - 1])}
                   </td>
                   <td className="md:sticky md:right-0 md:z-10 p-2 min-w-[105px] bg-purple-100 dark:bg-purple-950"></td>
                 </tr>
@@ -371,7 +354,7 @@ export function Table({
                 Total Income
               </p>
               <p className="text-2xl font-bold text-green-700 dark:text-green-400 mt-2">
-                +{totalIncome.toFixed(0)} kr
+                {formatCurrency(totalIncome)}
               </p>
             </div>
 
@@ -380,41 +363,37 @@ export function Table({
                 Total Expenses
               </p>
               <p className="text-2xl font-bold text-red-700 dark:text-red-400 mt-2">
-                -{totalExpenses.toFixed(0)} kr
+                {formatCurrency(totalExpenses)}
               </p>
             </div>
 
             <div
-              className={`p-4 border rounded-lg ${
-                grandTotal > 0
-                  ? "bg-green-100 dark:bg-green-950 border-green-200 dark:border-green-900"
-                  : grandTotal < 0
-                  ? "bg-red-100 dark:bg-red-950 border-red-200 dark:border-red-900"
-                  : "bg-gray-100 dark:bg-slate-800 border-gray-200 dark:border-slate-700"
-              }`}
+              className={`p-4 border rounded-lg ${handleNumber(
+                grandTotal,
+                "bg-green-100 dark:bg-green-950 border-green-200 dark:border-green-900",
+                "bg-red-100 dark:bg-red-950 border-red-200 dark:border-red-900",
+                "bg-gray-100 dark:bg-slate-800 border-gray-200 dark:border-slate-700"
+              )}`}
             >
               <p
-                className={`text-sm font-semibold uppercase ${
-                  grandTotal > 0
-                    ? "text-green-700 dark:text-green-400"
-                    : grandTotal < 0
-                    ? "text-red-700 dark:text-red-400"
-                    : "text-gray-700 dark:text-gray-300"
-                }`}
+                className={`text-sm font-semibold uppercase ${handleNumber(
+                  grandTotal,
+                  "text-green-700 dark:text-green-400",
+                  "text-red-700 dark:text-red-400",
+                  "text-gray-700 dark:text-gray-300"
+                )}`}
               >
                 Net Balance
               </p>
               <p
-                className={`text-2xl font-bold mt-2 ${
-                  grandTotal > 0
-                    ? "text-green-700 dark:text-green-400"
-                    : grandTotal < 0
-                    ? "text-red-700 dark:text-red-400"
-                    : "text-gray-700 dark:text-gray-300"
-                }`}
+                className={`text-2xl font-bold mt-2 ${handleNumber(
+                  grandTotal,
+                  "text-green-700 dark:text-green-400",
+                  "text-red-700 dark:text-red-400",
+                  "text-gray-700 dark:text-gray-300"
+                )}`}
               >
-                {grandTotal > 0 ? "+" : ""}
-                {grandTotal.toFixed(0)} kr
+                {formatCurrency(grandTotal)}
               </p>
             </div>
           </div>

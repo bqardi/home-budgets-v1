@@ -10,6 +10,7 @@ import {
 import { Trash2 } from "lucide-react";
 import { EditEntryModal } from "./EditEntryModal";
 import { Entry, Category } from "@/lib/types";
+import { formatCurrency, handleNumber } from "@/lib/utils";
 
 interface BudgetTableRowProps {
   entry: Entry;
@@ -64,16 +65,20 @@ export function TableRow({
     }
   };
 
-  const handleSaveAmount = async (amountId: string) => {
+  const handleSaveAmount = async (amountId: string, originalAmount: number) => {
     setSaving(true);
     try {
-      const amount = parseFloat(editingAmount || "0");
-      if (isNaN(amount)) throw new Error("Invalid amount");
+      const newAmount = parseFloat(editingAmount || "0");
+      if (isNaN(newAmount)) throw new Error("Invalid amount");
 
-      await updateEntryAmount(amountId, budgetId, amount);
+      // Only update if the value has changed
+      if (newAmount !== originalAmount) {
+        await updateEntryAmount(amountId, budgetId, newAmount);
+        onUpdate?.();
+      }
+
       setEditingMonth(null);
       setEditingAmount("");
-      onUpdate?.();
     } catch (error) {
       console.error("Failed to update amount:", error);
       alert("Failed to update amount");
@@ -149,9 +154,10 @@ export function TableRow({
                 step="0.01"
                 value={editingAmount}
                 onChange={(e) => setEditingAmount(e.target.value)}
-                onBlur={() => handleSaveAmount(amount.id)}
+                onBlur={() => handleSaveAmount(amount.id, amount.amount)}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") handleSaveAmount(amount.id);
+                  if (e.key === "Enter")
+                    handleSaveAmount(amount.id, amount.amount);
                   if (e.key === "Escape") {
                     setEditingMonth(null);
                     setEditingAmount("");
@@ -169,25 +175,16 @@ export function TableRow({
                     setEditingAmount(amount.amount.toString());
                   }
                 }}
-                className={`cursor-pointer hover:bg-accent dark:hover:bg-slate-800 px-1 py-0.5 rounded ${
-                  amount && amount.amount > 0
-                    ? entry.entry_type === "income"
-                      ? "text-green-600 dark:text-green-400"
-                      : "text-red-600 dark:text-red-400"
-                    : amount && amount.amount < 0
-                    ? "text-red-600 dark:text-red-400"
-                    : "text-muted-foreground"
-                }`}
+                className={`cursor-pointer hover:bg-accent dark:hover:bg-slate-800 px-1 py-0.5 rounded ${handleNumber(
+                  amount.amount,
+                  entry.entry_type === "income"
+                    ? "text-green-600 dark:text-green-400"
+                    : "text-red-600 dark:text-red-400",
+                  "text-red-700 dark:text-red-400",
+                  "text-muted-foreground"
+                )}`}
               >
-                {amount
-                  ? `${
-                      entry.entry_type === "expense"
-                        ? "-"
-                        : amount.amount > 0
-                        ? "+"
-                        : ""
-                    }${amount.amount.toFixed(0)}`
-                  : "-"}
+                {amount ? `${formatCurrency(amount.amount)}` : "-"}
               </div>
             )}
           </td>
@@ -196,16 +193,14 @@ export function TableRow({
 
       {/* Row Total */}
       <td
-        className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-x font-semibold min-w-[105px] bg-background dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 ${
-          rowTotal > 0
-            ? "text-green-700 dark:text-green-400"
-            : rowTotal < 0
-            ? "text-red-700 dark:text-red-400"
-            : "text-muted-foreground"
-        }`}
+        className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-x font-semibold min-w-[105px] bg-background dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 ${handleNumber(
+          rowTotal,
+          "text-green-700 dark:text-green-400",
+          "text-red-700 dark:text-red-400",
+          "text-muted-foreground"
+        )}`}
       >
-        {rowTotal > 0 ? "+" : ""}
-        {rowTotal.toFixed(0)}
+        {formatCurrency(rowTotal)}
       </td>
 
       {/* Delete Button */}
