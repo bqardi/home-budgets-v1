@@ -12,6 +12,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { createCategory } from "@/app/actions/entries";
+import { Plus } from "lucide-react";
 
 interface CreateCategoryModalProps {
   onSuccess?: () => void;
@@ -48,6 +49,7 @@ export function CreateCategoryModal({
       <DialogTrigger asChild>
         {asDropdownItem ? (
           <span className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+            <Plus className="mr-2 h-4 w-4" />
             Create Category
           </span>
         ) : (

@@ -7,6 +7,7 @@ import { ArrowLeft } from "lucide-react";
 import { Suspense } from "react";
 import { Navigation } from "@/components/nav";
 import { Footer } from "@/components/footer";
+import { CreateCategoryModal } from "../_components/CreateCategoryModal";
 
 async function getBudgetData(budgetId: string) {
   const supabase = await createClient();
@@ -104,13 +105,14 @@ async function BudgetPageContent({ id }: { id: string }) {
         </div>
 
         {categories.length === 0 ? (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
-            <p className="text-blue-900 font-medium mb-2">
+          <div className="bg-blue-50 dark:bg-blue-950/25 border border-blue-200 dark:border-blue-950 rounded-lg p-8 text-center">
+            <p className="text-blue-900 dark:text-blue-50 font-medium mb-2">
               No categories yet. Create one to get started!
             </p>
-            <p className="text-blue-700 text-sm">
+            <p className="text-blue-700 dark:text-blue-200 text-sm mb-8">
               Categories help you organize your budget entries.
             </p>
+            <CreateCategoryModal />
           </div>
         ) : (
           <BudgetTable

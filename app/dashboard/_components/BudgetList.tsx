@@ -60,11 +60,12 @@ export function BudgetList({ budgets }: BudgetListProps) {
       <div className="flex justify-end gap-2 mb-6">
         <CreateBudgetModal budgets={budgets} />
         <Button
-          variant="outline"
+          size="md"
+          variant={enableActions ? "outline" : "destructive"}
           onClick={() => setEnableActions((prev) => !prev)}
         >
           <Edit className="w-4 h-4 mr-2" />
-          {enableActions ? "Disable" : "Enable"} actions
+          Toggle actions
         </Button>
       </div>
       <div className="grid gap-2.5">
@@ -74,7 +75,7 @@ export function BudgetList({ budgets }: BudgetListProps) {
             className="relative isolate has-[button.delete:hover]:bg-red-950/25 has-[button.edit:hover]:bg-blue-950/25 hover:bg-accent/25 transition-colors"
           >
             <CardHeader>
-              <div className="flex items-start justify-between flex-wrap gap-y-4">
+              <div className="flex items-start justify-between flex-wrap gap-x-8 gap-y-4">
                 <div className="flex-1 flex items-center justify-between flex-wrap gap-y-2 gap-x-8">
                   <div className="flex items-center gap-2">
                     <CardTitle className="text-lg">{budget.name}</CardTitle>
