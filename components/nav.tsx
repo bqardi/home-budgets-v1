@@ -17,8 +17,8 @@ export function Navigation() {
   ];
 
   return (
-    <nav className="bg-background border-b sticky top-0 z-50">
-      <div className="py-4 hidden md:flex items-center justify-between">
+    <nav className="bg-background">
+      <div className="hidden md:flex items-center justify-between">
         <div className="flex items-center gap-8">
           <Link href="/" className="font-bold text-lg">
             Home Budget

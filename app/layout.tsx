@@ -35,12 +35,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main className="min-h-screen flex flex-col items-center">
-            <div className="flex-1 w-full flex flex-col gap-20 items-center">
-              <Header />
-              <div className="w-full grow flex justify-center">{children}</div>
-              <Footer />
-            </div>
+          <main className="min-h-screen flex flex-col items-center gap-12">
+            <Header />
+            <div className="w-full grow flex justify-center">{children}</div>
+            <Footer />
           </main>
         </ThemeProvider>
       </body>
