@@ -6,6 +6,7 @@ import { ArrowLeft } from "lucide-react";
 import { Suspense } from "react";
 import { ContentWrapper } from "../_components/ContentWrapper";
 import { Container } from "@/components/container";
+import { LoadingSpinner } from "@/components/loading-spinner";
 
 async function getBudgetData(budgetId: string) {
   const supabase = await createClient();
@@ -77,7 +78,7 @@ export default async function BudgetPage({ params }: PageProps) {
   const { id } = await params;
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<LoadingSpinner message="Loading budget..." />}>
       <BudgetPageContent id={id} />
     </Suspense>
   );
