@@ -23,38 +23,13 @@ import {
   updateEntryType,
 } from "@/app/actions/entries";
 import { Edit2 } from "lucide-react";
-
-const MONTHS = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
-interface EntryAmount {
-  id: string;
-  month: number;
-  amount: number;
-}
+import { Entry, Category } from "@/lib/types";
+import { getAllMonths } from "@/lib/utils";
 
 interface EditEntryModalProps {
-  entry: {
-    id: string;
-    description: string;
-    category_id: string;
-    entry_type: "income" | "expense";
-    entry_amounts: EntryAmount[];
-  };
+  entry: Entry;
   budgetId: string;
-  categories: Array<{ id: string; name: string }>;
+  categories: Category[];
   onSuccess?: () => void;
 }
 
@@ -385,24 +360,26 @@ export function EditEntryModal({
             {/* Custom Monthly Amounts Grid */}
             {pattern === "custom" && (
               <div className="grid grid-cols-3 gap-4 p-4 bg-muted rounded-lg">
-                {MONTHS.map((month, idx) => (
-                  <div key={month} className="space-y-1">
-                    <label className="text-xs font-semibold text-muted-foreground">
-                      {month}
-                    </label>
-                    <Input
-                      type="number"
-                      step="0.01"
-                      placeholder="0"
-                      value={monthlyAmounts[idx + 1]}
-                      onChange={(e) =>
-                        handleMonthChange(idx + 1, e.target.value)
-                      }
-                      disabled={loading}
-                      className="h-8"
-                    />
-                  </div>
-                ))}
+                {getAllMonths({ locale: "da-DK", format: "short" }).map(
+                  (month, idx) => (
+                    <div key={month} className="space-y-1">
+                      <label className="text-xs font-semibold text-muted-foreground">
+                        {month}
+                      </label>
+                      <Input
+                        type="number"
+                        step="0.01"
+                        placeholder="0"
+                        value={monthlyAmounts[idx + 1]}
+                        onChange={(e) =>
+                          handleMonthChange(idx + 1, e.target.value)
+                        }
+                        disabled={loading}
+                        className="h-8"
+                      />
+                    </div>
+                  )
+                )}
               </div>
             )}
           </div>

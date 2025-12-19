@@ -61,7 +61,7 @@ export function BudgetList({ budgets }: BudgetListProps) {
         <CreateBudgetModal budgets={budgets} />
         <Button
           size="md"
-          variant={enableActions ? "outline" : "destructive"}
+          variant={enableActions ? "destructive" : "outline"}
           onClick={() => setEnableActions((prev) => !prev)}
         >
           <Edit className="w-4 h-4 mr-2" />

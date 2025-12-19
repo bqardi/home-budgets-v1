@@ -6,32 +6,14 @@ import { CreateEntryRow } from "./CreateEntryModal";
 import { TransferModal } from "./TransferModal";
 import { ConfigurationDropdown } from "./ConfigurationDropdown";
 import { getAllMonths } from "@/lib/utils";
-
-interface EntryAmount {
-  id: string;
-  month: number;
-  amount: number;
-}
-
-interface Entry {
-  id: string;
-  description: string;
-  category_id: string;
-  entry_type: "income" | "expense";
-  entry_amounts: EntryAmount[];
-}
-
-interface Category {
-  id: string;
-  name: string;
-}
+import { Entry, Category, BudgetTransfer } from "@/lib/types";
 
 interface BudgetTableProps {
   entries: Entry[];
   categories: Category[];
   budgetId: string;
   onRefresh?: () => void;
-  otherBudgets?: Array<{ id: string; name: string; year: number }>;
+  otherBudgets?: BudgetTransfer[];
   initialStartingBalance?: string;
 }
 
@@ -92,16 +74,18 @@ export function BudgetTable({
   // Process income (positive)
   incomeEntries.forEach((entry) => {
     entry.entry_amounts.forEach((amount) => {
-      monthlyIncome[amount.month - 1] += amount.amount;
-      monthlyTotals[amount.month - 1] += amount.amount;
+      const monthIndex = Number(amount.month) - 1;
+      monthlyIncome[monthIndex] += amount.amount;
+      monthlyTotals[monthIndex] += amount.amount;
     });
   });
 
   // Process expenses (subtract)
   expenseEntries.forEach((entry) => {
     entry.entry_amounts.forEach((amount) => {
-      monthlyExpenses[amount.month - 1] += amount.amount;
-      monthlyTotals[amount.month - 1] -= amount.amount;
+      const monthIndex = Number(amount.month) - 1;
+      monthlyExpenses[monthIndex] += amount.amount;
+      monthlyTotals[monthIndex] -= amount.amount;
     });
   });
 

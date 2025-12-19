@@ -1,15 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
-
-interface EntryAmount {
-  amount: number;
-}
-
-interface Entry {
-  id: string;
-  entry_type: "income" | "expense";
-  entry_amounts: EntryAmount[];
-}
+import { Entry, EntryAmount } from "@/lib/types";
 
 export async function GET(
   request: NextRequest,
@@ -61,9 +52,9 @@ export async function GET(
     // Calculate total balance (sum of income - sum of expenses)
     let totalBalance = 0;
 
-    entries.forEach((entry: Entry) => {
+    entries.forEach((entry: any) => {
       const entryTotal = (entry.entry_amounts || []).reduce(
-        (sum: number, amount: EntryAmount) => sum + amount.amount,
+        (sum: number, amount: any) => sum + amount.amount,
         0
       );
 

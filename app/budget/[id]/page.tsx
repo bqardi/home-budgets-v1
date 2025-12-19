@@ -2,12 +2,11 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
-import { BudgetTable } from "../_components/BudgetTable";
 import { ArrowLeft } from "lucide-react";
 import { Suspense } from "react";
 import { Navigation } from "@/components/nav";
 import { Footer } from "@/components/footer";
-import { CreateCategoryModal } from "../_components/CreateCategoryModal";
+import { BudgetContentWrapper } from "../_components/BudgetContentWrapper";
 
 async function getBudgetData(budgetId: string) {
   const supabase = await createClient();
@@ -104,25 +103,13 @@ async function BudgetPageContent({ id }: { id: string }) {
           <p className="inline text-muted-foreground ml-2"> ({budget.year})</p>
         </div>
 
-        {categories.length === 0 ? (
-          <div className="bg-blue-50 dark:bg-blue-950/25 border border-blue-200 dark:border-blue-950 rounded-lg p-8 text-center">
-            <p className="text-blue-900 dark:text-blue-50 font-medium mb-2">
-              No categories yet. Create one to get started!
-            </p>
-            <p className="text-blue-700 dark:text-blue-200 text-sm mb-8">
-              Categories help you organize your budget entries.
-            </p>
-            <CreateCategoryModal />
-          </div>
-        ) : (
-          <BudgetTable
-            entries={entries}
-            categories={categories}
-            budgetId={id}
-            otherBudgets={allBudgets.filter((b) => b.id !== id)}
-            initialStartingBalance={(budget.starting_balance || 0).toString()}
-          />
-        )}
+        <BudgetContentWrapper
+          entries={entries}
+          categories={categories}
+          budgetId={id}
+          otherBudgets={allBudgets.filter((b) => b.id !== id)}
+          initialStartingBalance={(budget.starting_balance || 0).toString()}
+        />
       </div>
 
       <Footer />

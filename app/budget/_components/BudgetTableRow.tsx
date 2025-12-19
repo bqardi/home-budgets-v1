@@ -9,23 +9,12 @@ import {
 } from "@/app/actions/entries";
 import { Trash2 } from "lucide-react";
 import { EditEntryModal } from "./EditEntryModal";
-
-interface EntryAmount {
-  id: string;
-  month: number;
-  amount: number;
-}
+import { Entry, Category } from "@/lib/types";
 
 interface BudgetTableRowProps {
-  entry: {
-    id: string;
-    description: string;
-    category_id: string;
-    entry_type: "income" | "expense";
-    entry_amounts: EntryAmount[];
-  };
+  entry: Entry;
   budgetId: string;
-  categories: Array<{ id: string; name: string }>;
+  categories: Category[];
   categoryMap: Record<string, string>;
   onDelete?: () => void;
   onUpdate?: () => void;
