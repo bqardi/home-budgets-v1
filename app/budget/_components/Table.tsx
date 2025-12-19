@@ -265,18 +265,18 @@ export function Table({
                 )}
 
                 {/* Net Total Row */}
-                <tr className="bg-gray-100 dark:bg-slate-800 border-t-2 border-b font-semibold">
-                  <td className="md:sticky md:left-0 md:z-10 p-2 border-r text-left bg-gray-100 dark:bg-slate-800">
+                <tr className="bg-primary-foreground border-t-2 border-b font-semibold">
+                  <td className="md:sticky md:left-0 md:z-10 p-2 border-r text-left bg-primary-foreground">
                     Net Balance
                   </td>
-                  <td className="md:sticky md:left-[200px] md:z-10 p-2 border-r bg-gray-100 dark:bg-slate-800"></td>
+                  <td className="md:sticky md:left-[200px] md:z-10 p-2 border-r bg-primary-foreground"></td>
                   {monthlyTotals.map((total, idx) => (
                     <td
                       key={idx}
                       className={`p-2 text-right border-r ${handleNumber(
                         total,
                         "text-green-700 dark:text-green-400",
-                        "text-red-700 dark:text-red-400",
+                        "text-secondary bg-red-700 dark:bg-red-400",
                         "text-gray-500 dark:text-gray-400"
                       )}`}
                     >
@@ -284,24 +284,24 @@ export function Table({
                     </td>
                   ))}
                   <td
-                    className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-r bg-gray-100 dark:bg-slate-800 ${handleNumber(
+                    className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-r bg-primary-foreground ${handleNumber(
                       grandTotal,
                       "text-green-700 dark:text-green-400",
-                      "text-red-700 dark:text-red-400",
+                      "text-secondary bg-red-700 dark:bg-red-400",
                       "text-gray-500 dark:text-gray-400"
                     )}`}
                   >
                     {formatCurrency(grandTotal)}
                   </td>
-                  <td className="md:sticky md:right-0 md:z-10 p-2 min-w-[105px] bg-gray-100 dark:bg-slate-800"></td>
+                  <td className="md:sticky md:right-0 md:z-10 p-2 min-w-[105px] bg-primary-foreground"></td>
                 </tr>
 
                 {/* Running Balance Row */}
-                <tr className="bg-purple-100 dark:bg-purple-950 border-t border-b font-semibold">
-                  <td className="md:sticky md:left-0 md:z-10 p-2 border-r text-left bg-purple-100 dark:bg-purple-950">
+                <tr className="bg-primary-foreground border-t border-b font-semibold">
+                  <td className="md:sticky md:left-0 md:z-10 p-2 border-r text-left bg-primary-foreground">
                     Running Balance
                   </td>
-                  <td className="md:sticky md:left-[200px] md:z-10 p-2 text-xs text-muted-foreground bg-purple-100 dark:bg-purple-950">
+                  <td className="md:sticky md:left-[200px] md:z-10 p-2 text-xs text-muted-foreground bg-primary-foreground whitespace-nowrap">
                     Start: {formatCurrency(startBalance)}
                   </td>
                   {runningBalance.map((balance, idx) => (
@@ -310,7 +310,7 @@ export function Table({
                       className={`p-2 text-right border-r ${handleNumber(
                         balance,
                         "text-green-700 dark:text-green-400",
-                        "text-red-700 dark:text-red-400",
+                        "text-secondary bg-red-700 dark:bg-red-400",
                         "text-gray-500 dark:text-gray-400"
                       )}`}
                     >
@@ -318,16 +318,16 @@ export function Table({
                     </td>
                   ))}
                   <td
-                    className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-r bg-purple-100 dark:bg-purple-950 ${handleNumber(
+                    className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-r bg-primary-foreground ${handleNumber(
                       runningBalance[runningBalance.length - 1],
                       "text-green-700 dark:text-green-400",
-                      "text-red-700 dark:text-red-400",
+                      "text-secondary bg-red-700 dark:bg-red-400",
                       "text-gray-500 dark:text-gray-400"
                     )}`}
                   >
                     {formatCurrency(runningBalance[runningBalance.length - 1])}
                   </td>
-                  <td className="md:sticky md:right-0 md:z-10 p-2 min-w-[105px] bg-purple-100 dark:bg-purple-950"></td>
+                  <td className="md:sticky md:right-0 md:z-10 p-2 min-w-[105px] bg-primary-foreground"></td>
                 </tr>
               </>
             )}
