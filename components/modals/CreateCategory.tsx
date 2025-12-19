@@ -14,15 +14,15 @@ import {
 import { createCategory } from "@/app/actions/entries";
 import { Plus } from "lucide-react";
 
-interface CreateCategoryModalProps {
+interface CreateCategoryProps {
   onSuccess?: () => void;
   asDropdownItem?: boolean;
 }
 
-export function CreateCategoryModal({
+export function CreateCategory({
   onSuccess,
   asDropdownItem = false,
-}: CreateCategoryModalProps) {
+}: CreateCategoryProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");

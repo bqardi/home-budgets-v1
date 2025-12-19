@@ -8,7 +8,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MoreVertical } from "lucide-react";
-import { CreateCategoryModal } from "./CreateCategoryModal";
+import { CreateCategory } from "@/components/modals";
 import { useEffect, useState } from "react";
 import { updateStartingBalance } from "@/app/actions/budget";
 import { Separator } from "@/components/ui/separator";
@@ -77,7 +77,7 @@ export function ConfigurationDropdown({
         </div>
         <Separator className="my-4" />
         <DropdownMenuItem asChild>
-          <CreateCategoryModal asDropdownItem={true} />
+          <CreateCategory asDropdownItem={true} />
         </DropdownMenuItem>
         {otherBudgets.length > 0 && (
           <DropdownMenuItem onClick={() => setIsTransferModalOpen(true)}>

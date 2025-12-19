@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { BudgetTableRow } from "./BudgetTableRow";
+import { TableRow } from "./TableRow";
 import { CreateEntryRow } from "./CreateEntryModal";
 import { TransferModal } from "./TransferModal";
 import { ConfigurationDropdown } from "./ConfigurationDropdown";
@@ -17,7 +17,7 @@ interface BudgetTableProps {
   initialStartingBalance?: string;
 }
 
-export function BudgetTable({
+export function Table({
   entries: initialEntries,
   categories,
   budgetId,
@@ -161,7 +161,7 @@ export function BudgetTable({
                 {incomeEntries.length > 0 && (
                   <>
                     {incomeEntries.map((entry) => (
-                      <BudgetTableRow
+                      <TableRow
                         key={entry.id}
                         entry={entry}
                         budgetId={budgetId}
@@ -178,7 +178,7 @@ export function BudgetTable({
                 {expenseEntries.length > 0 && (
                   <>
                     {expenseEntries.map((entry) => (
-                      <BudgetTableRow
+                      <TableRow
                         key={entry.id}
                         entry={entry}
                         budgetId={budgetId}

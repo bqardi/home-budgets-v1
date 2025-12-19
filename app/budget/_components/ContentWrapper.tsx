@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { BudgetTable } from "./BudgetTable";
-import { CreateCategoryModal } from "./CreateCategoryModal";
+import { Table } from "./Table";
+import { CreateCategory } from "@/components/modals";
 import { refetchCategories } from "../_actions/categories";
 import { Entry, Category, BudgetTransfer } from "@/lib/types";
 
@@ -14,7 +14,7 @@ interface BudgetContentWrapperProps {
   initialStartingBalance: string;
 }
 
-export function BudgetContentWrapper({
+export function ContentWrapper({
   entries,
   categories: initialCategories,
   budgetId,
@@ -40,13 +40,13 @@ export function BudgetContentWrapper({
         <p className="text-blue-700 dark:text-blue-200 text-sm mb-8">
           Categories help you organize your budget entries.
         </p>
-        <CreateCategoryModal onSuccess={handleCategoryCreated} />
+        <CreateCategory onSuccess={handleCategoryCreated} />
       </div>
     );
   }
 
   return (
-    <BudgetTable
+    <Table
       entries={entries}
       categories={categories}
       budgetId={budgetId}

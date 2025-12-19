@@ -6,7 +6,7 @@ import { ArrowLeft } from "lucide-react";
 import { Suspense } from "react";
 import { Navigation } from "@/components/nav";
 import { Footer } from "@/components/footer";
-import { BudgetContentWrapper } from "../_components/BudgetContentWrapper";
+import { ContentWrapper } from "../_components/ContentWrapper";
 
 async function getBudgetData(budgetId: string) {
   const supabase = await createClient();
@@ -103,7 +103,7 @@ async function BudgetPageContent({ id }: { id: string }) {
           <p className="inline text-muted-foreground ml-2"> ({budget.year})</p>
         </div>
 
-        <BudgetContentWrapper
+        <ContentWrapper
           entries={entries}
           categories={categories}
           budgetId={id}

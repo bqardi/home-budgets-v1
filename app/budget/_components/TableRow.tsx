@@ -20,7 +20,7 @@ interface BudgetTableRowProps {
   onUpdate?: () => void;
 }
 
-export function BudgetTableRow({
+export function TableRow({
   entry,
   budgetId,
   categories,
