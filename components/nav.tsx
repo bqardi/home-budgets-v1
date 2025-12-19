@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { LogOut, LayoutDashboard, Settings } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 export function Navigation() {
   const router = useRouter();
+  const pathname = usePathname();
   const supabase = createClient();
 
   const handleLogout = async () => {
@@ -23,20 +24,34 @@ export function Navigation() {
             Home Budget
           </Link>
           <div className="hidden md:flex items-center gap-4">
-            <Link
-              href="/dashboard"
-              className="flex items-center gap-2 text-sm font-medium hover:text-primary transition-colors"
-            >
-              <LayoutDashboard className="w-4 h-4" />
-              Dashboard
-            </Link>
-            <Link
-              href="/settings"
-              className="flex items-center gap-2 text-sm font-medium hover:text-primary transition-colors"
-            >
-              <Settings className="w-4 h-4" />
-              Settings
-            </Link>
+            {pathname === "/dashboard" ? (
+              <div className="flex items-center gap-2 text-sm font-medium text-primary cursor-default opacity-100">
+                <LayoutDashboard className="w-4 h-4" />
+                Dashboard
+              </div>
+            ) : (
+              <Link
+                href="/dashboard"
+                className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary/75 transition-colors"
+              >
+                <LayoutDashboard className="w-4 h-4" />
+                Dashboard
+              </Link>
+            )}
+            {pathname === "/settings" ? (
+              <div className="flex items-center gap-2 text-sm font-medium text-primary cursor-default opacity-100">
+                <Settings className="w-4 h-4" />
+                Settings
+              </div>
+            ) : (
+              <Link
+                href="/settings"
+                className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary/75 transition-colors"
+              >
+                <Settings className="w-4 h-4" />
+                Settings
+              </Link>
+            )}
           </div>
         </div>
 
