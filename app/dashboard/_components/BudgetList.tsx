@@ -88,11 +88,13 @@ export function BudgetList({ budgets }: BudgetListProps) {
                     <BalanceDisplay
                       balance={budget.starting_balance || 0}
                       label="Start balance"
+                      options={{ locale: "da-DK", currency: "DKK" }}
                     />
                     <div className="text-muted-foreground">→</div>
                     <BalanceDisplay
-                      balance={budget.end_balance}
+                      balance={budget.end_balance || 0}
                       label="End balance"
+                      options={{ locale: "da-DK", currency: "DKK" }}
                     />
                   </div>
                 </div>

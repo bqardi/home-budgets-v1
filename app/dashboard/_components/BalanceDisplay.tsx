@@ -1,23 +1,32 @@
-import { NumberDisplay } from "@/components/ui/number-display";
+import { cn, formatCurrency, handleNumber } from "@/lib/utils";
 
 type BalanceDisplayProps = {
-  balance?: number | null;
+  balance: number;
   label?: string;
+  options?: { locale?: string; currency?: string };
 };
 
-export function BalanceDisplay({ balance, label }: BalanceDisplayProps) {
+export function BalanceDisplay({
+  balance,
+  label,
+  options,
+}: BalanceDisplayProps) {
   return (
     <p className="text-sm text-muted-foreground">
       {label && <span className="block text-xs mb-0.5">{label}</span>}
-      <NumberDisplay
-        className="block"
-        positiveClassName="bg-green-100 text-green-700 py-0.5 px-2 rounded-sm"
-        negativeClassName="bg-red-100 text-red-700 py-0.5 px-2 rounded-sm"
-        nilClassName="bg-gray-200 text-gray-800 py-0.5 px-2 rounded-sm"
-        value={balance || 0}
+      <span
+        className={cn(
+          "block py-0.5 px-2 rounded-sm",
+          handleNumber(
+            balance,
+            "bg-green-100 text-green-700",
+            "bg-red-100 text-red-700",
+            "bg-gray-200 text-gray-800"
+          )
+        )}
       >
-        <NumberDisplay.Value />
-      </NumberDisplay>
+        {formatCurrency(balance, options?.locale, options?.currency)}
+      </span>
     </p>
   );
 }
