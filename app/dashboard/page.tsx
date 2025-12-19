@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { BudgetList } from "./_components/BudgetList";
-import { CreateBudgetModal } from "./_components/CreateBudgetModal";
 import { Navigation } from "@/components/nav";
 import { Footer } from "@/components/footer";
 
@@ -41,10 +40,6 @@ export default async function DashboardPage() {
               Manage your household budget
             </p>
           </div>
-        </div>
-
-        <div className="flex justify-end mb-6">
-          <CreateBudgetModal budgets={budgets} />
         </div>
 
         <BudgetList budgets={budgets} />
