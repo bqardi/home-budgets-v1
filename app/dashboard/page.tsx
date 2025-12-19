@@ -1,8 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { BudgetList } from "./_components/BudgetList";
-import { Navigation } from "@/components/nav";
-import { Footer } from "@/components/footer";
+import { Container } from "@/components/container";
 
 async function getBudgets() {
   const supabase = await createClient();
@@ -30,22 +29,17 @@ export default async function DashboardPage() {
   const budgets = await getBudgets();
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navigation />
-      <div className="md:max-w-6xl mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">Budget Manager</h1>
-            <p className="text-muted-foreground mt-2">
-              Manage your household budget
-            </p>
-          </div>
+    <Container className="py-8">
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-3xl font-bold">Budget Manager</h1>
+          <p className="text-muted-foreground mt-2">
+            Manage your household budget
+          </p>
         </div>
-
-        <BudgetList budgets={budgets} />
       </div>
 
-      <Footer />
-    </div>
+      <BudgetList budgets={budgets} />
+    </Container>
   );
 }

@@ -57,12 +57,13 @@ export function BudgetList({ budgets }: BudgetListProps) {
 
   return (
     <>
-      <div className="flex justify-end gap-2 mb-6">
+      <div className="flex justify-end flex-wrap gap-2 mb-6">
         <CreateBudgetModal budgets={budgets} />
         <Button
           size="md"
           variant={enableActions ? "destructive" : "outline"}
           onClick={() => setEnableActions((prev) => !prev)}
+          className="max-xxs:w-full"
         >
           <Edit className="w-4 h-4 mr-2" />
           Toggle actions

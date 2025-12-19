@@ -89,7 +89,7 @@ export function CreateBudgetModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="md" variant="outline">
+        <Button size="md" variant="outline" className="max-xxs:w-full">
           <Plus className="w-4 h-4 mr-2" />
           New Budget
         </Button>

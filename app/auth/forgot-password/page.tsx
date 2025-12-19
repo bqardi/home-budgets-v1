@@ -1,5 +1,5 @@
 import { ForgotPasswordForm } from "@/components/forgot-password-form";
-import { MainHeader } from "@/components/main-header";
+import { MainHeader } from "@/components/header";
 import { Footer } from "@/components/footer";
 
 export default function Page() {

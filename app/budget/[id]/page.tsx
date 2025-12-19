@@ -4,9 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { Suspense } from "react";
-import { Navigation } from "@/components/nav";
-import { Footer } from "@/components/footer";
 import { ContentWrapper } from "../_components/ContentWrapper";
+import { Container } from "@/components/container";
 
 async function getBudgetData(budgetId: string) {
   const supabase = await createClient();
@@ -88,31 +87,26 @@ async function BudgetPageContent({ id }: { id: string }) {
   const { budget, categories, entries, allBudgets } = await getBudgetData(id);
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navigation />
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <Link href="/dashboard">
-          <Button variant="ghost" size="sm" className="mb-6">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Budgets
-          </Button>
-        </Link>
+    <Container className="py-8">
+      <Link href="/dashboard">
+        <Button variant="ghost" size="sm" className="mb-6">
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Budgets
+        </Button>
+      </Link>
 
-        <div className="mb-2 mr-12">
-          <h1 className="inline text-3xl font-bold">{budget.name}</h1>
-          <p className="inline text-muted-foreground ml-2"> ({budget.year})</p>
-        </div>
-
-        <ContentWrapper
-          entries={entries}
-          categories={categories}
-          budgetId={id}
-          otherBudgets={allBudgets.filter((b) => b.id !== id)}
-          initialStartingBalance={(budget.starting_balance || 0).toString()}
-        />
+      <div className="mb-2 mr-12">
+        <h1 className="inline text-3xl font-bold">{budget.name}</h1>
+        <p className="inline text-muted-foreground ml-2"> ({budget.year})</p>
       </div>
 
-      <Footer />
-    </div>
+      <ContentWrapper
+        entries={entries}
+        categories={categories}
+        budgetId={id}
+        otherBudgets={allBudgets.filter((b) => b.id !== id)}
+        initialStartingBalance={(budget.starting_balance || 0).toString()}
+      />
+    </Container>
   );
 }
