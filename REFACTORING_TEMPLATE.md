@@ -1,0 +1,177 @@
+/\*\*
+
+- REFACTORING TEMPLATE FOR CLEAN, SCALABLE CODE
+-
+- Use this pattern when cleaning up scattered functions throughout the app
+- This ensures consistency and maintainability across the codebase
+-
+- ============================================================================
+- DIRECTORY STRUCTURE
+- ============================================================================
+-
+- For features with CRUD operations:
+-
+- app/[feature]/
+- ├── page.tsx (Server component - fetches data)
+- ├── \_components/
+- │ └── [Feature]Form.tsx (Client component - interactive UI)
+- ├── \_actions/
+- │ └── [action].ts (Server actions - "use server")
+- └── lib/data/[feature].ts (Optional - shared types & read queries)
+-
+- ============================================================================
+- FILE PATTERNS
+- ============================================================================
+-
+- 1.  DATA FETCHING (lib/data/[feature].ts)
+- - Export TypeScript interfaces
+- - Export read-only data fetching functions
+- - Never import in client components
+- - Safe to import in server components
+- - Include documentation comments above functions
+-
+- 2.  SERVER ACTIONS (app/[feature]/\_actions/[action].ts)
+- - Add "use server" at the top
+- - Handle database mutations (create, update, delete)
+- - Include user authentication checks
+- - Return { success: boolean; data?: T; error?: string }
+- - Never make these client-side imports
+-
+- 3.  CLIENT COMPONENTS (app/[feature]/\_components/[Component].tsx)
+- - Add "use client" at the top
+- - Import server actions directly (no need to import data functions)
+- - Handle form state (useState)
+- - Call server actions on submit
+- - Display loading/error/success states
+-
+- 4.  PAGE COMPONENTS (app/[feature]/page.tsx)
+- - Server component (default)
+- - Fetch initial data using getSettings() from lib/data
+- - Pass data to client components
+- - Handle error states
+-
+- ============================================================================
+- IMPLEMENTATION CHECKLIST
+- ============================================================================
+-
+- When refactoring an existing function:
+-
+- ☐ Identify if it's a read operation (data fetching) or write operation (mutation)
+- ☐ Create TypeScript interface for return type
+- ☐ Write JSDoc comment explaining what the function does
+- ☐ Add authentication validation (check user is logged in)
+- ☐ Add error handling with console.error() for debugging
+- ☐ Return success/error response format for consistency
+- ☐ Place in appropriate file:
+- - Read: lib/data/[feature].ts
+- - Write: app/[feature]/\_actions/[file].ts
+- ☐ Test the function works end-to-end
+-
+- ============================================================================
+- EXAMPLE: SETTINGS PATTERN (ALREADY IMPLEMENTED)
+- ============================================================================
+-
+- File: lib/data/settings.ts
+- ├─ export interface Settings { ... }
+- └─ export async function getSettings(): Promise<Settings | null>
+-
+- File: app/settings/\_actions/updateSettings.ts
+- ├─ "use server"
+- ├─ export async function updateSettingsAction(updates: Partial<Settings>)
+- └─ Returns { success: boolean; data?: Settings; error?: string }
+-
+- File: app/settings/\_components/SettingsPreferencesForm.tsx
+- ├─ "use client"
+- ├─ import { updateSettingsAction } from "../\_actions/updateSettings"
+- ├─ import { Settings } from "@/lib/data/settings"
+- └─ Handle form state and call updateSettingsAction()
+-
+- File: app/settings/page.tsx
+- ├─ Server component (no "use client")
+- ├─ const settings = await getSettings()
+- └─ <SettingsPreferencesForm settings={settings} />
+-
+- ============================================================================
+- RESPONSE FORMAT STANDARD
+- ============================================================================
+-
+- For server actions, always return this format:
+-
+- {
+- success: boolean,
+- data?: T, // Return data on success
+- error?: string // Return error message on failure
+- }
+-
+- This allows client components to handle both cases consistently:
+-
+- const result = await updateSettingsAction(...);
+- if (result.success && result.data) {
+- setSuccess(true);
+- // Use result.data
+- } else {
+- setError(result.error || "Unknown error");
+- }
+-
+- ============================================================================
+- KEY PRINCIPLES
+- ============================================================================
+-
+- 1.  SEPARATION OF CONCERNS
+- - Data logic: lib/data/
+- - Server mutations: \_actions/
+- - UI interactions: \_components/
+- - Page layout: page.tsx
+-
+- 2.  TYPE SAFETY
+- - Export TypeScript interfaces
+- - Use Partial<> for partial updates
+- - Strong typing in function parameters and returns
+-
+- 3.  ERROR HANDLING
+- - Log errors with console.error()
+- - Return error messages to client
+- - Always validate user is authenticated
+-
+- 4.  CONSISTENCY
+- - Same response format across all server actions
+- - Same naming conventions (\_actions/, \_components/)
+- - Same authentication pattern in all mutations
+-
+- 5.  READABILITY
+- - Include JSDoc comments above functions
+- - Use clear, descriptive names
+- - Limit file sizes (move related functions to same file)
+-
+- ============================================================================
+- WHEN TO USE THIS TEMPLATE
+- ============================================================================
+-
+- ✅ Use this template for:
+- - CRUD operations (Create, Read, Update, Delete)
+- - Database operations
+- - Authentication-dependent features
+- - Form submissions
+- - Any feature with both data fetching and mutations
+-
+- ❌ Don't use this template for:
+- - Simple utility functions (helpers, formatters)
+- - Pure client-side state (use useState instead)
+- - External API calls without user context
+- - Simple data transformations
+-
+- ============================================================================
+- ADDITIONAL NOTES
+- ============================================================================
+-
+- - Always test in development before deployment
+- - Use npm run build to verify TypeScript and Next.js compilation
+- - Include proper error messages for debugging
+- - Keep files focused on single responsibility
+- - Document complex logic with comments
+-
+- For questions or refactoring requests, reference:
+- "Apply the clean code refactoring pattern with proper separation of concerns,
+- TypeScript types, error handling, and standard response formats as documented
+- in the settings module and REFACTORING_TEMPLATE.md"
+  \*/

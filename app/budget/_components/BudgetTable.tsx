@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { BudgetTableRow } from "./BudgetTableRow";
-import { CreateEntryRow } from "./CreateEntryRow";
+import { CreateEntryRow } from "./CreateEntryModal";
 import { TransferModal } from "./TransferModal";
 import { ConfigurationDropdown } from "./ConfigurationDropdown";
+import { getAllMonths } from "@/lib/utils";
 
 interface EntryAmount {
   id: string;
@@ -33,21 +34,6 @@ interface BudgetTableProps {
   otherBudgets?: Array<{ id: string; name: string; year: number }>;
   initialStartingBalance?: string;
 }
-
-const MONTHS = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
 
 export function BudgetTable({
   entries: initialEntries,
@@ -157,14 +143,16 @@ export function BudgetTable({
               <th className="md:sticky md:left-[200px] md:z-20 p-2 text-left font-semibold border-r md:min-w-[120px] bg-muted dark:bg-slate-800">
                 Category
               </th>
-              {MONTHS.map((month) => (
-                <th
-                  key={month}
-                  className="p-2 text-right font-semibold border-r min-w-[80px]"
-                >
-                  {month}
-                </th>
-              ))}
+              {getAllMonths({ locale: "da-DK", format: "short" }).map(
+                (month) => (
+                  <th
+                    key={month}
+                    className="p-2 text-right font-semibold border-r min-w-[80px]"
+                  >
+                    {month}
+                  </th>
+                )
+              )}
               <th className="md:sticky md:right-[105px] md:z-20 p-2 text-right font-semibold border-r min-w-[80px] bg-muted dark:bg-slate-800">
                 Total
               </th>
