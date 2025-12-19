@@ -35,7 +35,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main className="min-h-screen flex flex-col items-center gap-12">
+          <main className="min-h-screen flex flex-col items-center gap-20">
             <Header />
             <div className="w-full grow flex justify-center">{children}</div>
             <Footer />

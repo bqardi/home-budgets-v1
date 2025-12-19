@@ -88,9 +88,9 @@ async function BudgetPageContent({ id }: { id: string }) {
   const { budget, categories, entries, allBudgets } = await getBudgetData(id);
 
   return (
-    <Container className="py-8">
+    <Container className="relative py-8">
       <Link href="/dashboard">
-        <Button variant="ghost" size="sm" className="mb-6">
+        <Button variant="ghost" size="sm" className="absolute bottom-full">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Budgets
         </Button>
