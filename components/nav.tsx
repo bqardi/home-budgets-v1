@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { LogOut, LayoutDashboard } from "lucide-react";
+import { LogOut, LayoutDashboard, Settings } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 export function Navigation() {
@@ -29,6 +29,13 @@ export function Navigation() {
             >
               <LayoutDashboard className="w-4 h-4" />
               Dashboard
+            </Link>
+            <Link
+              href="/settings"
+              className="flex items-center gap-2 text-sm font-medium hover:text-primary transition-colors"
+            >
+              <Settings className="w-4 h-4" />
+              Settings
             </Link>
           </div>
         </div>
