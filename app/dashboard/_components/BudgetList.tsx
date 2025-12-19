@@ -6,8 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { deleteBudget } from "@/app/actions/budgets";
 import { Edit, Edit2, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { NumberDisplay } from "@/components/ui/number-display";
 import { CreateBudgetModal } from "./CreateBudgetModal";
+import { BalanceDisplay } from "./BalanceDisplay";
 
 interface Budget {
   id: string;
@@ -75,37 +75,23 @@ export function BudgetList({ budgets }: BudgetListProps) {
           >
             <CardHeader>
               <div className="flex items-start justify-between flex-wrap gap-y-4">
-                <div className="flex-1">
+                <div className="flex-1 flex items-center justify-between flex-wrap gap-y-2 gap-x-8">
                   <div className="flex items-center gap-2">
                     <CardTitle className="text-lg">{budget.name}</CardTitle>
                     <p className="text-sm text-muted-foreground">
                       ({budget.year})
                     </p>
                   </div>
-                  <div className="flex items-end gap-x-2 mt-1">
-                    <p className="ext-sm text-muted-foreground">
-                      <span className="block text-xs">Start balance</span>
-                      <NumberDisplay
-                        positiveClassName="bg-green-100 text-green-700 py-0.5 px-2 rounded-sm"
-                        negativeClassName="bg-red-100 text-red-700 py-0.5 px-2 rounded-sm"
-                        nilClassName="bg-gray-200 text-gray-800 py-0.5 px-2 rounded-sm"
-                        value={budget.starting_balance || 0}
-                      >
-                        <NumberDisplay.Value />
-                      </NumberDisplay>
-                    </p>
+                  <div className="flex items-end gap-x-3">
+                    <BalanceDisplay
+                      balance={budget.starting_balance || 0}
+                      label="Start balance"
+                    />
                     <div className="text-muted-foreground">→</div>
-                    <p className="ext-sm text-muted-foreground">
-                      <span className="block text-xs">End balance</span>
-                      <NumberDisplay
-                        positiveClassName="bg-green-100 text-green-700 py-0.5 px-2 rounded-sm"
-                        negativeClassName="bg-red-100 text-red-700 py-0.5 px-2 rounded-sm"
-                        nilClassName="bg-gray-200 text-gray-800 py-0.5 px-2 rounded-sm"
-                        value={budget.end_balance || 0}
-                      >
-                        <NumberDisplay.Value />
-                      </NumberDisplay>
-                    </p>
+                    <BalanceDisplay
+                      balance={budget.end_balance}
+                      label="End balance"
+                    />
                   </div>
                 </div>
                 {enableActions && (
