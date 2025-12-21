@@ -1,17 +1,11 @@
 import { UpdatePasswordForm } from "@/components/update-password-form";
-import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
 
 export default function Page() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      <div className="flex flex-1 w-full items-center justify-center p-6 md:p-10">
-        <div className="w-full max-w-sm">
-          <UpdatePasswordForm />
-        </div>
+    <div className="flex flex-1 w-full items-center justify-center p-6 md:p-10">
+      <div className="w-full max-w-sm">
+        <UpdatePasswordForm />
       </div>
-      <Footer />
     </div>
   );
 }
