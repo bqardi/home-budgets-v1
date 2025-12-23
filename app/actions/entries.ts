@@ -3,6 +3,25 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
+export async function getExistingCategories() {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+  if (userError || !user) throw new Error("Unauthorized");
+
+  const { data, error } = await supabase
+    .from("categories")
+    .select("name")
+    .eq("user_id", user.id);
+
+  if (error) throw new Error(error.message);
+
+  return (data || []).map((cat) => cat.name);
+}
+
 export async function createEntry(
   budgetId: string,
   categoryId: string,
@@ -188,4 +207,109 @@ export async function updateEntryType(
 
   revalidatePath(`/budget/${budgetId}`);
   return true;
+}
+
+export async function createCategoriesBatch(names: string[]) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+  if (userError || !user) throw new Error("Unauthorized");
+
+  if (names.length === 0) return [];
+
+  const { data, error } = await supabase
+    .from("categories")
+    .insert(
+      names.map((name) => ({
+        user_id: user.id,
+        name,
+        sort_order: 0,
+      }))
+    )
+    .select("id, name");
+
+  if (error) throw new Error(error.message);
+
+  return data || [];
+}
+
+export interface ParsedCSVRow {
+  description: string;
+  category: string;
+  type: "income" | "expense";
+  monthlyAmounts: Record<number, number>;
+}
+
+export async function importBudgetFromCSV(
+  budgetId: string,
+  csvRows: ParsedCSVRow[],
+  newCategoryNames: string[] = []
+) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+  if (userError || !user) throw new Error("Unauthorized");
+
+  // Get all categories (existing + newly created)
+  const { data: allCategories, error: categoriesError } = await supabase
+    .from("categories")
+    .select("id, name")
+    .eq("user_id", user.id);
+
+  if (categoriesError) throw new Error(categoriesError.message);
+
+  // Build map of category name to ID (existing categories)
+  const categoryIdMap: Record<string, string> = {};
+  (allCategories || []).forEach((cat) => {
+    categoryIdMap[cat.name] = cat.id;
+  });
+
+  // Create any missing categories
+  if (newCategoryNames.length > 0) {
+    const createdCategories = await createCategoriesBatch(newCategoryNames);
+    createdCategories.forEach((cat) => {
+      categoryIdMap[cat.name] = cat.id;
+    });
+  }
+
+  for (const row of csvRows) {
+    const categoryId = categoryIdMap[row.category];
+    if (!categoryId) {
+      throw new Error(`Category '${row.category}' not found`);
+    }
+
+    const { data: entry, error: entryError } = await supabase
+      .from("entries")
+      .insert({
+        user_id: user.id,
+        budget_id: budgetId,
+        category_id: categoryId,
+        description: row.description,
+        entry_type: row.type,
+      })
+      .select("id")
+      .single();
+
+    if (entryError) throw new Error(entryError.message);
+
+    const amounts = Array.from({ length: 12 }, (_, i) => ({
+      entry_id: entry.id,
+      month: i + 1,
+      amount: row.monthlyAmounts[i + 1] || 0,
+    }));
+
+    const { error: amountsError } = await supabase
+      .from("entry_amounts")
+      .insert(amounts);
+
+    if (amountsError) throw new Error(amountsError.message);
+  }
+
+  revalidatePath(`/budget/${budgetId}`);
 }

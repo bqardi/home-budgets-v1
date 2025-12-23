@@ -14,7 +14,9 @@ import {
 import { TransferOptions } from "@/components/transfer-options";
 import { createBudget } from "@/app/actions/budgets";
 import { transferRowsFromBudget } from "@/app/actions/transfers";
+import { importBudgetFromCSV, ParsedCSVRow } from "@/app/actions/entries";
 import { Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface Budget {
   id: string;
@@ -24,14 +26,21 @@ interface Budget {
 
 interface CreateBudgetModalProps {
   budgets?: Budget[];
+  csvData?: ParsedCSVRow[] | null;
+  missingCategories?: string[];
   onSuccess?: () => void;
+  onClose?: () => void;
 }
 
 export function CreateBudgetModal({
   budgets = [],
+  csvData,
+  missingCategories = [],
   onSuccess,
+  onClose,
 }: CreateBudgetModalProps) {
-  const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const [open, setOpen] = useState(!!csvData); // Auto-open only if CSV data provided
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -49,6 +58,17 @@ export function CreateBudgetModal({
     try {
       // Create the new budget first
       const newBudgetId = await createBudget(formData.name, formData.year);
+
+      // If importing from CSV
+      if (csvData && csvData.length > 0) {
+        // Import CSV rows (handles category creation internally)
+        await importBudgetFromCSV(newBudgetId, csvData, missingCategories);
+
+        setOpen(false);
+        onClose?.();
+        router.push(`/budget/${newBudgetId}`);
+        return;
+      }
 
       // If a source budget was selected, transfer data
       if (
@@ -132,8 +152,26 @@ export function CreateBudgetModal({
             </div>
           </div>
 
-          {/* Transfer Options (if budgets exist) */}
-          {budgets.length > 0 && (
+          {/* CSV Import Info */}
+          {csvData && csvData.length > 0 && (
+            <div className="border-t pt-4 bg-blue-50 dark:bg-blue-950/30 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
+              <p className="text-sm font-medium text-blue-900 dark:text-blue-100">
+                CSV Import
+              </p>
+              <p className="text-xs text-blue-700 dark:text-blue-300 mt-1">
+                {csvData.length} row{csvData.length !== 1 ? "s" : ""} will be
+                imported with{" "}
+                {missingCategories.length === 0
+                  ? "existing categories"
+                  : `${missingCategories.length} new categor${
+                      missingCategories.length !== 1 ? "ies" : "y"
+                    }`}
+              </p>
+            </div>
+          )}
+
+          {/* Transfer Options (if budgets exist and not importing CSV) */}
+          {budgets.length > 0 && !csvData && (
             <div className="border-t pt-4">
               <p className="text-sm font-medium text-muted-foreground mb-4">
                 Optionally copy data from another budget:
