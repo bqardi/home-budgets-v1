@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { revalidateAuthLayout } from "@/app/actions/auth";
 
 export function LoginForm({
   className,
@@ -38,10 +39,10 @@ export function LoginForm({
         password,
       });
       if (error) throw error;
-      // Update this route to redirect to an authenticated route. The user already has an active session.
-      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // Revalidate the layout so Header checks auth again
+      await revalidateAuthLayout();
       router.push("/dashboard");
-      router.refresh();
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {

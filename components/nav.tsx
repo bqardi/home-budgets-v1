@@ -7,7 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
 
-export function Navigation() {
+type NavigationProps = {
+  isLoggedIn: boolean;
+};
+
+export function Navigation({ isLoggedIn }: NavigationProps) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -24,28 +28,30 @@ export function Navigation() {
             Home Budget
           </Link>
 
-          <div className="flex items-center gap-4">
-            {navItems.map(({ href, label, icon: Icon }) =>
-              pathname === href ? (
-                <div
-                  key={href}
-                  className="flex items-center gap-2 text-sm font-medium text-primary cursor-default opacity-100"
-                >
-                  <Icon className="w-4 h-4" />
-                  {label}
-                </div>
-              ) : (
-                <Link
-                  key={href}
-                  href={href}
-                  className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary/75 transition-colors"
-                >
-                  <Icon className="w-4 h-4" />
-                  {label}
-                </Link>
-              )
-            )}
-          </div>
+          {isLoggedIn && (
+            <div className="flex items-center gap-4">
+              {navItems.map(({ href, label, icon: Icon }) =>
+                pathname === href ? (
+                  <div
+                    key={href}
+                    className="flex items-center gap-2 text-sm font-medium text-primary cursor-default opacity-100"
+                  >
+                    <Icon className="w-4 h-4" />
+                    {label}
+                  </div>
+                ) : (
+                  <Link
+                    key={href}
+                    href={href}
+                    className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary/75 transition-colors"
+                  >
+                    <Icon className="w-4 h-4" />
+                    {label}
+                  </Link>
+                )
+              )}
+            </div>
+          )}
         </div>
       </div>
 

@@ -3,14 +3,18 @@ import { Suspense } from "react";
 import { Navigation } from "./nav";
 import { Container } from "./container";
 import Link from "next/link";
+import { getAuthUserClaims } from "@/lib/auth/getUser";
 
-export function Header() {
+export async function Header() {
+  const claims = await getAuthUserClaims();
+  const isLoggedIn = !!claims;
+
   return (
     <header className="w-full flex justify-center gap-8 border-b border-b-foreground/10 h-16 bg-background sticky top-0 z-50">
       <Container className="grid grid-cols-[1fr_2fr_1fr] md:flex md:justify-between items-center px-5 text-sm">
         <div className="flex gap-5 items-center font-semibold">
           <Suspense>
-            <Navigation />
+            <Navigation isLoggedIn={isLoggedIn} />
           </Suspense>
         </div>
         <Link

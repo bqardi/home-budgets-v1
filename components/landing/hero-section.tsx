@@ -1,13 +1,10 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/lib/supabase/server";
+import { getAuthUserClaims } from "@/lib/auth/getUser";
 import { LayoutDashboard } from "lucide-react";
 
 export async function HeroSection() {
-  const supabase = await createClient();
-  const { data } = await supabase.auth.getClaims();
-
-  const user = data?.claims;
+  const user = await getAuthUserClaims();
   const isLoggedIn = !!user;
 
   return (
