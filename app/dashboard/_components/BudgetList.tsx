@@ -3,8 +3,14 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { deleteBudget } from "@/app/actions/budgets";
-import { Edit, Edit2, Trash2 } from "lucide-react";
+import { Edit, MoreVertical, Trash2, Check } from "lucide-react";
 import { useState } from "react";
 import { CreateBudgetModal } from "./CreateBudgetModal";
 import { BalanceDisplay } from "./BalanceDisplay";
@@ -59,15 +65,28 @@ export function BudgetList({ budgets }: BudgetListProps) {
     <>
       <div className="flex justify-end flex-wrap gap-2 mb-6">
         <CreateBudgetModal budgets={budgets} />
-        <Button
-          size="md"
-          variant={enableActions ? "destructive" : "outline"}
-          onClick={() => setEnableActions((prev) => !prev)}
-          className="max-xxs:w-full"
-        >
-          <Edit className="w-4 h-4 mr-2" />
-          Toggle actions
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button size="icon" variant="outline">
+              <MoreVertical className="w-4 h-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              onSelect={(e) => {
+                e.preventDefault();
+                setEnableActions((prev) => !prev);
+              }}
+            >
+              <span className="relative isolate pl-7">
+                {enableActions && (
+                  <Check className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4" />
+                )}
+                Display actionbuttons
+              </span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <div className="grid gap-2.5">
         {budgets.map((budget) => (
@@ -98,32 +117,39 @@ export function BudgetList({ budgets }: BudgetListProps) {
                     />
                   </div>
                 </div>
-                {enableActions && (
-                  <div className="flex items-center gap-2 relative z-10">
-                    {/* TODO: Add edit budget functionality */}
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() =>
-                        console.warn("Add edit budget functionality", budget.id)
-                      }
-                      title="Edit budget"
-                      className="edit"
-                    >
-                      <Edit2 className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => handleDelete(budget.id)}
-                      disabled={deleting === budget.id}
-                      title="Delete budget"
-                      className="delete"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                )}
+                <div className="flex items-center gap-2 relative z-10">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        disabled={deleting === budget.id}
+                      >
+                        <MoreVertical className="w-4 h-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      {/* TODO: Add edit budget functionality */}
+                      <DropdownMenuItem
+                        onSelect={() => {
+                          console.warn(
+                            "Add edit budget functionality",
+                            budget.id
+                          );
+                        }}
+                      >
+                        <Edit className="w-4 h-4" /> Edit budget
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onSelect={() => {
+                          handleDelete(budget.id);
+                        }}
+                      >
+                        <Trash2 className="w-4 h-4" /> Delete budget
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               </div>
             </CardHeader>
             <Link
