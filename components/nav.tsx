@@ -64,16 +64,16 @@ export function Navigation({ isLoggedIn }: NavigationProps) {
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="w-[250px]">
-          <div className="flex flex-col gap-6 mt-8">
-            <Link href="/">
+          <div className="flex flex-col gap-6 py-4 px-2">
+            <Link href="/" className="px-2">
               <Logo />
             </Link>
-            <nav className="flex flex-col gap-3">
+            <nav className="flex flex-col gap-1">
               {navItems.map(({ href, label, icon: Icon }) =>
                 pathname === href ? (
                   <div
                     key={href}
-                    className="flex items-center gap-2 text-sm font-medium text-primary cursor-default opacity-100 px-2 py-2"
+                    className="flex items-center gap-2 text-sm font-medium text-primary cursor-default opacity-100 px-2 py-3"
                   >
                     <Icon className="w-4 h-4" />
                     {label}
@@ -83,7 +83,7 @@ export function Navigation({ isLoggedIn }: NavigationProps) {
                     key={href}
                     href={href}
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary/75 transition-colors px-2 py-2 rounded-md hover:bg-muted"
+                    className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary/75 transition-colors px-2 py-3 rounded-md hover:bg-muted"
                   >
                     <Icon className="w-4 h-4" />
                     {label}
