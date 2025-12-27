@@ -3,7 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
-export async function createBudget(name: string, year: number) {
+export async function createBudget(year: number) {
   const supabase = await createClient();
 
   const {
@@ -16,7 +16,6 @@ export async function createBudget(name: string, year: number) {
     .from("budgets")
     .insert({
       user_id: user.id,
-      name,
       year,
     })
     .select("id")

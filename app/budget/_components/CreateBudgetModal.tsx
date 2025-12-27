@@ -88,7 +88,7 @@ export function CreateBudgetModal({
 
     try {
       // Create the new budget first
-      const newBudgetId = await createBudget(formData.name, formData.year);
+      const newBudgetId = await createBudget(formData.year);
 
       // If importing from CSV
       if (validatedCSVData && validatedCSVData.length > 0) {
@@ -200,20 +200,6 @@ export function CreateBudgetModal({
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Basic Info */}
             <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Budget Name</Label>
-                <Input
-                  id="name"
-                  placeholder="e.g., My Awesome Budget"
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  required
-                  disabled={loading}
-                />
-              </div>
-
               <div className="space-y-2">
                 <Label htmlFor="year">Year</Label>
                 <Input
