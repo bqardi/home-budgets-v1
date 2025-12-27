@@ -58,9 +58,9 @@ export default async function DashboardPage() {
     <Container className="py-8">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold">Budget Manager</h1>
+          <h1 className="text-3xl font-bold">Budget Overview</h1>
           <p className="text-muted-foreground mt-2">
-            Manage your household budget
+            Overview of your current budget year
           </p>
         </div>
       </div>
