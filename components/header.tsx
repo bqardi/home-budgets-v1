@@ -2,8 +2,9 @@ import { AuthButton } from "@/components/auth-button";
 import { Suspense } from "react";
 import { Navigation } from "./nav";
 import { Container } from "./container";
-import Link from "next/link";
 import { getAuthUserClaims } from "@/lib/auth/getUser";
+import { Logo } from "./logo";
+import Link from "next/link";
 
 export async function Header() {
   const claims = await getAuthUserClaims();
@@ -19,9 +20,10 @@ export async function Header() {
         </div>
         <Link
           href="/"
-          className="justify-self-center md:hidden font-bold text-lg"
+          className="justify-self-center flex gap-2 items-center text-lg font-semibold md:hidden"
         >
-          Home Budget
+          <Logo />
+          <span className="max-xxs:hidden">Home Budget</span>
         </Link>
         <div className="justify-self-end">
           <Suspense>

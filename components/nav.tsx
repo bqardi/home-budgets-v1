@@ -6,6 +6,7 @@ import { LayoutDashboard, Settings, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
+import { Logo } from "./logo";
 
 type NavigationProps = {
   isLoggedIn: boolean;
@@ -24,8 +25,8 @@ export function Navigation({ isLoggedIn }: NavigationProps) {
     <nav className="bg-background">
       <div className="hidden md:flex items-center justify-between">
         <div className="flex items-center gap-8">
-          <Link href="/" className="font-bold text-lg">
-            Home Budget
+          <Link href="/">
+            <Logo />
           </Link>
 
           {isLoggedIn && (
@@ -63,12 +64,8 @@ export function Navigation({ isLoggedIn }: NavigationProps) {
         </SheetTrigger>
         <SheetContent side="left" className="w-[250px]">
           <div className="flex flex-col gap-6 mt-8">
-            <Link
-              href="/"
-              className="font-bold text-lg"
-              onClick={() => setIsOpen(false)}
-            >
-              Home Budget
+            <Link href="/">
+              <Logo />
             </Link>
             <nav className="flex flex-col gap-3">
               {navItems.map(({ href, label, icon: Icon }) =>
