@@ -129,9 +129,14 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-3xl font-bold">{budget.name}</h2>
 
-        <Button asChild>
-          <Link href={`/budget/${budget.id}`}>Manage Budget</Link>
-        </Button>
+        <div className="flex gap-x-2">
+          <Button variant="outline" asChild>
+            <Link href="/budget">Budget Years</Link>
+          </Button>
+          <Button asChild>
+            <Link href={`/budget/${budget.id}`}>Manage Budget</Link>
+          </Button>
+        </div>
       </div>
 
       {/* Month Navigation */}
