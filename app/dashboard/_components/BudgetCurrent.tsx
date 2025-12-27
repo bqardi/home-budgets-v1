@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Budget, Entry } from "@/lib/types/database";
+import { Budget, Entry, Settings } from "@/lib/types/database";
 import { Button } from "@/components/ui/button";
 import {
   Accordion,
@@ -18,6 +18,7 @@ import { Card } from "@/components/ui/card";
 interface BudgetData {
   budget: Budget;
   entries: Entry[];
+  settings: Settings | null;
 }
 
 interface BudgetCurrentProps {
@@ -25,13 +26,20 @@ interface BudgetCurrentProps {
 }
 
 export function BudgetCurrent({ data }: BudgetCurrentProps) {
-  const { entries, budget } = data;
+  const { entries, budget, settings } = data;
   const currentDate = new Date();
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const [selectedMonth, setSelectedMonth] = useState(
     currentDate.getMonth() + 1
   );
-  const monthNames = getAllMonths({ locale: "en-US", format: "long" });
+  const monthNames = getAllMonths({
+    locale: settings?.locale || "da-DK",
+    format: "long",
+  });
+  const currencyDisplayOptions = {
+    currency: settings?.currency || "DKK",
+    locale: settings?.locale || "da-DK",
+  };
 
   const handlePrevMonth = () => {
     if (selectedMonth === 1) {
@@ -159,7 +167,10 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
           <span className="font-medium">
             {hasLastMonth ? "From last month" : "Starting Balance"}
           </span>
-          <CurrencyDisplay balance={startingBalance} />
+          <CurrencyDisplay
+            balance={startingBalance}
+            options={currencyDisplayOptions}
+          />
         </div>
 
         {/* Accordions */}
@@ -169,7 +180,11 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
             <AccordionTriggerRaw className="text-sm md:text-lg font-semibold px-4 py-3 hover:bg-accent/50 justify-start">
               Income
               <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200" />
-              <CurrencyDisplay className="ml-auto" balance={totalIncome} />
+              <CurrencyDisplay
+                className="ml-auto"
+                balance={totalIncome}
+                options={currencyDisplayOptions}
+              />
             </AccordionTriggerRaw>
             <AccordionContent className="text-xs md:text-base px-4">
               {incomeEntries.length === 0 ? (
@@ -189,7 +204,10 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
                         className="flex items-center justify-between"
                       >
                         <span>{entry.description}</span>
-                        <CurrencyDisplay balance={amount} />
+                        <CurrencyDisplay
+                          balance={amount}
+                          options={currencyDisplayOptions}
+                        />
                       </li>
                     );
                   })}
@@ -203,7 +221,11 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
             <AccordionTriggerRaw className="text-sm md:text-lg font-semibold px-4 py-3 hover:bg-accent/50 justify-start">
               Expenses
               <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200" />
-              <CurrencyDisplay className="ml-auto" balance={totalExpenses} />
+              <CurrencyDisplay
+                className="ml-auto"
+                balance={totalExpenses}
+                options={currencyDisplayOptions}
+              />
             </AccordionTriggerRaw>
             <AccordionContent className="text-xs md:text-base px-4 py-3">
               {expenseEntries.length === 0 ? (
@@ -223,7 +245,10 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
                         className="flex items-center justify-between"
                       >
                         <span>{entry.description}</span>
-                        <CurrencyDisplay balance={amount} />
+                        <CurrencyDisplay
+                          balance={amount}
+                          options={currencyDisplayOptions}
+                        />
                       </li>
                     );
                   })}
@@ -238,7 +263,10 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
           <span className="text-sm md:text-lg font-semibold">
             Month Balance
           </span>
-          <CurrencyDisplay balance={monthBalance} />
+          <CurrencyDisplay
+            balance={monthBalance}
+            options={currencyDisplayOptions}
+          />
         </div>
       </Card>
 

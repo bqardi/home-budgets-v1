@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Settings } from "@/lib/data/settings";
+import { Settings } from "@/lib/types";
 import { updateSettingsAction } from "../_actions/updateSettings";
 import {
   useConstraintValidation,

@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { Container } from "@/components/container";
 import { BudgetCurrent } from "./_components/BudgetCurrent";
 import { CreateBudgetModal } from "../budget/_components/CreateBudgetModal";
+import { getSettings } from "@/lib/data/settings";
 
 async function getBudgetData() {
   const supabase = await createClient();
@@ -49,6 +50,7 @@ async function getBudgetData() {
   return {
     budget,
     entries: entries || [],
+    settings: await getSettings(),
   };
 }
 

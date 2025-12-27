@@ -1,14 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-
-export interface Settings {
-  id: string;
-  user_id: string;
-  currency: string;
-  locale: string;
-  created_at: string;
-  updated_at: string;
-}
+import { Settings } from "../types";
 
 /**
  * Fetch user settings from the database

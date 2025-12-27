@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { Settings } from "@/lib/data/settings";
+import { Settings } from "@/lib/types";
 
 /**
  * Server Action: Update user settings
