@@ -5,6 +5,7 @@ import { Container } from "@/components/container";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import { getSettings } from "@/lib/data/settings";
 
 async function getBudgets() {
   const supabase = await createClient();
@@ -14,6 +15,8 @@ async function getBudgets() {
     redirect("/auth/login");
   }
 
+  const settings = await getSettings();
+
   const { data: budgets, error } = await supabase
     .from("budgets")
     .select("*")
@@ -22,14 +25,14 @@ async function getBudgets() {
 
   if (error) {
     console.error("Error fetching budgets:", error);
-    return [];
+    return { budgets: [], settings };
   }
 
-  return budgets || [];
+  return { budgets: budgets || [], settings };
 }
 
 export default async function DashboardPage() {
-  const budgets = await getBudgets();
+  const { budgets, settings } = await getBudgets();
 
   return (
     <Container className="relative py-8">
@@ -48,7 +51,7 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      <BudgetList budgets={budgets} />
+      <BudgetList budgets={budgets} settings={settings} />
     </Container>
   );
 }

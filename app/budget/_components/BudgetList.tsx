@@ -15,6 +15,7 @@ import { useState } from "react";
 import { CreateBudgetModal } from "./CreateBudgetModal";
 import { BalanceDisplay } from "./BalanceDisplay";
 import { cn } from "@/lib/utils";
+import { Settings } from "@/lib/types";
 
 interface Budget {
   id: string;
@@ -27,10 +28,16 @@ interface Budget {
 
 interface BudgetListProps {
   budgets: Budget[];
+  settings: Settings | null;
 }
 
-export function BudgetList({ budgets }: BudgetListProps) {
+export function BudgetList({ budgets, settings }: BudgetListProps) {
   const [deleting, setDeleting] = useState<string | null>(null);
+
+  const balanceDisplayOptions = {
+    currency: settings?.currency || "DKK",
+    locale: settings?.locale || "da-DK",
+  };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this budget?")) return;
@@ -91,13 +98,13 @@ export function BudgetList({ budgets }: BudgetListProps) {
                     <BalanceDisplay
                       balance={budget.starting_balance || 0}
                       label="Start balance"
-                      options={{ locale: "da-DK", currency: "DKK" }}
+                      options={balanceDisplayOptions}
                     />
                     <div className="text-muted-foreground">→</div>
                     <BalanceDisplay
                       balance={budget.end_balance || 0}
                       label="End balance"
-                      options={{ locale: "da-DK", currency: "DKK" }}
+                      options={balanceDisplayOptions}
                     />
                   </div>
                 </div>
