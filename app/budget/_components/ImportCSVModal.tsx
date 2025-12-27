@@ -19,6 +19,7 @@ interface ImportCSVModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   rawCSVData: Record<string, string | number>[];
+  onCancel?: () => void;
   onConfirm: (validRows: ParsedCSVRow[], missingCategories: string[]) => void;
   existingCategoryNames: string[];
 }
@@ -27,6 +28,7 @@ export function ImportCSVModal({
   open,
   onOpenChange,
   rawCSVData,
+  onCancel,
   onConfirm,
   existingCategoryNames,
 }: ImportCSVModalProps) {
@@ -119,7 +121,13 @@ export function ImportCSVModal({
 
           {/* Actions */}
           <div className="flex justify-end gap-2 border-t pt-4">
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
+            <Button
+              variant="outline"
+              onClick={() => {
+                onCancel?.();
+                onOpenChange(false);
+              }}
+            >
               Cancel
             </Button>
             <Button

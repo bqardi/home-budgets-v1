@@ -11,13 +11,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { deleteBudget } from "@/app/actions/budgets";
 import { Edit, MoreVertical, Trash2 } from "lucide-react";
-import { useEffect, useState, useRef } from "react";
+import { useState } from "react";
 import { CreateBudgetModal } from "./CreateBudgetModal";
-import { ImportCSVModal } from "./ImportCSVModal";
 import { BalanceDisplay } from "./BalanceDisplay";
-import { ParsedCSVRow, getExistingCategories } from "@/app/actions/entries";
 import { cn } from "@/lib/utils";
-import { useCSVImport } from "../_hooks/csv-import";
 
 interface Budget {
   id: string;
@@ -34,33 +31,6 @@ interface BudgetListProps {
 
 export function BudgetList({ budgets }: BudgetListProps) {
   const [deleting, setDeleting] = useState<string | null>(null);
-  const {
-    csvModalOpen,
-    setCSVModalOpen,
-    csvData,
-    validatedCSVData,
-    setValidatedCSVData,
-    parseFile,
-  } = useCSVImport();
-  const [missingCategories, setMissingCategories] = useState<string[]>([]);
-  const [showCreateBudgetModal, setShowCreateBudgetModal] = useState(false);
-  const [existingCategoryNames, setExistingCategoryNames] = useState<string[]>(
-    []
-  );
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Fetch existing categories on mount
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const categories = await getExistingCategories();
-        setExistingCategoryNames(categories);
-      } catch (error) {
-        console.error("Failed to fetch categories:", error);
-      }
-    };
-    fetchCategories();
-  }, []);
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this budget?")) return;
@@ -74,31 +44,6 @@ export function BudgetList({ budgets }: BudgetListProps) {
     } finally {
       setDeleting(null);
     }
-  };
-
-  const handleImportCSV = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { error } = await parseFile(e.target.files?.[0]);
-    if (error) {
-      alert("Failed to parse CSV: " + error);
-    }
-
-    // Reset input so same file can be selected again
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
-
-  const handleCSVConfirm = (
-    validRows: ParsedCSVRow[] | null,
-    missingCats: string[]
-  ) => {
-    setValidatedCSVData(validRows);
-    setMissingCategories(missingCats);
-    setShowCreateBudgetModal(true);
   };
 
   if (budgets.length === 0) {
@@ -118,45 +63,8 @@ export function BudgetList({ budgets }: BudgetListProps) {
 
   return (
     <>
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept=".csv"
-        onChange={handleFileSelect}
-        className="hidden"
-      />
-      {showCreateBudgetModal && (
-        <CreateBudgetModal
-          csvData={validatedCSVData}
-          missingCategories={missingCategories}
-          onClose={() => {
-            setShowCreateBudgetModal(false);
-            setValidatedCSVData(null);
-            setMissingCategories([]);
-          }}
-        />
-      )}
-      <ImportCSVModal
-        open={csvModalOpen}
-        onOpenChange={setCSVModalOpen}
-        rawCSVData={csvData}
-        onConfirm={handleCSVConfirm}
-        existingCategoryNames={existingCategoryNames}
-      />
       <div className="flex justify-end flex-wrap gap-2 mb-6">
         <CreateBudgetModal budgets={budgets} />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button size="icon" variant="outline">
-              <MoreVertical className="w-4 h-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onSelect={handleImportCSV}>
-              Import CSV
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
       <div className="grid gap-2.5">
         {budgets.map((budget) => (
