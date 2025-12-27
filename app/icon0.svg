@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><style>
+    #light-icon {
+      display: inline;
+    }
+    #dark-icon {
+      display: none;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      #light-icon {
+        display: none;
+      }
+      #dark-icon {
+        display: inline;
+      }
+    }
+  </style><g id="light-icon"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><g><g transform="matrix(12.5,0,0,12.5,0,0)"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="80" height="80"><svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg"><path d="M40,0 L74.64,20 L74.64,32 L40,12 L16.36,26 L16.36,32 L50.81,52.25 L40.31,58.5 L5.36,38 L5.36,20 Z" fill="black"></path><path d="M40,23 L74.64,43 L74.64,60 L40,80 L5.36,60 L5.36,48 L40,68.5 L63.64,54.75 L63.64,49 L29.64,29 Z" fill="black"></path></svg></svg></g></g></svg></g><g id="dark-icon"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><g><g transform="matrix(12.5,0,0,12.5,0,0)"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="80" height="80"><svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg"><path d="M40,0 L74.64,20 L74.64,32 L40,12 L16.36,26 L16.36,32 L50.81,52.25 L40.31,58.5 L5.36,38 L5.36,20 Z" fill="white"></path><path d="M40,23 L74.64,43 L74.64,60 L40,80 L5.36,60 L5.36,48 L40,68.5 L63.64,54.75 L63.64,49 L29.64,29 Z" fill="white"></path></svg></svg></g></g></svg></g></svg>
