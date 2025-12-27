@@ -10,10 +10,10 @@ import {
   Accordion,
   AccordionContent,
   AccordionItem,
-  AccordionTrigger,
+  AccordionTriggerRaw,
 } from "@/components/ui/accordion";
 import { getAllMonths } from "@/lib/utils";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronDownIcon, ChevronLeft, ChevronRight } from "lucide-react";
 import { CurrencyDisplay } from "./CurrencyDisplay";
 
 interface BudgetData {
@@ -124,7 +124,7 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
   const monthBalance = startingBalance + totalIncome + totalExpenses;
 
   return (
-    <div className="text-lg">
+    <div className="text-sm md:text-lg">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-3xl font-bold">{budget.name}</h2>
@@ -173,20 +173,19 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
         <span className="font-medium">
           {hasLastMonth ? "From last month" : "Starting Balance"}
         </span>
-        <CurrencyDisplay balance={startingBalance} className="pr-8" />
+        <CurrencyDisplay balance={startingBalance} />
       </div>
 
       {/* Accordions */}
       <Accordion type="single" collapsible className="w-full border-y">
         {/* Income Accordion */}
         <AccordionItem value="income">
-          <AccordionTrigger className="px-4 py-3 hover:bg-accent/50">
-            <div className="text-lg font-semibold flex items-center justify-between w-full">
-              Income
-              <CurrencyDisplay balance={totalIncome} />
-            </div>
-          </AccordionTrigger>
-          <AccordionContent className="text-base px-4">
+          <AccordionTriggerRaw className="text-sm md:text-lg font-semibold px-4 py-3 hover:bg-accent/50 justify-start">
+            Income
+            <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200" />
+            <CurrencyDisplay className="ml-auto" balance={totalIncome} />
+          </AccordionTriggerRaw>
+          <AccordionContent className="text-xs md:text-base px-4">
             {incomeEntries.length === 0 ? (
               <p className="text-muted-foreground">
                 No income entries for this month.
@@ -204,7 +203,7 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
                       className="flex items-center justify-between"
                     >
                       <span>{entry.description}</span>
-                      <CurrencyDisplay balance={amount} className="pr-8" />
+                      <CurrencyDisplay balance={amount} />
                     </li>
                   );
                 })}
@@ -215,13 +214,12 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
 
         {/* Expenses Accordion */}
         <AccordionItem value="expenses">
-          <AccordionTrigger className="px-4 py-3 hover:bg-accent/50">
-            <div className="text-lg font-semibold flex items-center justify-between w-full">
-              Expenses
-              <CurrencyDisplay balance={totalExpenses} />
-            </div>
-          </AccordionTrigger>
-          <AccordionContent className="text-base px-4 py-3">
+          <AccordionTriggerRaw className="text-sm md:text-lg font-semibold px-4 py-3 hover:bg-accent/50 justify-start">
+            Expenses
+            <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200" />
+            <CurrencyDisplay className="ml-auto" balance={totalExpenses} />
+          </AccordionTriggerRaw>
+          <AccordionContent className="text-xs md:text-base px-4 py-3">
             {expenseEntries.length === 0 ? (
               <p className="text-muted-foreground">
                 No expense entries for this month.
@@ -230,7 +228,7 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
               <ul className="space-y-2">
                 {expenseEntries.map((entry) => {
                   const amount = entry.entry_amounts.reduce(
-                    (sum, amt) => sum + amt.amount,
+                    (sum, amt) => sum - amt.amount,
                     0
                   );
                   return (
@@ -239,7 +237,7 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
                       className="flex items-center justify-between"
                     >
                       <span>{entry.description}</span>
-                      <CurrencyDisplay balance={amount} className="pr-8" />
+                      <CurrencyDisplay balance={amount} />
                     </li>
                   );
                 })}
@@ -251,8 +249,8 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
 
       {/* Month Balance */}
       <div className="flex items-center justify-between px-4 py-3">
-        <span className="text-lg font-semibold">Month Balance</span>
-        <CurrencyDisplay balance={monthBalance} className="pr-8" />
+        <span className="text-sm md:text-lg font-semibold">Month Balance</span>
+        <CurrencyDisplay balance={monthBalance} />
       </div>
     </div>
   );
