@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Settings, Menu } from "lucide-react";
+import { LayoutDashboard, Settings, Menu, Coins } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
@@ -18,6 +18,7 @@ export function Navigation({ isLoggedIn }: NavigationProps) {
 
   const navItems = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/budget", label: "Budget", icon: Coins },
     { href: "/settings", label: "Settings", icon: Settings },
   ];
 
@@ -30,12 +31,12 @@ export function Navigation({ isLoggedIn }: NavigationProps) {
           </Link>
 
           {isLoggedIn && (
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-5">
               {navItems.map(({ href, label, icon: Icon }) =>
                 pathname === href ? (
                   <div
                     key={href}
-                    className="flex items-center gap-2 text-sm font-medium text-primary cursor-default opacity-100"
+                    className="flex items-center gap-1 text-sm font-medium text-primary cursor-default opacity-100"
                   >
                     <Icon className="w-4 h-4" />
                     {label}
@@ -44,7 +45,7 @@ export function Navigation({ isLoggedIn }: NavigationProps) {
                   <Link
                     key={href}
                     href={href}
-                    className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary/75 transition-colors"
+                    className="flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-primary/75 transition-colors"
                   >
                     <Icon className="w-4 h-4" />
                     {label}
