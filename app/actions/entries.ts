@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { Budget, Entry } from "@/lib/types/database";
 
 export async function getExistingCategories() {
   const supabase = await createClient();
@@ -20,6 +21,58 @@ export async function getExistingCategories() {
   if (error) throw new Error(error.message);
 
   return (data || []).map((cat) => cat.name);
+}
+
+export async function getBudgetDataForMonth(
+  budgetId: string,
+  year: number,
+  month: number
+) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+  if (userError || !user) throw new Error("Unauthorized");
+
+  // Check if budget exists for this year
+  const { data: budget, error: budgetError } = await supabase
+    .from("budgets")
+    .select("id, name, year, starting_balance")
+    .eq("id", budgetId)
+    .eq("user_id", user.id)
+    .eq("year", year)
+    .single();
+
+  if (budgetError || !budget) {
+    return null; // No data for this year
+  }
+
+  // Fetch entries for this month
+  const { data: entries = [] } = await supabase
+    .from("entries")
+    .select(
+      `
+      id,
+      description,
+      category_id,
+      entry_type,
+      created_at,
+      entry_amounts (
+        id,
+        month,
+        amount
+      )
+    `
+    )
+    .eq("budget_id", budgetId)
+    .eq("user_id", user.id);
+
+  return {
+    budget,
+    entries: entries || [],
+  };
 }
 
 export async function createEntry(
