@@ -15,9 +15,9 @@ import { useEffect, useState, useRef } from "react";
 import { CreateBudgetModal } from "./CreateBudgetModal";
 import { ImportCSVModal } from "./ImportCSVModal";
 import { BalanceDisplay } from "./BalanceDisplay";
-import { parseCSVFile } from "@/lib/csv/parse";
 import { ParsedCSVRow, getExistingCategories } from "@/app/actions/entries";
 import { cn } from "@/lib/utils";
+import { useCSVImport } from "../_hooks/csv-import";
 
 interface Budget {
   id: string;
@@ -34,11 +34,14 @@ interface BudgetListProps {
 
 export function BudgetList({ budgets }: BudgetListProps) {
   const [deleting, setDeleting] = useState<string | null>(null);
-  const [csvModalOpen, setCSVModalOpen] = useState(false);
-  const [csvData, setCSVData] = useState<Record<string, string | number>[]>([]);
-  const [validatedCSVData, setValidatedCSVData] = useState<
-    ParsedCSVRow[] | null
-  >(null);
+  const {
+    csvModalOpen,
+    setCSVModalOpen,
+    csvData,
+    validatedCSVData,
+    setValidatedCSVData,
+    parseFile,
+  } = useCSVImport();
   const [missingCategories, setMissingCategories] = useState<string[]>([]);
   const [showCreateBudgetModal, setShowCreateBudgetModal] = useState(false);
   const [existingCategoryNames, setExistingCategoryNames] = useState<string[]>(
@@ -78,18 +81,9 @@ export function BudgetList({ budgets }: BudgetListProps) {
   };
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      const data = await parseCSVFile(file);
-      setCSVData(data);
-      setCSVModalOpen(true);
-    } catch (error) {
-      alert(
-        "Failed to parse CSV: " +
-          (error instanceof Error ? error.message : String(error))
-      );
+    const { error } = await parseFile(e.target.files?.[0]);
+    if (error) {
+      alert("Failed to parse CSV: " + error);
     }
 
     // Reset input so same file can be selected again
