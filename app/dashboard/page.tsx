@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { BudgetList } from "./_components/BudgetList";
 import { Container } from "@/components/container";
+import { BudgetCurrent } from "./_components/BudgetCurrent";
 
-async function getBudgets() {
+async function getBudgetData() {
   const supabase = await createClient();
 
   const { data: userData, error: userError } = await supabase.auth.getUser();
@@ -11,22 +11,48 @@ async function getBudgets() {
     redirect("/auth/login");
   }
 
-  const { data: budgets, error } = await supabase
-    .from("budgets")
-    .select("*")
-    .eq("user_id", userData.user.id)
-    .order("created_at", { ascending: false });
+  const currentYear = new Date().getFullYear();
 
-  if (error) {
-    console.error("Error fetching budgets:", error);
-    return [];
+  // Fetch budget (including starting_balance)
+  const { data: budget, error: budgetError } = await supabase
+    .from("budgets")
+    .select("*, starting_balance")
+    .eq("year", currentYear)
+    .eq("user_id", userData.user.id)
+    .single();
+
+  if (budgetError || !budget) {
+    redirect("/dashboard");
   }
 
-  return budgets || [];
+  // Fetch entries
+  const { data: entries = [] } = await supabase
+    .from("entries")
+    .select(
+      `
+      id,
+      description,
+      category_id,
+      entry_type,
+      created_at,
+      entry_amounts (
+        id,
+        month,
+        amount
+      )
+    `
+    )
+    .eq("budget_id", budget.id)
+    .eq("user_id", userData.user.id);
+
+  return {
+    budget,
+    entries: entries || [],
+  };
 }
 
 export default async function DashboardPage() {
-  const budgets = await getBudgets();
+  const budget = await getBudgetData();
 
   return (
     <Container className="py-8">
@@ -39,7 +65,7 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      <BudgetList budgets={budgets} />
+      <BudgetCurrent data={budget} />
     </Container>
   );
 }
