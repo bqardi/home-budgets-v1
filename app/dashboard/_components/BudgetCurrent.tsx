@@ -124,7 +124,7 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
   const monthBalance = startingBalance + totalIncome - totalExpenses;
 
   return (
-    <div>
+    <div className="text-lg">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-3xl font-bold">{budget.name}</h2>
@@ -147,7 +147,7 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
         </Button>
 
         <div className="text-center">
-          <h3 className="text-lg font-semibold">
+          <h3 className="font-semibold">
             {monthNames[selectedMonth - 1]} {selectedYear}
           </h3>
         </div>
@@ -164,30 +164,30 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
       </div>
 
       {/* Starting Balance */}
-      <div className="flex items-center justify-between px-4 py-3 bg-muted rounded-lg mb-4">
+      <div className="flex items-center justify-between px-4 py-3">
         <span className="font-medium">
           {hasLastMonth ? "From last month" : "Starting Balance"}
         </span>
-        <span className="text-sm font-semibold pr-8">
+        <span className="font-semibold font-mono pr-8">
           {formatCurrency(startingBalance)}
         </span>
       </div>
 
       {/* Accordions */}
-      <Accordion type="single" collapsible className="w-full mb-4">
+      <Accordion type="single" collapsible className="w-full border-y">
         {/* Income Accordion */}
         <AccordionItem value="income">
           <AccordionTrigger className="px-4 py-3 hover:bg-accent/50">
-            <div className="flex items-center justify-between w-full">
-              <span className="text-sm font-semibold">Income</span>
-              <span className="text-green-600 dark:text-green-400 font-semibold">
+            <div className="text-lg font-semibold flex items-center justify-between w-full">
+              Income
+              <span className="text-green-600 dark:text-green-400 font-mono">
                 {formatCurrency(totalIncome)}
               </span>
             </div>
           </AccordionTrigger>
-          <AccordionContent className="px-4 py-3">
+          <AccordionContent className="text-base px-4">
             {incomeEntries.length === 0 ? (
-              <p className="text-muted-foreground text-sm">
+              <p className="text-muted-foreground">
                 No income entries for this month.
               </p>
             ) : (
@@ -200,10 +200,10 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
                   return (
                     <li
                       key={entry.id}
-                      className="flex items-center justify-between text-sm"
+                      className="flex items-center justify-between"
                     >
                       <span>{entry.description}</span>
-                      <span className="text-green-600 dark:text-green-400 font-medium">
+                      <span className="text-green-600 dark:text-green-400 font-mono pr-8">
                         {formatCurrency(amount)}
                       </span>
                     </li>
@@ -217,16 +217,16 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
         {/* Expenses Accordion */}
         <AccordionItem value="expenses">
           <AccordionTrigger className="px-4 py-3 hover:bg-accent/50">
-            <div className="flex items-center justify-between w-full">
-              <span className="text-sm font-semibold">Expenses</span>
-              <span className="text-red-600 dark:text-red-400 font-semibold">
+            <div className="text-lg font-semibold flex items-center justify-between w-full">
+              Expenses
+              <span className="text-red-600 dark:text-red-400 font-mono">
                 {formatCurrency(totalExpenses)}
               </span>
             </div>
           </AccordionTrigger>
-          <AccordionContent className="px-4 py-3">
+          <AccordionContent className="text-base px-4 py-3">
             {expenseEntries.length === 0 ? (
-              <p className="text-muted-foreground text-sm">
+              <p className="text-muted-foreground">
                 No expense entries for this month.
               </p>
             ) : (
@@ -239,10 +239,10 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
                   return (
                     <li
                       key={entry.id}
-                      className="flex items-center justify-between text-sm"
+                      className="flex items-center justify-between"
                     >
                       <span>{entry.description}</span>
-                      <span className="text-red-600 dark:text-red-400 font-medium">
+                      <span className="text-red-600 dark:text-red-400 font-mono pr-8">
                         {formatCurrency(amount)}
                       </span>
                     </li>
@@ -255,10 +255,10 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
       </Accordion>
 
       {/* Month Balance */}
-      <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 rounded-lg border border-primary/20">
-        <span className="font-semibold text-sm">Month Balance</span>
+      <div className="flex items-center justify-between px-4 py-3">
+        <span className="text-lg font-semibold">Month Balance</span>
         <span
-          className={`text-sm font-bold pr-8 ${
+          className={`font-semibold font-mono pr-8 ${
             monthBalance >= 0
               ? "text-green-600 dark:text-green-400"
               : "text-red-600 dark:text-red-400"
