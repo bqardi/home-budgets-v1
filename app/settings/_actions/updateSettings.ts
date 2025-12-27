@@ -14,7 +14,7 @@ import { Settings } from "@/lib/data/settings";
  * - Returns success/error response with type safety
  */
 export async function updateSettingsAction(
-  updates: Partial<Pick<Settings, "currency" | "locale">>
+  updates: Partial<Settings>
 ): Promise<{ success: boolean; data?: Settings; error?: string }> {
   const supabase = await createClient();
 

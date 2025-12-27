@@ -1,9 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Settings } from "@/lib/data/settings";
 import { updateSettingsAction } from "../_actions/updateSettings";
+import {
+  useConstraintValidation,
+  type FormValues,
+} from "@/hooks/constraint-validation";
 
 interface SettingsPreferencesFormProps {
   settings: Settings;
@@ -14,22 +18,22 @@ export function SettingsPreferencesForm({
   settings,
   onUpdate,
 }: SettingsPreferencesFormProps) {
-  const [currency, setCurrency] = useState(settings.currency);
-  const [locale, setLocale] = useState(settings.locale);
+  const { values, errors, touched, handleChange, handleBlur, handleSubmit } =
+    useConstraintValidation({
+      currency: settings.currency,
+      locale: settings.locale,
+    });
+  const formRef = useRef<HTMLFormElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (formData: FormValues & Partial<Settings>) => {
     setIsLoading(true);
     setError(null);
     setSuccess(false);
 
-    const result = await updateSettingsAction({
-      currency,
-      locale,
-    });
+    const result = await updateSettingsAction(formData);
 
     if (result.success && result.data) {
       setSuccess(true);
@@ -43,14 +47,22 @@ export function SettingsPreferencesForm({
     setIsLoading(false);
   };
 
+  const handleReset = () => {
+    if (formRef.current) {
+      formRef.current.reset();
+    }
+    setError(null);
+    setSuccess(false);
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
+    <form ref={formRef} noValidate onSubmit={(e) => handleSubmit(e, onSubmit)}>
       <div className="bg-card border rounded-lg p-6">
         <h2 className="text-xl font-semibold mb-6">Preferences</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           {/* Currency Input */}
-          <div>
+          <div className="relative flex flex-col">
             <label
               htmlFor="currency"
               className="text-sm font-medium text-muted-foreground"
@@ -60,15 +72,40 @@ export function SettingsPreferencesForm({
             <input
               id="currency"
               type="text"
-              value={currency}
-              onChange={(e) => setCurrency(e.target.value)}
+              name="currency"
+              required
+              minLength={1}
+              maxLength={3}
               placeholder="e.g., DKK, USD, EUR"
-              className="mt-2 w-full px-3 py-2 bg-background border border-input rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              value={values.currency}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              data-value-missing="Currency is required"
+              data-too-short="Currency code should be at least 1 character"
+              data-too-long="Currency code should be at most 3 characters"
+              className={`mt-2 w-full px-3 py-2 bg-background border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent ${
+                touched.currency && errors.currency
+                  ? "border-destructive outline-destructive"
+                  : "border-input"
+              }`}
+              aria-invalid={!!(touched.currency && errors.currency)}
+              aria-describedby={errors.currency ? "currency-error" : undefined}
+              disabled={isLoading}
             />
+            {touched.currency && errors.currency && (
+              <span
+                id="currency-error"
+                role="alert"
+                aria-live="polite"
+                className="text-sm text-destructive mt-1"
+              >
+                {errors.currency}
+              </span>
+            )}
           </div>
 
           {/* Locale Input */}
-          <div>
+          <div className="relative flex flex-col">
             <label
               htmlFor="locale"
               className="text-sm font-medium text-muted-foreground"
@@ -78,11 +115,34 @@ export function SettingsPreferencesForm({
             <input
               id="locale"
               type="text"
-              value={locale}
-              onChange={(e) => setLocale(e.target.value)}
+              name="locale"
+              required
+              pattern="[a-z]{2}-[A-Z]{2}"
               placeholder="e.g., da-DK, en-US"
-              className="mt-2 w-full px-3 py-2 bg-background border border-input rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              value={values.locale}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              data-value-missing="Language & Region is required"
+              data-pattern-mismatch="Please use format: xx-XX (e.g., da-DK)"
+              className={`mt-2 w-full px-3 py-2 bg-background border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent ${
+                touched.locale && errors.locale
+                  ? "border-destructive outline-destructive"
+                  : "border-input"
+              }`}
+              aria-invalid={!!(touched.locale && errors.locale)}
+              aria-describedby={errors.locale ? "locale-error" : undefined}
+              disabled={isLoading}
             />
+            {touched.locale && errors.locale && (
+              <span
+                id="locale-error"
+                role="alert"
+                aria-live="polite"
+                className="text-sm text-destructive mt-1"
+              >
+                {errors.locale}
+              </span>
+            )}
           </div>
         </div>
 
@@ -112,12 +172,7 @@ export function SettingsPreferencesForm({
           <Button
             type="button"
             variant="outline"
-            onClick={() => {
-              setCurrency(settings.currency);
-              setLocale(settings.locale);
-              setError(null);
-              setSuccess(false);
-            }}
+            onClick={handleReset}
             disabled={isLoading}
           >
             Reset
