@@ -14,6 +14,9 @@ interface SettingsPreferencesFormProps {
   onUpdate?: (updatedSettings: Settings) => void;
 }
 
+const SUPPORTED_CURRENCIES = ["DKK", "USD", "EUR", "GBP"];
+const SUPPORTED_LOCALES = ["da-DK", "en-US", "en-GB", "de-DE", "fr-FR"];
+
 export function SettingsPreferencesForm({
   settings,
   onUpdate,
@@ -61,7 +64,7 @@ export function SettingsPreferencesForm({
         <h2 className="text-xl font-semibold mb-6">Preferences</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          {/* Currency Input */}
+          {/* Currency Select */}
           <div className="relative flex flex-col">
             <label
               htmlFor="currency"
@@ -69,21 +72,15 @@ export function SettingsPreferencesForm({
             >
               Currency
             </label>
-            <input
+            <select
               id="currency"
-              type="text"
               name="currency"
               required
-              minLength={1}
-              maxLength={3}
-              placeholder="e.g., DKK, USD, EUR"
               value={values.currency}
               onChange={handleChange}
               onBlur={handleBlur}
               data-value-missing="Currency is required"
-              data-too-short="Currency code should be at least 1 character"
-              data-too-long="Currency code should be at most 3 characters"
-              className={`mt-2 w-full px-3 py-2 bg-background border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent ${
+              className={`mt-2 w-full px-3 py-2 bg-background border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent ${
                 touched.currency && errors.currency
                   ? "border-destructive outline-destructive"
                   : "border-input"
@@ -91,7 +88,14 @@ export function SettingsPreferencesForm({
               aria-invalid={!!(touched.currency && errors.currency)}
               aria-describedby={errors.currency ? "currency-error" : undefined}
               disabled={isLoading}
-            />
+            >
+              <option value="">Select a currency</option>
+              {SUPPORTED_CURRENCIES.map((curr) => (
+                <option key={curr} value={curr}>
+                  {curr}
+                </option>
+              ))}
+            </select>
             {touched.currency && errors.currency && (
               <span
                 id="currency-error"
@@ -104,7 +108,7 @@ export function SettingsPreferencesForm({
             )}
           </div>
 
-          {/* Locale Input */}
+          {/* Locale Select */}
           <div className="relative flex flex-col">
             <label
               htmlFor="locale"
@@ -112,19 +116,15 @@ export function SettingsPreferencesForm({
             >
               Language & Region
             </label>
-            <input
+            <select
               id="locale"
-              type="text"
               name="locale"
               required
-              pattern="[a-z]{2}-[A-Z]{2}"
-              placeholder="e.g., da-DK, en-US"
               value={values.locale}
               onChange={handleChange}
               onBlur={handleBlur}
               data-value-missing="Language & Region is required"
-              data-pattern-mismatch="Please use format: xx-XX (e.g., da-DK)"
-              className={`mt-2 w-full px-3 py-2 bg-background border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent ${
+              className={`mt-2 w-full px-3 py-2 bg-background border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent ${
                 touched.locale && errors.locale
                   ? "border-destructive outline-destructive"
                   : "border-input"
@@ -132,7 +132,14 @@ export function SettingsPreferencesForm({
               aria-invalid={!!(touched.locale && errors.locale)}
               aria-describedby={errors.locale ? "locale-error" : undefined}
               disabled={isLoading}
-            />
+            >
+              <option value="">Select a language & region</option>
+              {SUPPORTED_LOCALES.map((locale) => (
+                <option key={locale} value={locale}>
+                  {locale}
+                </option>
+              ))}
+            </select>
             {touched.locale && errors.locale && (
               <span
                 id="locale-error"
