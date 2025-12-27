@@ -210,7 +210,7 @@ export function Table({
                     {monthlyIncome.map((total, idx) => (
                       <td
                         key={idx}
-                        className={`p-2 text-right border-r ${handleNumber(
+                        className={`font-mono p-2 text-right border-r ${handleNumber(
                           total,
                           "text-green-700 dark:text-green-400",
                           "text-red-700 dark:text-red-400",
@@ -225,7 +225,7 @@ export function Table({
                       </td>
                     ))}
                     <td
-                      className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-r font-semibold min-w-[80px] bg-green-100 dark:bg-green-950 ${handleNumber(
+                      className={`font-mono md:sticky md:right-[105px] md:z-10 p-2 text-right border-r font-semibold min-w-[80px] bg-green-100 dark:bg-green-950 ${handleNumber(
                         totalIncome,
                         "text-green-700 dark:text-green-400",
                         "text-red-700 dark:text-red-400",
@@ -252,7 +252,7 @@ export function Table({
                     {monthlyExpenses.map((total, idx) => (
                       <td
                         key={idx}
-                        className={`p-2 text-right border-r ${handleNumber(
+                        className={`font-mono p-2 text-right border-r ${handleNumber(
                           total,
                           "text-red-700 dark:text-red-400",
                           "text-green-700 dark:text-green-400",
@@ -267,7 +267,7 @@ export function Table({
                       </td>
                     ))}
                     <td
-                      className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-r bg-red-100 dark:bg-red-950 ${handleNumber(
+                      className={`font-mono md:sticky md:right-[105px] md:z-10 p-2 text-right border-r bg-red-100 dark:bg-red-950 ${handleNumber(
                         totalExpenses,
                         "text-red-700 dark:text-red-400",
                         "text-green-700 dark:text-green-400",
@@ -293,7 +293,7 @@ export function Table({
                   {monthlyTotals.map((total, idx) => (
                     <td
                       key={idx}
-                      className={`p-2 text-right border-r ${handleNumber(
+                      className={`font-mono p-2 text-right border-r ${handleNumber(
                         total,
                         "text-green-700 dark:text-green-400",
                         "text-secondary bg-red-700 dark:bg-red-400",
@@ -308,7 +308,7 @@ export function Table({
                     </td>
                   ))}
                   <td
-                    className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-r bg-primary-foreground ${handleNumber(
+                    className={`font-mono md:sticky md:right-[105px] md:z-10 p-2 text-right border-r bg-primary-foreground ${handleNumber(
                       grandTotal,
                       "text-green-700 dark:text-green-400",
                       "text-secondary bg-red-700 dark:bg-red-400",
@@ -329,7 +329,7 @@ export function Table({
                   <td className="md:sticky md:left-0 md:z-10 p-2 border-r text-left bg-primary-foreground">
                     Running Balance
                   </td>
-                  <td className="md:sticky md:left-[200px] md:z-10 p-2 text-xs text-muted-foreground bg-primary-foreground whitespace-nowrap">
+                  <td className="font-mono md:sticky md:left-[200px] md:z-10 p-2 text-xs text-muted-foreground bg-primary-foreground whitespace-nowrap">
                     Start:{" "}
                     {formatCurrency(
                       startBalance,
@@ -340,7 +340,7 @@ export function Table({
                   {runningBalance.map((balance, idx) => (
                     <td
                       key={idx}
-                      className={`p-2 text-right border-r ${handleNumber(
+                      className={`font-mono p-2 text-right border-r ${handleNumber(
                         balance,
                         "text-green-700 dark:text-green-400",
                         "text-secondary bg-red-700 dark:bg-red-400",
@@ -355,7 +355,7 @@ export function Table({
                     </td>
                   ))}
                   <td
-                    className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-r bg-primary-foreground ${handleNumber(
+                    className={`font-mono md:sticky md:right-[105px] md:z-10 p-2 text-right border-r bg-primary-foreground ${handleNumber(
                       runningBalance[runningBalance.length - 1],
                       "text-green-700 dark:text-green-400",
                       "text-secondary bg-red-700 dark:bg-red-400",
@@ -394,7 +394,7 @@ export function Table({
               <p className="text-sm font-semibold text-green-700 dark:text-green-400 uppercase">
                 Total Income
               </p>
-              <p className="text-2xl font-bold text-green-700 dark:text-green-400 mt-2">
+              <p className="font-mono text-2xl font-bold text-green-700 dark:text-green-400 mt-2">
                 {formatCurrency(
                   totalIncome,
                   settings?.locale || "da-DK",
@@ -407,7 +407,7 @@ export function Table({
               <p className="text-sm font-semibold text-red-700 dark:text-red-400 uppercase">
                 Total Expenses
               </p>
-              <p className="text-2xl font-bold text-red-700 dark:text-red-400 mt-2">
+              <p className="font-mono text-2xl font-bold text-red-700 dark:text-red-400 mt-2">
                 {formatCurrency(
                   totalExpenses,
                   settings?.locale || "da-DK",
@@ -425,7 +425,7 @@ export function Table({
               )}`}
             >
               <p
-                className={`text-sm font-semibold uppercase ${handleNumber(
+                className={`font-mono text-sm font-semibold uppercase ${handleNumber(
                   grandTotal,
                   "text-green-700 dark:text-green-400",
                   "text-red-700 dark:text-red-400",
@@ -435,7 +435,7 @@ export function Table({
                 Net Balance
               </p>
               <p
-                className={`text-2xl font-bold mt-2 ${handleNumber(
+                className={`font-mono text-2xl font-bold mt-2 ${handleNumber(
                   grandTotal,
                   "text-green-700 dark:text-green-400",
                   "text-red-700 dark:text-red-400",

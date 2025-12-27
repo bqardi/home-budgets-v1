@@ -12,7 +12,7 @@ export function BalanceDisplay({
   options,
 }: BalanceDisplayProps) {
   return (
-    <p className="text-xs text-muted-foreground">
+    <p className="text-xs font-mono text-muted-foreground">
       {label && <span className="block text-xs mb-px">{label}</span>}
       <span
         className={cn(

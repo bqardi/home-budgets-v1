@@ -177,7 +177,7 @@ export function TableRow({
                     setEditingAmount(amount.amount.toString());
                   }
                 }}
-                className={`cursor-pointer hover:bg-accent dark:hover:bg-slate-800 px-1 py-0.5 rounded ${handleNumber(
+                className={`font-mono cursor-pointer hover:bg-accent dark:hover:bg-slate-800 px-1 py-0.5 rounded ${handleNumber(
                   amount.amount,
                   entry.entry_type === "income"
                     ? "text-green-600 dark:text-green-400"
@@ -201,7 +201,7 @@ export function TableRow({
 
       {/* Row Total */}
       <td
-        className={`md:sticky md:right-[105px] md:z-10 p-2 text-right border-x font-semibold min-w-[105px] bg-background dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 ${handleNumber(
+        className={`font-mono md:sticky md:right-[105px] md:z-10 p-2 text-right border-x font-semibold min-w-[105px] bg-background dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 ${handleNumber(
           rowTotal,
           "text-green-700 dark:text-green-400",
           "text-red-700 dark:text-red-400",
