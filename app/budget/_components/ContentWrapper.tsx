@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Table } from "./Table";
 import { CreateCategory } from "@/components/modals";
 import { refetchCategories } from "../_actions/categories";
-import { Entry, Category, BudgetTransfer } from "@/lib/types";
+import { Entry, Category, BudgetTransfer, Settings } from "@/lib/types";
 
 interface BudgetContentWrapperProps {
   entries: Entry[];
@@ -12,6 +12,7 @@ interface BudgetContentWrapperProps {
   budgetId: string;
   otherBudgets: BudgetTransfer[];
   initialStartingBalance: string;
+  settings: Settings | null;
 }
 
 export function ContentWrapper({
@@ -20,6 +21,7 @@ export function ContentWrapper({
   budgetId,
   otherBudgets,
   initialStartingBalance,
+  settings,
 }: BudgetContentWrapperProps) {
   const [categories, setCategories] = useState(initialCategories);
 
@@ -52,6 +54,7 @@ export function ContentWrapper({
       budgetId={budgetId}
       otherBudgets={otherBudgets}
       initialStartingBalance={initialStartingBalance}
+      settings={settings}
     />
   );
 }

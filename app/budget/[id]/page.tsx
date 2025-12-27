@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import { ContentWrapper } from "../_components/ContentWrapper";
 import { Container } from "@/components/container";
 import { LoadingSpinner } from "@/components/loading-spinner";
+import { getSettings } from "@/lib/data/settings";
 
 async function getBudgetData(budgetId: string) {
   const supabase = await createClient();
@@ -67,6 +68,7 @@ async function getBudgetData(budgetId: string) {
     categories: categories || [],
     entries: entries || [],
     allBudgets: allBudgets || [],
+    settings: await getSettings(),
   };
 }
 
@@ -85,7 +87,8 @@ export default async function BudgetPage({ params }: PageProps) {
 }
 
 async function BudgetPageContent({ id }: { id: string }) {
-  const { budget, categories, entries, allBudgets } = await getBudgetData(id);
+  const { budget, categories, entries, allBudgets, settings } =
+    await getBudgetData(id);
 
   return (
     <Container className="relative py-8">
@@ -104,6 +107,7 @@ async function BudgetPageContent({ id }: { id: string }) {
         budgetId={id}
         otherBudgets={allBudgets.filter((b) => b.id !== id)}
         initialStartingBalance={(budget.starting_balance || 0).toString()}
+        settings={settings}
       />
     </Container>
   );

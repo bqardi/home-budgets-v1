@@ -9,7 +9,7 @@ import {
 } from "@/app/actions/entries";
 import { Trash2 } from "lucide-react";
 import { EditEntryModal } from "./EditEntryModal";
-import { Entry, Category } from "@/lib/types";
+import { Entry, Category, Settings } from "@/lib/types";
 import { formatCurrency, handleNumber } from "@/lib/utils";
 
 interface BudgetTableRowProps {
@@ -19,6 +19,7 @@ interface BudgetTableRowProps {
   categoryMap: Record<string, string>;
   onDelete?: () => void;
   onUpdate?: () => void;
+  settings: Settings | null;
 }
 
 export function TableRow({
@@ -28,6 +29,7 @@ export function TableRow({
   categoryMap,
   onDelete,
   onUpdate,
+  settings,
 }: BudgetTableRowProps) {
   const [editingDescription, setEditingDescription] = useState(false);
   const [descriptionValue, setDescriptionValue] = useState(entry.description);
@@ -184,7 +186,13 @@ export function TableRow({
                   "text-muted-foreground"
                 )}`}
               >
-                {amount ? `${formatCurrency(amount.amount)}` : "-"}
+                {amount
+                  ? `${formatCurrency(
+                      amount.amount,
+                      settings?.locale || "da-DK",
+                      settings?.currency || "DKK"
+                    )}`
+                  : "-"}
               </div>
             )}
           </td>
@@ -200,7 +208,11 @@ export function TableRow({
           "text-muted-foreground"
         )}`}
       >
-        {formatCurrency(rowTotal)}
+        {formatCurrency(
+          rowTotal,
+          settings?.locale || "da-DK",
+          settings?.currency || "DKK"
+        )}
       </td>
 
       {/* Delete Button */}

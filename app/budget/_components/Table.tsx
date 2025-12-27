@@ -6,7 +6,7 @@ import { CreateEntryRow } from "./CreateEntryModal";
 import { TransferModal } from "./TransferModal";
 import { ConfigurationDropdown } from "./ConfigurationDropdown";
 import { formatCurrency, getAllMonths, handleNumber } from "@/lib/utils";
-import { Entry, Category, BudgetTransfer } from "@/lib/types";
+import { Entry, Category, BudgetTransfer, Settings } from "@/lib/types";
 
 interface BudgetTableProps {
   entries: Entry[];
@@ -15,6 +15,7 @@ interface BudgetTableProps {
   onRefresh?: () => void;
   otherBudgets?: BudgetTransfer[];
   initialStartingBalance?: string;
+  settings: Settings | null;
 }
 
 export function Table({
@@ -23,6 +24,7 @@ export function Table({
   budgetId,
   otherBudgets = [],
   initialStartingBalance = "0",
+  settings,
 }: BudgetTableProps) {
   const [startingBalance, setStartingBalance] = useState<string>(
     initialStartingBalance
@@ -169,6 +171,7 @@ export function Table({
                         categoryMap={categoryMap}
                         onUpdate={handleRefresh}
                         onDelete={handleRefresh}
+                        settings={settings}
                       />
                     ))}
                   </>
@@ -186,6 +189,7 @@ export function Table({
                         categoryMap={categoryMap}
                         onUpdate={handleRefresh}
                         onDelete={handleRefresh}
+                        settings={settings}
                       />
                     ))}
                   </>
@@ -213,7 +217,11 @@ export function Table({
                           "text-gray-500 dark:text-gray-400"
                         )}`}
                       >
-                        {formatCurrency(total)}
+                        {formatCurrency(
+                          total,
+                          settings?.locale || "da-DK",
+                          settings?.currency || "DKK"
+                        )}
                       </td>
                     ))}
                     <td
@@ -224,7 +232,11 @@ export function Table({
                         "text-muted-foreground"
                       )}`}
                     >
-                      {formatCurrency(totalIncome)}
+                      {formatCurrency(
+                        totalIncome,
+                        settings?.locale || "da-DK",
+                        settings?.currency || "DKK"
+                      )}
                     </td>
                     <td className="md:sticky md:right-0 md:z-10 p-2 min-w-[105px] bg-green-100 dark:bg-green-950"></td>
                   </tr>
@@ -247,7 +259,11 @@ export function Table({
                           "text-gray-500 dark:text-gray-400"
                         )}`}
                       >
-                        {formatCurrency(total)}
+                        {formatCurrency(
+                          total,
+                          settings?.locale || "da-DK",
+                          settings?.currency || "DKK"
+                        )}
                       </td>
                     ))}
                     <td
@@ -258,7 +274,11 @@ export function Table({
                         "text-gray-500 dark:text-gray-400"
                       )}`}
                     >
-                      {formatCurrency(totalExpenses)}
+                      {formatCurrency(
+                        totalExpenses,
+                        settings?.locale || "da-DK",
+                        settings?.currency || "DKK"
+                      )}
                     </td>
                     <td className="md:sticky md:right-0 md:z-10 p-2 min-w-[105px] bg-red-100 dark:bg-red-950"></td>
                   </tr>
@@ -280,7 +300,11 @@ export function Table({
                         "text-gray-500 dark:text-gray-400"
                       )}`}
                     >
-                      {formatCurrency(total)}
+                      {formatCurrency(
+                        total,
+                        settings?.locale || "da-DK",
+                        settings?.currency || "DKK"
+                      )}
                     </td>
                   ))}
                   <td
@@ -291,7 +315,11 @@ export function Table({
                       "text-gray-500 dark:text-gray-400"
                     )}`}
                   >
-                    {formatCurrency(grandTotal)}
+                    {formatCurrency(
+                      grandTotal,
+                      settings?.locale || "da-DK",
+                      settings?.currency || "DKK"
+                    )}
                   </td>
                   <td className="md:sticky md:right-0 md:z-10 p-2 min-w-[105px] bg-primary-foreground"></td>
                 </tr>
@@ -302,7 +330,12 @@ export function Table({
                     Running Balance
                   </td>
                   <td className="md:sticky md:left-[200px] md:z-10 p-2 text-xs text-muted-foreground bg-primary-foreground whitespace-nowrap">
-                    Start: {formatCurrency(startBalance)}
+                    Start:{" "}
+                    {formatCurrency(
+                      startBalance,
+                      settings?.locale || "da-DK",
+                      settings?.currency || "DKK"
+                    )}
                   </td>
                   {runningBalance.map((balance, idx) => (
                     <td
@@ -314,7 +347,11 @@ export function Table({
                         "text-gray-500 dark:text-gray-400"
                       )}`}
                     >
-                      {formatCurrency(balance)}
+                      {formatCurrency(
+                        balance,
+                        settings?.locale || "da-DK",
+                        settings?.currency || "DKK"
+                      )}
                     </td>
                   ))}
                   <td
@@ -325,7 +362,11 @@ export function Table({
                       "text-gray-500 dark:text-gray-400"
                     )}`}
                   >
-                    {formatCurrency(runningBalance[runningBalance.length - 1])}
+                    {formatCurrency(
+                      runningBalance[runningBalance.length - 1],
+                      settings?.locale || "da-DK",
+                      settings?.currency || "DKK"
+                    )}
                   </td>
                   <td className="md:sticky md:right-0 md:z-10 p-2 min-w-[105px] bg-primary-foreground"></td>
                 </tr>
@@ -354,7 +395,11 @@ export function Table({
                 Total Income
               </p>
               <p className="text-2xl font-bold text-green-700 dark:text-green-400 mt-2">
-                {formatCurrency(totalIncome)}
+                {formatCurrency(
+                  totalIncome,
+                  settings?.locale || "da-DK",
+                  settings?.currency || "DKK"
+                )}
               </p>
             </div>
 
@@ -363,7 +408,11 @@ export function Table({
                 Total Expenses
               </p>
               <p className="text-2xl font-bold text-red-700 dark:text-red-400 mt-2">
-                {formatCurrency(totalExpenses)}
+                {formatCurrency(
+                  totalExpenses,
+                  settings?.locale || "da-DK",
+                  settings?.currency || "DKK"
+                )}
               </p>
             </div>
 
@@ -393,7 +442,11 @@ export function Table({
                   "text-gray-700 dark:text-gray-300"
                 )}`}
               >
-                {formatCurrency(grandTotal)}
+                {formatCurrency(
+                  grandTotal,
+                  settings?.locale || "da-DK",
+                  settings?.currency || "DKK"
+                )}
               </p>
             </div>
           </div>
