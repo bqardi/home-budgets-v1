@@ -25,7 +25,7 @@ export async function HeroSection() {
             </p>
             <div className="flex justify-center items-center gap-4">
               <Link href="/dashboard">
-                <Button variant="default" size="lg" className="mb-6">
+                <Button variant="default" size="lg" className="my-6">
                   <LayoutDashboard className="w-4 h-4 mr-1" />
                   Go to your dashboard
                 </Button>
