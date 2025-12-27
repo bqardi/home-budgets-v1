@@ -125,20 +125,6 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
 
   return (
     <div className="text-sm md:text-lg">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-3xl font-bold">{budget.name}</h2>
-
-        <div className="flex gap-x-2">
-          <Button variant="outline" asChild>
-            <Link href="/budget">Budget Years</Link>
-          </Button>
-          <Button asChild>
-            <Link href={`/budget/${budget.id}`}>Manage Budget</Link>
-          </Button>
-        </div>
-      </div>
-
       {/* Month Navigation */}
       <div className="grid grid-cols-[40px_200px_40px] items-center mb-6 gap-4">
         <Button
@@ -251,6 +237,16 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
       <div className="flex items-center justify-between px-4 py-3">
         <span className="text-sm md:text-lg font-semibold">Month Balance</span>
         <CurrencyDisplay balance={monthBalance} />
+      </div>
+
+      {/* Budget Navigation */}
+      <div className="flex justify-end gap-x-2 mt-8">
+        <Button className="max-xs:w-full" variant="outline" asChild>
+          <Link href="/budget">Budget Years</Link>
+        </Button>
+        <Button className="max-xs:w-full" asChild>
+          <Link href={`/budget/${budget.id}`}>Manage Budget</Link>
+        </Button>
       </div>
     </div>
   );
