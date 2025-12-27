@@ -15,6 +15,7 @@ import {
 import { getAllMonths } from "@/lib/utils";
 import { ChevronDownIcon, ChevronLeft, ChevronRight } from "lucide-react";
 import { CurrencyDisplay } from "./CurrencyDisplay";
+import { Card } from "@/components/ui/card";
 
 interface BudgetData {
   budget: Budget;
@@ -154,90 +155,94 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
         </Button>
       </div>
 
-      {/* Starting Balance */}
-      <div className="flex items-center justify-between px-4 py-3">
-        <span className="font-medium">
-          {hasLastMonth ? "From last month" : "Starting Balance"}
-        </span>
-        <CurrencyDisplay balance={startingBalance} />
-      </div>
+      <Card>
+        {/* Starting Balance */}
+        <div className="flex items-center justify-between px-4 py-3">
+          <span className="font-medium">
+            {hasLastMonth ? "From last month" : "Starting Balance"}
+          </span>
+          <CurrencyDisplay balance={startingBalance} />
+        </div>
 
-      {/* Accordions */}
-      <Accordion type="single" collapsible className="w-full border-y">
-        {/* Income Accordion */}
-        <AccordionItem value="income">
-          <AccordionTriggerRaw className="text-sm md:text-lg font-semibold px-4 py-3 hover:bg-accent/50 justify-start">
-            Income
-            <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200" />
-            <CurrencyDisplay className="ml-auto" balance={totalIncome} />
-          </AccordionTriggerRaw>
-          <AccordionContent className="text-xs md:text-base px-4">
-            {incomeEntries.length === 0 ? (
-              <p className="text-muted-foreground">
-                No income entries for this month.
-              </p>
-            ) : (
-              <ul className="space-y-2">
-                {incomeEntries.map((entry) => {
-                  const amount = entry.entry_amounts.reduce(
-                    (sum, amt) => sum + amt.amount,
-                    0
-                  );
-                  return (
-                    <li
-                      key={entry.id}
-                      className="flex items-center justify-between"
-                    >
-                      <span>{entry.description}</span>
-                      <CurrencyDisplay balance={amount} />
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-          </AccordionContent>
-        </AccordionItem>
+        {/* Accordions */}
+        <Accordion type="single" collapsible className="w-full border-y">
+          {/* Income Accordion */}
+          <AccordionItem value="income">
+            <AccordionTriggerRaw className="text-sm md:text-lg font-semibold px-4 py-3 hover:bg-accent/50 justify-start">
+              Income
+              <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200" />
+              <CurrencyDisplay className="ml-auto" balance={totalIncome} />
+            </AccordionTriggerRaw>
+            <AccordionContent className="text-xs md:text-base px-4">
+              {incomeEntries.length === 0 ? (
+                <p className="text-muted-foreground">
+                  No income entries for this month.
+                </p>
+              ) : (
+                <ul className="space-y-2">
+                  {incomeEntries.map((entry) => {
+                    const amount = entry.entry_amounts.reduce(
+                      (sum, amt) => sum + amt.amount,
+                      0
+                    );
+                    return (
+                      <li
+                        key={entry.id}
+                        className="flex items-center justify-between"
+                      >
+                        <span>{entry.description}</span>
+                        <CurrencyDisplay balance={amount} />
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </AccordionContent>
+          </AccordionItem>
 
-        {/* Expenses Accordion */}
-        <AccordionItem value="expenses">
-          <AccordionTriggerRaw className="text-sm md:text-lg font-semibold px-4 py-3 hover:bg-accent/50 justify-start">
-            Expenses
-            <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200" />
-            <CurrencyDisplay className="ml-auto" balance={totalExpenses} />
-          </AccordionTriggerRaw>
-          <AccordionContent className="text-xs md:text-base px-4 py-3">
-            {expenseEntries.length === 0 ? (
-              <p className="text-muted-foreground">
-                No expense entries for this month.
-              </p>
-            ) : (
-              <ul className="space-y-2">
-                {expenseEntries.map((entry) => {
-                  const amount = entry.entry_amounts.reduce(
-                    (sum, amt) => sum - amt.amount,
-                    0
-                  );
-                  return (
-                    <li
-                      key={entry.id}
-                      className="flex items-center justify-between"
-                    >
-                      <span>{entry.description}</span>
-                      <CurrencyDisplay balance={amount} />
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
+          {/* Expenses Accordion */}
+          <AccordionItem value="expenses">
+            <AccordionTriggerRaw className="text-sm md:text-lg font-semibold px-4 py-3 hover:bg-accent/50 justify-start">
+              Expenses
+              <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200" />
+              <CurrencyDisplay className="ml-auto" balance={totalExpenses} />
+            </AccordionTriggerRaw>
+            <AccordionContent className="text-xs md:text-base px-4 py-3">
+              {expenseEntries.length === 0 ? (
+                <p className="text-muted-foreground">
+                  No expense entries for this month.
+                </p>
+              ) : (
+                <ul className="space-y-2">
+                  {expenseEntries.map((entry) => {
+                    const amount = entry.entry_amounts.reduce(
+                      (sum, amt) => sum - amt.amount,
+                      0
+                    );
+                    return (
+                      <li
+                        key={entry.id}
+                        className="flex items-center justify-between"
+                      >
+                        <span>{entry.description}</span>
+                        <CurrencyDisplay balance={amount} />
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
 
-      {/* Month Balance */}
-      <div className="flex items-center justify-between px-4 py-3">
-        <span className="text-sm md:text-lg font-semibold">Month Balance</span>
-        <CurrencyDisplay balance={monthBalance} />
-      </div>
+        {/* Month Balance */}
+        <div className="flex items-center justify-between px-4 py-3">
+          <span className="text-sm md:text-lg font-semibold">
+            Month Balance
+          </span>
+          <CurrencyDisplay balance={monthBalance} />
+        </div>
+      </Card>
 
       {/* Budget Navigation */}
       <div className="flex justify-end gap-x-2 mt-8">
