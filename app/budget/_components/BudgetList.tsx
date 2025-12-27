@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,6 +17,7 @@ import { ImportCSVModal } from "./ImportCSVModal";
 import { BalanceDisplay } from "./BalanceDisplay";
 import { parseCSVFile } from "@/lib/csv/parse";
 import { ParsedCSVRow, getExistingCategories } from "@/app/actions/entries";
+import { cn } from "@/lib/utils";
 
 interface Budget {
   id: string;
@@ -167,18 +168,24 @@ export function BudgetList({ budgets }: BudgetListProps) {
         {budgets.map((budget) => (
           <Card
             key={budget.id}
-            className="relative isolate has-[button.delete:hover]:bg-red-950/25 has-[button.edit:hover]:bg-blue-950/25 hover:bg-accent/25 transition-colors"
+            className="group relative isolate overflow-hidden hover:bg-accent/25 transition-colors"
           >
-            <CardHeader>
-              <div className="flex items-start justify-between flex-wrap gap-x-8 gap-y-4">
-                <div className="flex-1 flex items-center justify-between flex-wrap gap-y-2 gap-x-8">
-                  <div className="flex items-center gap-2">
-                    <CardTitle className="text-lg">{budget.name}</CardTitle>
-                    <p className="text-sm text-muted-foreground">
-                      ({budget.year})
-                    </p>
-                  </div>
-                  <div className="flex items-end gap-x-3">
+            <CardHeader className="pl-8 md:pl-10">
+              <p
+                className={cn(
+                  "absolute top-0 bottom-0 left-0 w-5 text-sm whitespace-nowrap leading-tight grid place-content-center transition-colors",
+                  budget.year === new Date().getFullYear()
+                    ? "bg-blue-400 text-blue-50 group-hover:bg-blue-500"
+                    : "bg-gray-100 text-gray-400 group-hover:bg-gray-200"
+                )}
+              >
+                <span className="origin-center rotate-[-90deg]">
+                  {budget.year}
+                </span>
+              </p>
+              <div className="flex items-start justify-between flex-wrap gap-2">
+                <div className="flex-1">
+                  <div className="flex items-end gap-x-2">
                     <BalanceDisplay
                       balance={budget.starting_balance || 0}
                       label="Start balance"
