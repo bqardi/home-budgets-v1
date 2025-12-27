@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Container } from "@/components/container";
 import { BudgetCurrent } from "./_components/BudgetCurrent";
+import { CreateBudgetModal } from "../budget/_components/CreateBudgetModal";
 
 async function getBudgetData() {
   const supabase = await createClient();
@@ -22,7 +23,7 @@ async function getBudgetData() {
     .single();
 
   if (budgetError || !budget) {
-    redirect("/dashboard");
+    return null;
   }
 
   // Fetch entries
@@ -53,6 +54,32 @@ async function getBudgetData() {
 
 export default async function DashboardPage() {
   const budget = await getBudgetData();
+
+  if (!budget) {
+    return (
+      <Container className="py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">Budget Overview</h1>
+            <p className="text-muted-foreground mt-2">
+              Overview of your current budget year
+            </p>
+          </div>
+        </div>
+
+        <div className="flex flex-col items-center justify-center gap-6 py-16 text-center">
+          <div>
+            <h2 className="text-2xl font-semibold mb-2">No budget yet</h2>
+            <p className="text-muted-foreground mb-6">
+              Create your first budget for {new Date().getFullYear()} to get
+              started
+            </p>
+          </div>
+          <CreateBudgetModal />
+        </div>
+      </Container>
+    );
+  }
 
   return (
     <Container className="py-8">
