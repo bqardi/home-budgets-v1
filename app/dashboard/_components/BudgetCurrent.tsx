@@ -5,7 +5,6 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Budget, Entry } from "@/lib/types/database";
-import { formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Accordion,
@@ -15,6 +14,7 @@ import {
 } from "@/components/ui/accordion";
 import { getAllMonths } from "@/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { CurrencyDisplay } from "./CurrencyDisplay";
 
 interface BudgetData {
   budget: Budget;
@@ -118,10 +118,10 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
   const totalExpenses = expenseEntries.reduce(
     (sum, entry) =>
       sum +
-      entry.entry_amounts.reduce((amtSum, amount) => amtSum + amount.amount, 0),
+      entry.entry_amounts.reduce((amtSum, amount) => amtSum - amount.amount, 0),
     0
   );
-  const monthBalance = startingBalance + totalIncome - totalExpenses;
+  const monthBalance = startingBalance + totalIncome + totalExpenses;
 
   return (
     <div className="text-lg">
@@ -173,9 +173,7 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
         <span className="font-medium">
           {hasLastMonth ? "From last month" : "Starting Balance"}
         </span>
-        <span className="font-semibold font-mono pr-8">
-          {formatCurrency(startingBalance)}
-        </span>
+        <CurrencyDisplay balance={startingBalance} className="pr-8" />
       </div>
 
       {/* Accordions */}
@@ -185,9 +183,7 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
           <AccordionTrigger className="px-4 py-3 hover:bg-accent/50">
             <div className="text-lg font-semibold flex items-center justify-between w-full">
               Income
-              <span className="text-green-600 dark:text-green-400 font-mono">
-                {formatCurrency(totalIncome)}
-              </span>
+              <CurrencyDisplay balance={totalIncome} />
             </div>
           </AccordionTrigger>
           <AccordionContent className="text-base px-4">
@@ -208,9 +204,7 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
                       className="flex items-center justify-between"
                     >
                       <span>{entry.description}</span>
-                      <span className="text-green-600 dark:text-green-400 font-mono pr-8">
-                        {formatCurrency(amount)}
-                      </span>
+                      <CurrencyDisplay balance={amount} className="pr-8" />
                     </li>
                   );
                 })}
@@ -224,9 +218,7 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
           <AccordionTrigger className="px-4 py-3 hover:bg-accent/50">
             <div className="text-lg font-semibold flex items-center justify-between w-full">
               Expenses
-              <span className="text-red-600 dark:text-red-400 font-mono">
-                {formatCurrency(totalExpenses)}
-              </span>
+              <CurrencyDisplay balance={totalExpenses} />
             </div>
           </AccordionTrigger>
           <AccordionContent className="text-base px-4 py-3">
@@ -247,9 +239,7 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
                       className="flex items-center justify-between"
                     >
                       <span>{entry.description}</span>
-                      <span className="text-red-600 dark:text-red-400 font-mono pr-8">
-                        {formatCurrency(amount)}
-                      </span>
+                      <CurrencyDisplay balance={amount} className="pr-8" />
                     </li>
                   );
                 })}
@@ -262,15 +252,7 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
       {/* Month Balance */}
       <div className="flex items-center justify-between px-4 py-3">
         <span className="text-lg font-semibold">Month Balance</span>
-        <span
-          className={`font-semibold font-mono pr-8 ${
-            monthBalance >= 0
-              ? "text-green-600 dark:text-green-400"
-              : "text-red-600 dark:text-red-400"
-          }`}
-        >
-          {formatCurrency(monthBalance)}
-        </span>
+        <CurrencyDisplay balance={monthBalance} className="pr-8" />
       </div>
     </div>
   );
