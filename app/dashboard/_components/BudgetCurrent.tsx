@@ -56,6 +56,7 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
     selectedMonth > 1 || selectedYear > currentDate.getFullYear();
   const canGoNext =
     selectedMonth < 12 || selectedYear < currentDate.getFullYear();
+  const hasLastMonth = selectedMonth > 1;
 
   // Helper function to get entries for a specific month
   const getEntriesForMonth = (month: number) => {
@@ -126,17 +127,15 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
     <div>
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <div>
-          <h2 className="text-3xl font-bold">{budget.name}</h2>
-          <p className="text-sm text-muted-foreground mt-1">{selectedYear}</p>
-        </div>
+        <h2 className="text-3xl font-bold">{budget.name}</h2>
+
         <Button asChild>
           <Link href={`/budget/${budget.id}`}>Manage Budget</Link>
         </Button>
       </div>
 
       {/* Month Navigation */}
-      <div className="flex items-center justify-between mb-6 gap-4">
+      <div className="grid grid-cols-[40px_200px_40px] items-center mb-6 gap-4">
         <Button
           variant="outline"
           size="icon"
@@ -147,7 +146,7 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
           <ChevronLeft className="h-4 w-4" />
         </Button>
 
-        <div className="text-center flex-1">
+        <div className="text-center">
           <h3 className="text-lg font-semibold">
             {monthNames[selectedMonth - 1]} {selectedYear}
           </h3>
@@ -166,8 +165,10 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
 
       {/* Starting Balance */}
       <div className="flex items-center justify-between px-4 py-3 bg-muted rounded-lg mb-4">
-        <span className="font-medium">Starting Balance</span>
-        <span className="text-lg font-semibold">
+        <span className="font-medium">
+          {hasLastMonth ? "From last month" : "Starting Balance"}
+        </span>
+        <span className="text-sm font-semibold pr-8">
           {formatCurrency(startingBalance)}
         </span>
       </div>
@@ -177,7 +178,7 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
         {/* Income Accordion */}
         <AccordionItem value="income">
           <AccordionTrigger className="px-4 py-3 hover:bg-accent/50">
-            <div className="flex items-center justify-between w-full pr-4">
+            <div className="flex items-center justify-between w-full">
               <span className="text-sm font-semibold">Income</span>
               <span className="text-green-600 dark:text-green-400 font-semibold">
                 {formatCurrency(totalIncome)}
@@ -216,7 +217,7 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
         {/* Expenses Accordion */}
         <AccordionItem value="expenses">
           <AccordionTrigger className="px-4 py-3 hover:bg-accent/50">
-            <div className="flex items-center justify-between w-full pr-4">
+            <div className="flex items-center justify-between w-full">
               <span className="text-sm font-semibold">Expenses</span>
               <span className="text-red-600 dark:text-red-400 font-semibold">
                 {formatCurrency(totalExpenses)}
@@ -257,7 +258,7 @@ export function BudgetCurrent({ data }: BudgetCurrentProps) {
       <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 rounded-lg border border-primary/20">
         <span className="font-semibold text-sm">Month Balance</span>
         <span
-          className={`text-sm font-bold ${
+          className={`text-sm font-bold pr-8 ${
             monthBalance >= 0
               ? "text-green-600 dark:text-green-400"
               : "text-red-600 dark:text-red-400"
