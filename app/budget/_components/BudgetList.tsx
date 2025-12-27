@@ -12,9 +12,9 @@ import {
 import { deleteBudget } from "@/app/actions/budgets";
 import { Edit, MoreVertical, Trash2 } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
-import { CreateBudgetModal } from "../../dashboard/_components/CreateBudgetModal";
-import { ImportCSVModal } from "../../dashboard/_components/ImportCSVModal";
-import { BalanceDisplay } from "../../dashboard/_components/BalanceDisplay";
+import { CreateBudgetModal } from "./CreateBudgetModal";
+import { ImportCSVModal } from "./ImportCSVModal";
+import { BalanceDisplay } from "./BalanceDisplay";
 import { parseCSVFile } from "@/lib/csv/parse";
 import { ParsedCSVRow, getExistingCategories } from "@/app/actions/entries";
 
