@@ -89,7 +89,7 @@ async function BudgetPageContent({ id }: { id: string }) {
 
   return (
     <Container className="relative py-8">
-      <Link href="/dashboard">
+      <Link href="/budget">
         <Button variant="ghost" size="sm" className="absolute bottom-full">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Budgets
