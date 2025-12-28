@@ -47,6 +47,7 @@ export function TransferOptions({
             <SelectValue placeholder="Choose a budget to copy from..." />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value="none">None</SelectItem>
             {otherBudgets.map((budget) => (
               <SelectItem key={budget.id} value={budget.id}>
                 {budget.name} ({budget.year})

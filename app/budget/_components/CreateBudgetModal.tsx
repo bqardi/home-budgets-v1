@@ -69,6 +69,9 @@ export function CreateBudgetModal({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const hasTransferSelection =
+    transferBalance || transferIncome || transferExpense;
+
   // Fetch existing categories on mount
   useEffect(() => {
     const fetchCategories = async () => {
@@ -81,6 +84,14 @@ export function CreateBudgetModal({
     };
     fetchCategories();
   }, []);
+  useEffect(() => {
+    if (selectedBudgetId === "none") {
+      setSelectedBudgetId("");
+      setTransferBalance(false);
+      setTransferIncome(false);
+      setTransferExpense(false);
+    }
+  }, [selectedBudgetId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -107,10 +118,7 @@ export function CreateBudgetModal({
       }
 
       // If a source budget was selected, transfer data
-      if (
-        selectedBudgetId &&
-        (transferBalance || transferIncome || transferExpense)
-      ) {
+      if (!validatedCSVData && selectedBudgetId && hasTransferSelection) {
         await transferRowsFromBudget(
           newBudgetId,
           selectedBudgetId,
@@ -122,10 +130,7 @@ export function CreateBudgetModal({
 
       // Reset form
       setFormData({ name: "", year: new Date().getFullYear() });
-      setSelectedBudgetId("");
-      setTransferBalance(false);
-      setTransferIncome(false);
-      setTransferExpense(false);
+      setSelectedBudgetId("none");
       setOpen(false);
       onSuccess?.();
     } catch (error) {
@@ -138,9 +143,6 @@ export function CreateBudgetModal({
       setLoading(false);
     }
   };
-
-  const hasTransferSelection =
-    transferBalance || transferIncome || transferExpense;
 
   const handleImportCSV = () => {
     fileInputRef.current?.click();
@@ -294,6 +296,8 @@ export function CreateBudgetModal({
                   setMissingCategories([]);
                   setCSVData([]);
                   setValidatedCSVData(null);
+                  setSelectedBudgetId("none");
+                  onClose?.();
                 }}
                 disabled={loading}
               >
@@ -302,9 +306,7 @@ export function CreateBudgetModal({
               <Button
                 type="submit"
                 disabled={
-                  loading ||
-                  !formData.name.trim() ||
-                  (selectedBudgetId !== "" && !hasTransferSelection)
+                  loading || (selectedBudgetId !== "" && !hasTransferSelection)
                 }
               >
                 {loading ? "Creating..." : "Create Budget"}
