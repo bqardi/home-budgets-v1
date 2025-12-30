@@ -1,3 +1,18 @@
+/**
+ * TAILWIND 4 GLOBALS
+ * 
+ * Instructions for copying themes from shadcn projects:
+ * 1. Copy ONLY the :root and .dark CSS variable blocks from the other project
+ * 2. Replace the values below (keep the variable names as-is)
+ * 3. Keep the @import, @custom-variant, and @theme inline sections unchanged
+ * 
+ * DO NOT copy:
+ * - @import "shadcn/tailwind.css"
+ * - Font variables like --font-sans, --font-geist-mono
+ * - Sidebar variables like --sidebar-*
+ * - Radius variables beyond -sm, -md, -lg
+ */
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
