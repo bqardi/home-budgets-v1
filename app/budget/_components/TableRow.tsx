@@ -104,9 +104,9 @@ export function TableRow({
   };
 
   return (
-    <tr className="hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors border-b">
+    <tr className="hover:bg-secondary dark:hover:bg-secondary transition-colors border-b">
       {/* Description */}
-      <td className="md:sticky md:left-0 md:z-10 p-2 border-r max-w-[200px] truncate bg-background dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900">
+      <td className="md:sticky md:left-0 md:z-10 p-2 border-r max-w-50 truncate bg-background dark:bg-background hover:bg-secondary dark:hover:bg-secondary">
         {editingDescription ? (
           <input
             type="text"
@@ -135,7 +135,7 @@ export function TableRow({
       </td>
 
       {/* Category */}
-      <td className="md:sticky md:left-[200px] md:z-10 p-2 border-r text-sm text-muted-foreground max-w-[120px] truncate bg-background dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900">
+      <td className="md:sticky md:left-50 md:z-10 p-2 border-r text-sm text-muted-foreground max-w-30 truncate bg-background dark:bg-background hover:bg-secondary dark:hover:bg-secondary">
         {categoryMap[entry.category_id]}
       </td>
 
@@ -148,7 +148,7 @@ export function TableRow({
         return (
           <td
             key={month}
-            className="p-2 text-right border-r min-w-[105px] bg-background dark:bg-slate-950"
+            className="p-2 text-right border-r min-w-26.25 bg-background dark:bg-background"
           >
             {isEditing && amount ? (
               <input
@@ -177,12 +177,12 @@ export function TableRow({
                     setEditingAmount(amount.amount.toString());
                   }
                 }}
-                className={`font-mono cursor-pointer hover:bg-accent dark:hover:bg-slate-800 px-1 py-0.5 rounded ${handleNumber(
+                className={`font-mono cursor-pointer hover:bg-secondary dark:hover:bg-secondary px-1 py-0.5 rounded ${handleNumber(
                   amount.amount,
                   entry.entry_type === "income"
-                    ? "text-green-600 dark:text-green-400"
-                    : "text-red-600 dark:text-red-400",
-                  "text-red-700 dark:text-red-400",
+                    ? "text-success dark:text-success"
+                    : "text-destructive dark:text-destructive",
+                  "text-destructive dark:text-destructive",
                   "text-muted-foreground"
                 )}`}
               >
@@ -201,10 +201,10 @@ export function TableRow({
 
       {/* Row Total */}
       <td
-        className={`font-mono md:sticky md:right-[105px] md:z-10 p-2 text-right border-x font-semibold min-w-[105px] bg-background dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 ${handleNumber(
+        className={`font-mono md:sticky md:right-26.25 md:z-10 p-2 text-right border-x font-semibold min-w-26.25 bg-background dark:bg-background hover:bg-secondary dark:hover:bg-secondary ${handleNumber(
           rowTotal,
-          "text-green-700 dark:text-green-400",
-          "text-red-700 dark:text-red-400",
+          "text-success dark:text-success",
+          "text-destructive dark:text-destructive",
           "text-muted-foreground"
         )}`}
       >
@@ -216,7 +216,7 @@ export function TableRow({
       </td>
 
       {/* Delete Button */}
-      <td className="md:sticky md:right-0 md:z-10 p-2 bg-background dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 flex gap-2">
+      <td className="md:sticky md:right-0 md:z-10 p-2 bg-background dark:bg-background hover:bg-secondary dark:hover:bg-secondary flex gap-2">
         <EditEntryModal
           entry={entry}
           budgetId={budgetId}

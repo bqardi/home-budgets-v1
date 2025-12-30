@@ -35,7 +35,7 @@ export function LandingHero() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Feature 1 */}
           <div className="flex gap-6">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-primary/10">
                 <BarChart3 className="h-6 w-6 text-primary" />
               </div>
@@ -51,7 +51,7 @@ export function LandingHero() {
 
           {/* Feature 2 */}
           <div className="flex gap-6">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-primary/10">
                 <PieChart className="h-6 w-6 text-primary" />
               </div>
@@ -67,7 +67,7 @@ export function LandingHero() {
 
           {/* Feature 3 */}
           <div className="flex gap-6">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-primary/10">
                 <TrendingUp className="h-6 w-6 text-primary" />
               </div>
@@ -83,7 +83,7 @@ export function LandingHero() {
 
           {/* Feature 4 */}
           <div className="flex gap-6">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-primary/10">
                 <Shield className="h-6 w-6 text-primary" />
               </div>

@@ -88,9 +88,7 @@ export function BudgetList({ budgets, settings }: BudgetListProps) {
                     : "bg-gray-100 text-gray-400 group-hover:bg-gray-200"
                 )}
               >
-                <span className="origin-center rotate-[-90deg]">
-                  {budget.year}
-                </span>
+                <span className="origin-center rotate-90">{budget.year}</span>
               </p>
               <div className="flex items-start justify-between flex-wrap gap-2">
                 <div className="flex-1">

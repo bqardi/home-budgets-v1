@@ -56,7 +56,7 @@ export function FeaturesSection() {
               key={index}
               className={`flex gap-6 p-6 rounded-xl ${feature.bgColor}`}
             >
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <div className="flex items-center justify-center h-12 w-12 rounded-lg">
                   <Icon className={`h-6 w-6 ${colorMap[feature.color]}`} />
                 </div>
