@@ -122,11 +122,11 @@ export function Table({
       <div className="overflow-x-auto border rounded-lg">
         <table className="w-full text-sm border-collapse">
           <thead>
-            <tr className="bg-muted dark:bg-muted border-b">
-              <th className="md:sticky md:left-0 md:z-20 p-2 text-left font-semibold border-r md:min-w-50 bg-muted dark:bg-muted">
+            <tr className="bg-muted border-b">
+              <th className="md:sticky md:left-0 md:z-20 p-2 text-left font-semibold border-r md:min-w-50 bg-muted">
                 Description
               </th>
-              <th className="md:sticky md:left-50 md:z-20 p-2 text-left font-semibold border-r md:min-w-30 bg-muted dark:bg-muted">
+              <th className="md:sticky md:left-50 md:z-20 p-2 text-left font-semibold border-r md:min-w-30 bg-muted">
                 Category
               </th>
               {getAllMonths({ locale: "da-DK", format: "short" }).map(
@@ -139,10 +139,10 @@ export function Table({
                   </th>
                 )
               )}
-              <th className="md:sticky md:right-26.25 md:z-20 p-2 text-right font-semibold border-r min-w-20 bg-muted dark:bg-muted">
+              <th className="md:sticky md:right-26.25 md:z-20 p-2 text-right font-semibold border-r min-w-20 bg-muted">
                 Total
               </th>
-              <th className="md:sticky md:right-0 md:z-20 p-2 text-right font-semibold min-w-26.25 bg-muted dark:bg-muted">
+              <th className="md:sticky md:right-0 md:z-20 p-2 text-right font-semibold min-w-26.25 bg-muted">
                 Actions
               </th>
             </tr>
@@ -202,11 +202,11 @@ export function Table({
               <>
                 {/* Income Total Row */}
                 {incomeEntries.length > 0 && (
-                  <tr className="bg-success/10 dark:bg-success/20 border-t border-b font-semibold">
-                    <td className="md:sticky md:left-0 md:z-10 p-2 border-r text-left bg-success/10 dark:bg-success/20">
+                  <tr className="bg-secondary border-t border-b font-semibold">
+                    <td className="md:sticky md:left-0 md:z-10 p-2 border-r text-left bg-secondary">
                       Income Total
                     </td>
-                    <td className="md:sticky md:left-50 md:z-10 p-2 border-r bg-success/10 dark:bg-success/20"></td>
+                    <td className="md:sticky md:left-50 md:z-10 p-2 border-r bg-secondary"></td>
                     {monthlyIncome.map((total, idx) => (
                       <td
                         key={idx}
@@ -225,7 +225,7 @@ export function Table({
                       </td>
                     ))}
                     <td
-                      className={`font-mono md:sticky md:right-26.25 md:z-10 p-2 text-right border-r font-semibold min-w-20 bg-success/10 dark:bg-success/20 ${handleNumber(
+                      className={`font-mono md:sticky md:right-26.25 md:z-10 p-2 text-right border-r font-semibold min-w-20 bg-secondary ${handleNumber(
                         totalIncome,
                         "text-success dark:text-success",
                         "text-destructive dark:text-destructive",
@@ -238,17 +238,17 @@ export function Table({
                         settings?.currency || "DKK"
                       )}
                     </td>
-                    <td className="md:sticky md:right-0 md:z-10 p-2 min-w-26.25 bg-success/10 dark:bg-success/20"></td>
+                    <td className="md:sticky md:right-0 md:z-10 p-2 min-w-26.25 bg-secondary"></td>
                   </tr>
                 )}
 
                 {/* Expense Total Row */}
                 {expenseEntries.length > 0 && (
-                  <tr className="bg-destructive/10 dark:bg-destructive/20 border-t border-b font-semibold">
-                    <td className="md:sticky md:left-0 md:z-10 p-2 border-r text-left bg-destructive/10 dark:bg-destructive/20">
+                  <tr className="bg-secondary border-t border-b font-semibold">
+                    <td className="md:sticky md:left-0 md:z-10 p-2 border-r text-left bg-secondary">
                       Expense Total
                     </td>
-                    <td className="md:sticky md:left-50 md:z-10 p-2 border-r bg-destructive/10 dark:bg-destructive/20"></td>
+                    <td className="md:sticky md:left-50 md:z-10 p-2 border-r bg-secondary"></td>
                     {monthlyExpenses.map((total, idx) => (
                       <td
                         key={idx}
@@ -267,7 +267,7 @@ export function Table({
                       </td>
                     ))}
                     <td
-                      className={`font-mono md:sticky md:right-26.25 md:z-10 p-2 text-right border-r bg-destructive/10 dark:bg-destructive/20 ${handleNumber(
+                      className={`font-mono md:sticky md:right-26.25 md:z-10 p-2 text-right border-r bg-secondary ${handleNumber(
                         totalExpenses,
                         "text-destructive dark:text-destructive",
                         "text-success dark:text-success",
@@ -280,24 +280,24 @@ export function Table({
                         settings?.currency || "DKK"
                       )}
                     </td>
-                    <td className="md:sticky md:right-0 md:z-10 p-2 min-w-26.25 bg-destructive/10 dark:bg-destructive/20"></td>
+                    <td className="md:sticky md:right-0 md:z-10 p-2 min-w-26.25 bg-secondary"></td>
                   </tr>
                 )}
 
                 {/* Net Total Row */}
-                <tr className="bg-primary-foreground border-t-2 border-b font-semibold">
-                  <td className="md:sticky md:left-0 md:z-10 p-2 border-r text-left bg-primary-foreground">
+                <tr className="bg-background border-t-2 border-b font-semibold">
+                  <td className="md:sticky md:left-0 md:z-10 p-2 border-r text-left bg-background">
                     Net Balance
                   </td>
-                  <td className="md:sticky md:left-50 md:z-10 p-2 border-r bg-primary-foreground"></td>
+                  <td className="md:sticky md:left-50 md:z-10 p-2 border-r bg-background"></td>
                   {monthlyTotals.map((total, idx) => (
                     <td
                       key={idx}
                       className={`font-mono p-2 text-right border-r ${handleNumber(
                         total,
-                        "text-green-700 dark:text-green-400",
-                        "text-secondary bg-red-700 dark:bg-red-400",
-                        "text-gray-500 dark:text-gray-400"
+                        "text-success dark:text-success",
+                        "text-destructive dark:text-destructive",
+                        "text-muted-foreground dark:text-muted-foreground"
                       )}`}
                     >
                       {formatCurrency(
@@ -308,11 +308,11 @@ export function Table({
                     </td>
                   ))}
                   <td
-                    className={`font-mono md:sticky md:right-26.25 md:z-10 p-2 text-right border-r bg-primary-foreground ${handleNumber(
+                    className={`font-mono md:sticky md:right-26.25 md:z-10 p-2 text-right border-r bg-background ${handleNumber(
                       grandTotal,
-                      "text-green-700 dark:text-green-400",
-                      "text-secondary bg-red-700 dark:bg-red-400",
-                      "text-gray-500 dark:text-gray-400"
+                      "text-success dark:text-success",
+                      "text-destructive dark:text-destructive",
+                      "text-muted-foreground dark:text-muted-foreground"
                     )}`}
                   >
                     {formatCurrency(
@@ -321,15 +321,15 @@ export function Table({
                       settings?.currency || "DKK"
                     )}
                   </td>
-                  <td className="md:sticky md:right-0 md:z-10 p-2 min-w-26.25 bg-primary-foreground"></td>
+                  <td className="md:sticky md:right-0 md:z-10 p-2 min-w-26.25 bg-background"></td>
                 </tr>
 
                 {/* Running Balance Row */}
-                <tr className="bg-primary-foreground border-t border-b font-semibold">
-                  <td className="md:sticky md:left-0 md:z-10 p-2 border-r text-left bg-primary-foreground">
+                <tr className="bg-background border-t border-b font-semibold">
+                  <td className="md:sticky md:left-0 md:z-10 p-2 border-r text-left bg-background">
                     Running Balance
                   </td>
-                  <td className="font-mono md:sticky md:left-50 md:z-10 p-2 text-xs text-muted-foreground bg-primary-foreground whitespace-nowrap">
+                  <td className="font-mono md:sticky md:left-50 md:z-10 p-2 text-xs text-muted-foreground bg-background whitespace-nowrap">
                     Start:{" "}
                     {formatCurrency(
                       startBalance,
@@ -342,9 +342,9 @@ export function Table({
                       key={idx}
                       className={`font-mono p-2 text-right border-r ${handleNumber(
                         balance,
-                        "text-green-700 dark:text-green-400",
-                        "text-secondary bg-red-700 dark:bg-red-400",
-                        "text-gray-500 dark:text-gray-400"
+                        "text-success dark:text-success",
+                        "text-destructive dark:text-destructive",
+                        "text-muted-foreground dark:text-muted-foreground"
                       )}`}
                     >
                       {formatCurrency(
@@ -355,11 +355,11 @@ export function Table({
                     </td>
                   ))}
                   <td
-                    className={`font-mono md:sticky md:right-26.25 md:z-10 p-2 text-right border-r bg-primary-foreground ${handleNumber(
+                    className={`font-mono md:sticky md:right-26.25 md:z-10 p-2 text-right border-r bg-background ${handleNumber(
                       runningBalance[runningBalance.length - 1],
-                      "text-green-700 dark:text-green-400",
-                      "text-secondary bg-red-700 dark:bg-red-400",
-                      "text-gray-500 dark:text-gray-400"
+                      "text-success dark:text-success",
+                      "text-destructive dark:text-destructive",
+                      "text-muted-foreground dark:text-muted-foreground"
                     )}`}
                   >
                     {formatCurrency(
@@ -368,7 +368,7 @@ export function Table({
                       settings?.currency || "DKK"
                     )}
                   </td>
-                  <td className="md:sticky md:right-0 md:z-10 p-2 min-w-26.25 bg-primary-foreground"></td>
+                  <td className="md:sticky md:right-0 md:z-10 p-2 min-w-26.25 bg-background"></td>
                 </tr>
               </>
             )}
@@ -390,11 +390,11 @@ export function Table({
         <div className="bg-card border rounded-lg p-6">
           <h3 className="text-lg font-semibold mb-4">Summary</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-4 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-900 rounded-lg">
-              <p className="text-sm font-semibold text-green-700 dark:text-green-400 uppercase">
+            <div className="p-4 bg-secondary border border-border rounded-lg">
+              <p className="text-sm font-semibold text-success uppercase">
                 Total Income
               </p>
-              <p className="font-mono text-2xl font-bold text-green-700 dark:text-green-400 mt-2">
+              <p className="font-mono text-2xl font-bold text-success mt-2">
                 {formatCurrency(
                   totalIncome,
                   settings?.locale || "da-DK",
@@ -403,11 +403,11 @@ export function Table({
               </p>
             </div>
 
-            <div className="p-4 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-900 rounded-lg">
-              <p className="text-sm font-semibold text-red-700 dark:text-red-400 uppercase">
+            <div className="p-4 bg-secondary border border-border rounded-lg">
+              <p className="text-sm font-semibold text-destructive uppercase">
                 Total Expenses
               </p>
-              <p className="font-mono text-2xl font-bold text-red-700 dark:text-red-400 mt-2">
+              <p className="font-mono text-2xl font-bold text-destructive mt-2">
                 {formatCurrency(
                   totalExpenses,
                   settings?.locale || "da-DK",
@@ -419,9 +419,9 @@ export function Table({
             <div
               className={`p-4 border rounded-lg ${handleNumber(
                 grandTotal,
-                "bg-green-100 dark:bg-green-950 border-green-200 dark:border-green-900",
-                "bg-red-100 dark:bg-red-950 border-red-200 dark:border-red-900",
-                "bg-gray-100 dark:bg-slate-800 border-gray-200 dark:border-slate-700"
+                "bg-secondary border-border",
+                "bg-secondary border-border",
+                "bg-secondary border-border"
               )}`}
             >
               <p
@@ -437,9 +437,9 @@ export function Table({
               <p
                 className={`font-mono text-2xl font-bold mt-2 ${handleNumber(
                   grandTotal,
-                  "text-green-700 dark:text-green-400",
-                  "text-red-700 dark:text-red-400",
-                  "text-gray-700 dark:text-gray-300"
+                  "text-success",
+                  "text-destructive",
+                  "text-muted-foreground"
                 )}`}
               >
                 {formatCurrency(
