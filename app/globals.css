@@ -1,24 +1,11 @@
-/**
- * TAILWIND 4 GLOBALS
- * 
- * Instructions for copying themes from shadcn projects:
- * 1. Copy ONLY the :root and .dark CSS variable blocks from the other project
- * 2. Replace the values below (keep the variable names as-is)
- * 3. Keep the @import, @custom-variant, and @theme inline sections unchanged
- * 
- * DO NOT copy:
- * - @import "shadcn/tailwind.css"
- * - Font variables like --font-sans, --font-geist-mono
- * - Sidebar variables like --sidebar-*
- * - Radius variables beyond -sm, -md, -lg
- */
-
 @import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -34,6 +21,7 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -42,9 +30,21 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
 }
 
 :root {
@@ -60,8 +60,8 @@
   --secondary-foreground: oklch(0.21 0.006 285.885);
   --muted: oklch(0.97 0.001 106.424);
   --muted-foreground: oklch(0.553 0.013 58.071);
-  --accent: oklch(0.97 0.001 106.424);
-  --accent-foreground: oklch(0.216 0.006 56.043);
+  --accent: oklch(0.488 0.243 264.376);
+  --accent-foreground: oklch(0.97 0.014 254.604);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.923 0.003 48.717);
   --input: oklch(0.923 0.003 48.717);
@@ -76,8 +76,8 @@
   --sidebar-foreground: oklch(0.147 0.004 49.25);
   --sidebar-primary: oklch(0.546 0.245 262.881);
   --sidebar-primary-foreground: oklch(0.97 0.014 254.604);
-  --sidebar-accent: oklch(0.97 0.001 106.424);
-  --sidebar-accent-foreground: oklch(0.216 0.006 56.043);
+  --sidebar-accent: oklch(0.488 0.243 264.376);
+  --sidebar-accent-foreground: oklch(0.97 0.014 254.604);
   --sidebar-border: oklch(0.923 0.003 48.717);
   --sidebar-ring: oklch(0.709 0.01 56.259);
 }
@@ -95,8 +95,8 @@
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.268 0.007 34.298);
   --muted-foreground: oklch(0.709 0.01 56.259);
-  --accent: oklch(0.268 0.007 34.298);
-  --accent-foreground: oklch(0.985 0.001 106.423);
+  --accent: oklch(0.42 0.18 266);
+  --accent-foreground: oklch(0.97 0.014 254.604);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
@@ -110,8 +110,8 @@
   --sidebar-foreground: oklch(0.985 0.001 106.423);
   --sidebar-primary: oklch(0.623 0.214 259.815);
   --sidebar-primary-foreground: oklch(0.97 0.014 254.604);
-  --sidebar-accent: oklch(0.268 0.007 34.298);
-  --sidebar-accent-foreground: oklch(0.985 0.001 106.423);
+  --sidebar-accent: oklch(0.42 0.18 266);
+  --sidebar-accent-foreground: oklch(0.97 0.014 254.604);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.553 0.013 58.071);
 }
